@@ -84,8 +84,8 @@ public class ApplicationFormController implements Initializable {
         leases.add("6 months");
         leases.add("12 months");
 
-        selectedCat = "";
-        selectedLease = "";
+        selectedCat = null;
+        selectedLease = null;
 
         dob.setValue(LocalDate.now());
         moveIn.setValue(LocalDate.now());
@@ -97,15 +97,44 @@ public class ApplicationFormController implements Initializable {
 
     @FXML
     private void submitApp(ActionEvent event) throws IOException {
-        if (name.equals("")) {
+        LocalDate dobChoice = dob.getValue();
+        LocalDate moveInChoice = moveIn.getValue();
+        String gender = (genderMale.isSelected()) ? "M" : "F";
+
+        if (name.getText().equals("")) {
             System.out.println("Please enter a valid name.");
-        } else if (selectedCat.equals("")) {
-            System.out.println("Please select a category.");
-        } else if (selectedLease.equals("")) {
+        } else if (dobChoice.isEqual(LocalDate.now())
+                || dobChoice.isAfter(LocalDate.now())) {
+            System.out.println("Please choose valid birth date.");
+        } else if (income.getText().equals("")) {
+            System.out.println("Please enter a valid monthly income.");
+        } else if (selectedCat == null) {
+            System.out.println("Please select an apartment category.");
+        } else if (minRent.getText().equals("")) {
+            System.out.println("Please enter a value for minimum rent.");
+        } else if (maxRent.getText().equals("")) {
+            System.out.println("Please enter a value for max rent.");
+        } else if (Integer.parseInt(minRent.getText())
+                > Integer.parseInt(maxRent.getText())) {
+            System.out.println("Min rent must be less than max rent.");
+        } else if (moveInChoice.isEqual(LocalDate.now())
+                || moveInChoice.isBefore(LocalDate.now())) {
+            System.out.println("Move in date must be after today.");
+        } else if (selectedLease == null) {
             System.out.println("Please select a lease term.");
+        } else if (prevAddr.getText().equals("")) {
+            System.out.println("Please enter a previous address.");
         } else {
-            System.out.println(selectedCat);
-            System.out.println(selectedLease);
+            System.out.println("Name: " + name.getText());
+            System.out.println("Date of Birth: " + dobChoice);
+            System.out.println("Gender: " + gender);
+            System.out.println("Monthly income: " + income.getText());
+            System.out.println("Preferred category: " + selectedCat);
+            System.out.println("Min rent: " + minRent.getText());
+            System.out.println("Max rent: " + maxRent.getText());
+            System.out.println("Move in date: " + moveInChoice);
+            System.out.println("Preferred lease: " + selectedLease);
+            System.out.println("Previous address: " + prevAddr.getText());
         }
     }
 

@@ -21,7 +21,7 @@
       <TextField fx:id="name" layoutX="207.0" layoutY="91.0" />
       <DatePicker fx:id="dob" layoutX="207.0" layoutY="139.0" />
       <Label layoutX="126.0" layoutY="190.0" text="Gender:" />
-      <RadioButton fx:id="genderMale" layoutX="207.0" layoutY="190.0" mnemonicParsing="false" text="Male">
+      <RadioButton fx:id="genderMale" layoutX="207.0" layoutY="190.0" mnemonicParsing="false" selected="true" text="Male">
          <toggleGroup>
             <ToggleGroup fx:id="gen" />
          </toggleGroup></RadioButton>
