@@ -18,26 +18,29 @@
       </Label>
       <Label layoutX="135.0" layoutY="96.0" text="Name:" />
       <Label layoutX="91.0" layoutY="144.0" text="Date of Birth:" />
-      <TextField layoutX="207.0" layoutY="91.0" />
-      <DatePicker layoutX="207.0" layoutY="139.0" />
+      <TextField fx:id="name" layoutX="207.0" layoutY="91.0" />
+      <DatePicker fx:id="dob" layoutX="207.0" layoutY="139.0" />
       <Label layoutX="126.0" layoutY="190.0" text="Gender:" />
-      <RadioButton layoutX="207.0" layoutY="190.0" mnemonicParsing="false" text="Male" />
-      <RadioButton layoutX="301.0" layoutY="190.0" mnemonicParsing="false" text="Female" />
+      <RadioButton fx:id="genderMale" layoutX="207.0" layoutY="190.0" mnemonicParsing="false" text="Male">
+         <toggleGroup>
+            <ToggleGroup fx:id="gen" />
+         </toggleGroup></RadioButton>
+      <RadioButton fx:id="genderFemale" layoutX="301.0" layoutY="190.0" mnemonicParsing="false" text="Female" toggleGroup="$gen" />
       <Label layoutX="46.0" layoutY="242.0" text="Monthly Income ($):" />
-      <TextField layoutX="207.0" layoutY="237.0" />
-      <ChoiceBox layoutX="207.0" layoutY="293.0" prefWidth="150.0" />
+      <TextField fx:id="income" layoutX="207.0" layoutY="237.0" />
+      <ChoiceBox fx:id="categorySel" layoutX="207.0" layoutY="293.0" onMouseClicked="#selectCategory" prefWidth="150.0" />
       <Label layoutX="48.0" layoutY="298.0" text="Preferred Category:" />
       <Label layoutX="408.0" layoutY="298.0" text="Monthly Rent ($):" />
       <Label layoutX="538.0" layoutY="298.0" text="min:" />
-      <TextField layoutX="576.0" layoutY="293.0" prefHeight="31.0" prefWidth="60.0" />
-      <Label layoutX="653.0" layoutY="298.0" text="min:" />
-      <TextField layoutX="693.0" layoutY="293.0" prefHeight="31.0" prefWidth="60.0" />
+      <TextField fx:id="minRent" layoutX="576.0" layoutY="293.0" prefHeight="31.0" prefWidth="60.0" />
+      <Label layoutX="653.0" layoutY="298.0" text="max:" />
+      <TextField fx:id="maxRent" layoutX="693.0" layoutY="293.0" prefHeight="31.0" prefWidth="60.0" />
       <Label layoutX="17.0" layoutY="356.0" text="Preferred Move-In Date:" />
-      <DatePicker layoutX="207.0" layoutY="351.0" />
+      <DatePicker fx:id="moveIn" layoutX="207.0" layoutY="351.0" />
       <Label layoutX="96.0" layoutY="409.0" text="Lease Term:" />
-      <ChoiceBox layoutX="207.0" layoutY="404.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="leaseSel" layoutX="207.0" layoutY="404.0" onMouseClicked="#selectLeaseTerm" prefWidth="150.0" />
       <Label layoutX="60.0" layoutY="472.0" text="Previous Address:" />
-      <TextArea layoutX="206.0" layoutY="472.0" prefHeight="101.0" prefWidth="302.0" />
-      <Button layoutX="580.0" layoutY="507.0" mnemonicParsing="false" text="Submit Application" />
+      <TextArea fx:id="prevAddr" layoutX="206.0" layoutY="472.0" prefHeight="101.0" prefWidth="302.0" />
+      <Button fx:id="submit" layoutX="580.0" layoutY="507.0" mnemonicParsing="false" onAction="#submitApp" text="Submit Application" />
    </children>
 </AnchorPane>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.ResidentHomepageController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+      <Label layoutX="236.0" layoutY="17.0" text="Homepage">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <Button fx:id="rentButton" layoutX="73.0" layoutY="205.0" mnemonicParsing="false" text="Pay Rent" />
+      <Button fx:id="maintButton" layoutX="208.0" layoutY="205.0" mnemonicParsing="false" text="Request Maintenance" />
+      <Button fx:id="paymentInfoButton" layoutX="426.0" layoutY="205.0" mnemonicParsing="false" text="Payment Info" />
+      <Hyperlink fx:id="messages" layoutX="129.0" layoutY="116.0" onAction="#viewMessages" text="You have 1 unread message(s) from Management." textFill="RED" underline="true" />
+   </children>
+</AnchorPane>

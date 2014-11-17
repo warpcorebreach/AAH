@@ -6,9 +6,6 @@
 package aah;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -35,23 +32,25 @@ public class AAH extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Connection c = null;
+        /* initialize database connection */
+        /*
+        Connection conn = null;
 
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            c = DriverManager.getConnection("jdbc:mysql://academic-mysql.cc.gatech.edu/cs4400_Group_16", "cs4400_Group_16", "bigADQY9");
-            if (!c.isClosed()) {
+            conn = DriverManager.getConnection("jdbc:mysql://academic-mysql.cc.gatech.edu/cs4400_Group_16", "cs4400_Group_16", "bigADQY9");
+            if (!conn.isClosed()) {
                 System.out.println("Successfully connected!");
             }
         } catch (Exception e) {
             System.out.println("Exception caught");
         } finally {
             try {
-                if (c != null) {
-                    c.close();
+                if (conn != null) {
+                    conn.close();
                 }
             } catch (SQLException e) {}
-        }
+        } */
         launch(args);
     }
 

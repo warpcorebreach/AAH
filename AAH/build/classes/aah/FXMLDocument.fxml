@@ -12,16 +12,17 @@
     <children>
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
-      <Label layoutX="267.0" layoutY="17.0" text="Login">
+      <Label layoutX="67.0" layoutY="17.0" text="Welcome to Atlanta Apartment Homes!">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <TextField layoutX="207.0" layoutY="169.0" />
-      <TextField layoutX="207.0" layoutY="209.0" />
-      <Label layoutX="126.0" layoutY="174.0" text="Username:" />
-      <Label layoutX="130.0" layoutY="214.0" text="Password:" />
-      <Button layoutX="463.0" layoutY="185.0" mnemonicParsing="false" text="Login" />
-      <Button fx:id="newAccount" layoutX="223.0" layoutY="304.0" mnemonicParsing="false" onAction="#createAccount" text="Create New Account" />
+      <TextField fx:id="username" layoutX="207.0" layoutY="151.0" />
+      <Label layoutX="126.0" layoutY="156.0" text="Username:" />
+      <Label layoutX="130.0" layoutY="196.0" text="Password:" />
+      <Button fx:id="loginButton" layoutX="463.0" layoutY="167.0" mnemonicParsing="false" onAction="#login" text="Login" />
+      <Button fx:id="newAcctButton" layoutX="207.0" layoutY="304.0" mnemonicParsing="false" onAction="#createAccount" text="Create New Account" />
+      <Label layoutX="121.0" layoutY="309.0" text="New Users:" />
+      <PasswordField fx:id="password" layoutX="207.0" layoutY="191.0" />
     </children>
 </AnchorPane>
