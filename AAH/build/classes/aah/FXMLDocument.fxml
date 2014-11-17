@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="aah.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.FXMLDocumentController">
     <children>
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
-      <Label layoutX="115.0" layoutY="90.0" text="Group 16 GUI" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+      <Label layoutX="267.0" layoutY="17.0" text="Login">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <TextField layoutX="207.0" layoutY="169.0" />
+      <TextField layoutX="207.0" layoutY="209.0" />
+      <Label layoutX="126.0" layoutY="174.0" text="Username:" />
+      <Label layoutX="130.0" layoutY="214.0" text="Password:" />
+      <Button layoutX="463.0" layoutY="185.0" mnemonicParsing="false" text="Login" />
+      <Button fx:id="newAccount" layoutX="223.0" layoutY="304.0" mnemonicParsing="false" onAction="#createAccount" text="Create New Account" />
     </children>
 </AnchorPane>

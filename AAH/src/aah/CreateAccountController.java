@@ -18,25 +18,30 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+
 /**
+ * FXML Controller class
  *
  * @author Justin
  */
-public class FXMLDocumentController implements Initializable {
+public class CreateAccountController implements Initializable {
 
     @FXML
-    private Button newAccount = new Button("Create Account");
+    private Button regButton = new Button("Register");
 
+    /**
+     * Initializes the controller class.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
 
     @FXML
-    private void createAccount(ActionEvent event) throws IOException {
+    private void register(ActionEvent event) throws IOException {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("CreateAccount.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("ApplicationForm.fxml"));
 
         Scene scene = new Scene(root);
         stage.setScene(scene);

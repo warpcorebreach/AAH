@@ -21,7 +21,7 @@
       <TextField layoutX="207.0" layoutY="209.0" />
       <Label layoutX="126.0" layoutY="174.0" text="Username:" />
       <Label layoutX="130.0" layoutY="214.0" text="Password:" />
-      <Button layoutX="462.0" layoutY="190.0" mnemonicParsing="false" text="Login" />
-      <Label layoutX="440.0" layoutY="355.0" text="Create Account" textFill="#50a0eb" underline="true" />
+      <Button layoutX="463.0" layoutY="185.0" mnemonicParsing="false" text="Login" />
+      <Button fx:id="newAccount" layoutX="223.0" layoutY="304.0" mnemonicParsing="false" onAction="#createAccount" text="Create New Account" />
     </children>
 </AnchorPane>
