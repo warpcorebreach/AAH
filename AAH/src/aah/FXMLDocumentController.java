@@ -24,6 +24,7 @@ import javafx.stage.Stage;
  * @author Justin
  */
 public class FXMLDocumentController implements Initializable {
+    private int userType;
 
     @FXML
     private Button newAcctButton = new Button();
@@ -39,7 +40,7 @@ public class FXMLDocumentController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        userType = 2;   // change for testing
     }
 
     @FXML
@@ -52,12 +53,27 @@ public class FXMLDocumentController implements Initializable {
             System.out.println("Username: " + username.getText());
             System.out.println("Password: " + password.getText());
 
-            // check DB for valid username/password combo
+            /* check DB for valid username/password combo
+            check if user is a manager, resident, or prospective resident
+            userType: 1 - manager
+                      2 - resident
+                      3 - prospective resident */
 
-            /* go to Homepage */
             Node node = (Node) event.getSource();
             Stage stage = (Stage) node.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("ResidentHomepage.fxml"));
+            Parent root;
+
+            // determine which homepage to load
+            if (userType == 1) {
+                root = FXMLLoader.load(
+                        getClass().getResource("MgrHomepage.fxml"));
+            } else if (userType == 2) {
+                root = FXMLLoader.load(
+                        getClass().getResource("ResidentHomepage.fxml"));
+            } else {
+                root = FXMLLoader.load(
+                        getClass().getResource("ProspResidentLogin.fxml"));
+            }
 
             Scene scene = new Scene(root);
             stage.setScene(scene);

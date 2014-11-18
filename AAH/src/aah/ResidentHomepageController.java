@@ -53,4 +53,9 @@ public class ResidentHomepageController implements Initializable {
         System.out.println("Go to messages screen.");
     }
 
+    @FXML
+    private void payRent(ActionEvent event) {
+        
+    }
+
 }

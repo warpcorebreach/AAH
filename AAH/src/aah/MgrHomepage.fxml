@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.MgrHomepageController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+      <Label layoutX="236.0" layoutY="17.0" text="Homepage">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <Button fx:id="appButton" layoutX="34.0" layoutY="141.0" mnemonicParsing="false" onAction="#appReview" text="Application Review" />
+      <Button fx:id="maintButton" layoutX="215.0" layoutY="141.0" mnemonicParsing="false" onAction="#maintRequests" text="Maintenance Requests" />
+      <Button fx:id="rentButton" layoutX="434.0" layoutY="141.0" mnemonicParsing="false" onAction="#rentReminders" text="Rent Reminder" />
+      <Separator layoutX="123.0" layoutY="222.0" prefHeight="0.0" prefWidth="356.0" />
+      <Label layoutX="276.0" layoutY="93.0" text="Actions" />
+      <Label layoutX="274.0" layoutY="252.0" text="Reports" />
+      <ChoiceBox fx:id="reportChoice" layoutX="225.0" layoutY="312.0" onMouseClicked="#select" prefWidth="150.0" />
+      <Label layoutX="75.0" layoutY="317.0" text="Select report to view:" />
+      <Button fx:id="viewButton" layoutX="434.0" layoutY="312.0" mnemonicParsing="false" onAction="#viewReport" text="View" />
+   </children>
+</AnchorPane>

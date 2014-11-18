@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="aah.RentPaymentController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+      <Label layoutX="217.0" layoutY="17.0" text="Rent Payment">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <Label fx:id="dateLabel" layoutX="231.0" layoutY="96.0" text="Date: 2014-11-17">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="217.0" layoutY="136.0" text="Apartment No.: 1234">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="121.0" layoutY="187.0" text="Rent for month:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <DatePicker layoutX="260.0" layoutY="185.0" />
+      <Label layoutX="234.0" layoutY="246.0" text="Rent due: $1,435">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ChoiceBox layoutX="260.0" layoutY="304.0" prefWidth="150.0" />
+      <Label layoutX="174.0" layoutY="306.0" text="Use card:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
