@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package aah;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.SQLException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -14,13 +10,33 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
+/******************************************************************************
+ * This class initializes the DB connection and creates the tables via the
+ * static methods in Tables. Also adds a few entries to User for testing.
+ *
+ * Notes:
+ *  1) comment out the line with Tables.dropTables() if the DB is empty
+ *  2) as of now only the login screen uses DB functionality but it works
+ *  3) login screen can be tested by logging in as one of the users below
+ *     (there is one user in the DB for each type)
+ *
+ * Users:
+ *  1) Username: jcoates8
+ *     Password: 1234
+ *     Type: Management
+ *
+ *  2) Username: jtrimm3
+ *     Password: 1234
+ *     Type: Resident
+ *
+ *  3) Username: wli
+ *     Password: 1234
+ *     Type: Prospective Resident
  *
  * @author Justin
- */
+ *****************************************************************************/
 public class AAH extends Application {
-    private static final String username = "cs4400_Group_16";
-    private static final String pword = "bigADQY9";
+
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -36,69 +52,16 @@ public class AAH extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-
-        /******************************************************
-         * TODO: Implement CREATE TABLE and DROP TABLE statements
-         * in a separate class with static methods that can be called
-         * from main(). This will make setting up and clearing the DB
-         * a little clearer.
-         ******************************************************/
-
-        /* initialize database connection */
-        Connection conn = null;
-
-        try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            conn = DriverManager.getConnection("jdbc:mysql://"
-                    + "academic-mysql.cc.gatech.edu/cs4400_Group_16",
-                    username, pword);
-            if (!conn.isClosed()) {
-                System.out.println("Successfully connected!");
-            }
-        } catch (Exception e) {
-            System.out.println("Exception caught");
-        } /* finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {}
-        } */
-
-        if (conn != null) {
-            /* DROP TABLE User */
-            /*
-            Statement sttable1 = conn.createStatement();
-            sttable1.executeUpdate("DROP TABLE User");
-            System.out.println("Dropping TABLE User...");
-            sttable1.close(); */
-
-            /* Insert a new User into the DB */
-            /*
-            Statement sttable = conn.createStatement();
-            sttable.executeUpdate("CREATE TABLE User("
-                + "Username VARCHAR(15) NOT NULL,"
-                + "Password VARCHAR(20) NOT NULL,"
-                + "PRIMARY KEY(Username))");
-            sttable.close();
-
-            Statement stinsert = conn.createStatement();
-            stinsert.executeUpdate("INSERT INTO User VALUES("
-                    + "'jcoates8', '1234')");
-            stinsert.close();
-
-            Statement stselect = conn.createStatement();
-            ResultSet user = stselect.executeQuery("SELECT * FROM User");
-            while (user.next()) {
-                System.out.println(user.getString("Username") + ", "
-                    + user.getString("Password"));
-            }
-            user.close(); */
+        boolean success = Tables.initConnection();
+        if (success) {
+            System.out.println("Connection successful!");
+            Tables.dropTables();
+            Tables.createTables();
+            launch(args);
         } else {
             System.out.println("Connection failed.");
+            return;
         }
-
-        launch(args);
     }
 
 }
