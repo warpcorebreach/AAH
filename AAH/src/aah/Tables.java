@@ -236,6 +236,6 @@ public class Tables {
 
     public static void setCurrentUser(String u) {
         curUser = u;
-    } // aa
+    }
 
 }
