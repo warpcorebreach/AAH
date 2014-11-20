@@ -53,27 +53,30 @@ public class AAH extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
-        // connect to the DB
+
+        System.out.println("[BEGIN main()]");
+        /*
+         * --------------------
+         *      NOTICE
+         * --------------------
+         * As of 11/20/2014 @ 12:44am We have maxed out all of our database
+         * connections since we forgot to close a connection after the program
+         * terminates.  This application is not runnable until fixed.
+         * --------------------*/
+
         boolean success = Tables.initConnection();
         if (success) {
             System.out.println("Connection successful!");
             //Tables.dropTables();
             //Tables.createTables();
             launch(args);
-            try {
-                Connection conn = Tables.getConnection();
-                if (conn != null) {
-                    // close connection
-                    conn.close();
-                    System.out.println("Connection closed.");
-                }
-            } catch (SQLException e) {
-                System.out.println("Exception: " + e.getMessage());
-            }
+            Tables.closeConnection();
         } else {
             System.out.println("Connection failed.");
             return;
         }
+
+        System.out.println("[END main()]");
     }
 
 }

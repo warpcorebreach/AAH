@@ -10,7 +10,7 @@ import java.sql.*;
  * @author Justin
  */
 public class Tables {
-    
+
     //DB credentials
     private static final String username = "cs4400_Group_16";
     private static final String pword = "bigADQY9";
@@ -18,7 +18,7 @@ public class Tables {
     //
     private static String curUser = null;
     private static Connection conn = null;
-    
+
     //maximum number of times to try and connect/disconnect
     //  from the DB
     private static final int MAX_CONN_OPEN_ATTEMPTS = 3;
@@ -31,12 +31,12 @@ public class Tables {
      * @return boolean True if DB connection successful, false otherwise.
      */
     public static boolean initConnection() {
-        
+
         int i = 0;
         boolean isConnected = false;
-        
+
         System.out.println("Attempting to establish database connection...");
-        
+
         //sanity check- make sure the connection object is isn't already initialized
         if(conn != null){
             System.out.println("ERROR: cannot open database connection; connection object already initialized");
@@ -65,9 +65,9 @@ public class Tables {
                     System.out.println("ERROR: cannot open connection");
                     System.out.println("\t" + ex.getMessage());
                 }//end catch
-            }//end for            
+            }//end for
         }//end else
-        
+
         //connection was opened successfully
         if(isConnected){
             System.out.println("Connection opened successfully.");
@@ -76,23 +76,23 @@ public class Tables {
         else{
             System.out.println("FAILED to open connection after [" + MAX_CONN_OPEN_ATTEMPTS + "] attempts; timed out.");
         }//end else
-        
+
         return isConnected;
-        
+
     }//end method initConnection
-    
+
     /**
      * This method closes the active DB connection
-     * 
+     *
      * @return True on successful database close; false otherwise
      */
     static boolean closeConnection() {
-        
+
         int i = 0;
         boolean isClosed = false;
-        
+
         System.out.println("Attempting to close database connection...");
-        
+
         //sanity check
         if(conn == null){
             System.out.println("ERROR: cannot close connection; connection object is [null]");
@@ -113,6 +113,7 @@ public class Tables {
                     //  to close it.
                     //Make sure we destroy the old reference too
                     conn = null;
+                    isClosed = true;
                     break;
                 }//end try
                 //uh-oh...
@@ -122,7 +123,7 @@ public class Tables {
                 }//end catch
             }//end for
         }//end else
-        
+
         //connection was closed successfully
         if(isClosed){
             System.out.println("Connection closed successfully.");
@@ -131,9 +132,9 @@ public class Tables {
         else{
             System.out.println("FAILED to close connection after [" + MAX_CONN_CLOSE_ATTEMPTS + "] attempts; timed out.");
         }//end else
-        
+
         return isClosed;
-        
+
     }//end method closeConnection
 
     /**
