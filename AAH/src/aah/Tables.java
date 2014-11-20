@@ -48,7 +48,7 @@ public class Tables {
     public static void createTables() throws SQLException {
         // create a new table User
         Statement sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE USER("
+        sttable.executeUpdate("CREATE TABLE User("
             + "Username VARCHAR(15) NOT NULL, "
             + "Password VARCHAR(20) NOT NULL, "
             + "PRIMARY KEY(Username))");
@@ -56,14 +56,14 @@ public class Tables {
 
         // create Manager table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE MANAGEMENT("
+        sttable.executeUpdate("CREATE TABLE Management("
             + "Username VARCHAR(15) NOT NULL, "
             + "PRIMARY KEY(Username))");
         sttable.close();
 
         // create Resident table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE RESIDENT("
+        sttable.executeUpdate("CREATE TABLE Resident("
             + "Username VARCHAR(15) NOT NULL, "
             + "Apt_No INT NOT NULL, "
             + "PRIMARY KEY(Username), "
@@ -75,7 +75,7 @@ public class Tables {
 
         // create Prospective Resident table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE PROSPECTIVE_RESIDENT("
+        sttable.executeUpdate("CREATE TABLE Prospective_Resident("
             + "Username VARCHAR(15) NOT NULL, "
             + "Name VARCHAR(20) NOT NULL, "
             + "DOB DATE NOT NULL, "
@@ -95,7 +95,7 @@ public class Tables {
 
         // create Payment_Info table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE PAYMENT_INFO("
+        sttable.executeUpdate("CREATE TABLE Payment_Info("
             + "Card_No INT NOT NULL, "
             + "Cvv INT NOT NULL, "
             + "Name_On_Card VARCHAR(25) NOT NULL, "
@@ -108,7 +108,7 @@ public class Tables {
 
         // create Apartment table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE APARTMENT("
+        sttable.executeUpdate("CREATE TABLE Apartment("
             + "Apt_No INT NOT NULL, "
             + "Rent INT NOT NULL, "
             + "Category CHAR(9) NOT NULL, "
@@ -120,7 +120,7 @@ public class Tables {
 
         // create Maintenance_Request table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE MAINTENANCE_REQUEST("
+        sttable.executeUpdate("CREATE TABLE Maintenance_Request("
             + "Request_Date DATE NOT NULL, "
             + "Resolved_Date DATE, "
             + "Apt_No INT NOT NULL, "
@@ -134,14 +134,14 @@ public class Tables {
 
         // create Issue table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE ISSUE("
+        sttable.executeUpdate("CREATE TABLE Issue("
             + "Issue_Type VARCHAR(50) NOT NULL, "
             + "PRIMARY KEY(Issue_Type))");
         sttable.close();
 
         // create Reminder table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE REMINDER("
+        sttable.executeUpdate("CREATE TABLE Reminder("
             + "Date DATE NOT NULL, "
             + "Apt_No INT NOT NULL, "
             + "Message VARCHAR(100) NOT NULL, "
@@ -152,7 +152,7 @@ public class Tables {
 
         // create Pays_Rent table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE PAYS_RENT("
+        sttable.executeUpdate("CREATE TABLE Pays_Rent("
             + "Card_No INT NOT NULL, "
             + "Month VARCHAR(10) NOT NULL, "
             + "Year INT NOT NULL, "
@@ -170,7 +170,7 @@ public class Tables {
 
         // create Date table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE DATE("
+        sttable.executeUpdate("CREATE TABLE Date("
             + "Month INT NOT NULL, "
             + "Year INT NOT NULL, "
             + "PRIMARY KEY(Month, Year))");
@@ -236,6 +236,6 @@ public class Tables {
 
     public static void setCurrentUser(String u) {
         curUser = u;
-    }
+    } // aa
 
 }
