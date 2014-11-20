@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package aah;
 
 import java.sql.*;
@@ -17,6 +13,7 @@ public class Tables {
     private static final String username = "cs4400_Group_16";
     private static final String pword = "bigADQY9";
 
+    private static String curUser;
     private static Connection conn;
 
     /**
@@ -76,7 +73,18 @@ public class Tables {
         sttable = conn.createStatement();
         sttable.executeUpdate("CREATE TABLE Prospective_Resident("
             + "Username VARCHAR(15) NOT NULL, "
-            + "PRIMARY KEY(Username))");
+            + "Name VARCHAR(20) NOT NULL, "
+            + "DOB DATE NOT NULL, "
+            + "Gender CHAR NOT NULL, "
+            + "Pref_Lease INT NOT NULL, "
+            + "Category CHAR(9) NOT NULL, "
+            + "Move_Date DATE NOT NULL, "
+            + "Income INT NOT NULL, "
+            + "Prev_Addr VARCHAR(50) NOT NULL, "
+            + "Min_Rent INT NOT NULL, "
+            + "Max_Rent INT NOT NULL, "
+            + "PRIMARY KEY(Username), "
+            + "CONSTRAINT name_dob UNIQUE(Name, DOB))");
         sttable.close();
 
         System.out.println("Tables created.");
@@ -92,8 +100,6 @@ public class Tables {
             + "VALUES('jcoates8')");
         sttable.executeUpdate("INSERT INTO Resident "
             + "VALUES('jtrimm3', 12)");
-        sttable.executeUpdate("INSERT INTO Prospective_Resident "
-            + "VALUES('wli')");
         sttable.close();
 
         System.out.println("Values inserted.");
@@ -101,7 +107,7 @@ public class Tables {
 
     /**
      * Drop all the tables from the DB.
-     * 
+     *
      * @throws SQLException
      */
     public static void dropTables() throws SQLException {
@@ -129,6 +135,14 @@ public class Tables {
 
     public static Connection getConnection() {
         return conn;
+    }
+
+    public static String getCurrentUser() {
+        return curUser;
+    }
+
+    public static void setCurrentUser(String u) {
+        curUser = u;
     }
 
 }

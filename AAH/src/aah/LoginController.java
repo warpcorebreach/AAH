@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package aah;
 
 import java.io.IOException;
@@ -24,7 +20,7 @@ import java.sql.*;
  *
  * @author Justin
  */
-public class FXMLDocumentController implements Initializable {
+public class LoginController implements Initializable {
     private int userType;
     private Connection conn;
 
@@ -71,6 +67,7 @@ public class FXMLDocumentController implements Initializable {
             user.next();    // increment ResultSet pointer becuase reasons
             if (user.getInt("C") == 1 ) {
                 // we have a valid user, load proper Homepage
+                Tables.setCurrentUser(uname);
                 loadHomepage(event, uname);
             } else {
                 // throw login error message

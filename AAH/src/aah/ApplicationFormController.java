@@ -23,6 +23,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import java.sql.*;
 
 /**
  * FXML Controller class
@@ -96,12 +97,20 @@ public class ApplicationFormController implements Initializable {
     }
 
     @FXML
-    private void submitApp(ActionEvent event) throws IOException {
+    private void submitApp(ActionEvent event) throws IOException, SQLException {
         LocalDate dobChoice = dob.getValue();
         LocalDate moveInChoice = moveIn.getValue();
+        String nameIn = name.getText();
         String gender = (genderMale.isSelected()) ? "M" : "F";
+        String lease = selectedLease.substring(0, 1);
+        String addr = prevAddr.getText();
+        int incomeIn = Integer.parseInt(income.getText());
 
-        if (name.getText().equals("")) {
+        // get currently logged in user
+        String curUser = Tables.getCurrentUser();
+
+        // make sure all fields are filled out
+        if (nameIn.equals("")) {
             System.out.println("Please enter a valid name.");
         } else if (dobChoice.isEqual(LocalDate.now())
                 || dobChoice.isAfter(LocalDate.now())) {
@@ -115,26 +124,49 @@ public class ApplicationFormController implements Initializable {
         } else if (maxRent.getText().equals("")) {
             System.out.println("Please enter a value for max rent.");
         } else if (Integer.parseInt(minRent.getText())
-                > Integer.parseInt(maxRent.getText())) {
+            > Integer.parseInt(maxRent.getText())) {
             System.out.println("Min rent must be less than max rent.");
         } else if (moveInChoice.isEqual(LocalDate.now())
                 || moveInChoice.isBefore(LocalDate.now())) {
             System.out.println("Move in date must be after today.");
         } else if (selectedLease == null) {
             System.out.println("Please select a lease term.");
-        } else if (prevAddr.getText().equals("")) {
+        } else if (addr.equals("")) {
             System.out.println("Please enter a previous address.");
         } else {
-            System.out.println("Name: " + name.getText());
+            int minRentIn = Integer.parseInt(minRent.getText());
+            int maxRentIn = Integer.parseInt(maxRent.getText());
+
+            System.out.println("Name: " + nameIn);
             System.out.println("Date of Birth: " + dobChoice);
             System.out.println("Gender: " + gender);
-            System.out.println("Monthly income: " + income.getText());
+            System.out.println("Monthly income: " + incomeIn);
             System.out.println("Preferred category: " + selectedCat);
-            System.out.println("Min rent: " + minRent.getText());
-            System.out.println("Max rent: " + maxRent.getText());
+            System.out.println("Min rent: " + minRentIn);
+            System.out.println("Max rent: " + maxRentIn);
             System.out.println("Move in date: " + moveInChoice);
             System.out.println("Preferred lease: " + selectedLease);
-            System.out.println("Previous address: " + prevAddr.getText());
+            System.out.println("Previous address: " + addr);
+
+            java.sql.Date sqlDOB = java.sql.Date.valueOf(dobChoice.toString());
+            java.sql.Date sqlMoveIn = java.sql.Date.valueOf(
+                    moveInChoice.toString());
+
+            // all fields properly filled, add application to DB
+            String resQ = "INSERT INTO Prospective_Resident VALUES"
+                    + "('" + curUser + "', '" + nameIn + "', '" + sqlDOB
+                    + "', '" + gender + "', " + Integer.parseInt(lease)
+                    + ", '" + selectedCat + "', '" + sqlMoveIn + "', "
+                    + incomeIn + ", '" + addr + "', " + minRentIn + ", "
+                    + maxRentIn + ")";
+
+            Connection conn = Tables.getConnection();
+            Statement newRes = conn.createStatement();
+            newRes.executeUpdate(resQ);
+            newRes.close();
+
+            System.out.println("Application submitted.");
+
         }
     }
 

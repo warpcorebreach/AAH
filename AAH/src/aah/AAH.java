@@ -41,7 +41,7 @@ public class AAH extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(
-                getClass().getResource("FXMLDocument.fxml"));
+                getClass().getResource("Login.fxml"));
 
         Scene scene = new Scene(root);
         stage.setScene(scene);

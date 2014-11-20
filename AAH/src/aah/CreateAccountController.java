@@ -18,6 +18,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.EventHandler;
+import javafx.stage.WindowEvent;
 
 
 /**
@@ -26,6 +31,7 @@ import javafx.stage.Stage;
  * @author Justin
  */
 public class CreateAccountController implements Initializable {
+    private Connection conn;
 
     @FXML
     private Button regButton = new Button();
@@ -44,11 +50,11 @@ public class CreateAccountController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        conn = Tables.getConnection();
     }
 
     @FXML
-    private void register(ActionEvent event) throws IOException {
+    private void register(ActionEvent event) throws IOException, SQLException {
         if (username.getText().equals("")) {
             System.out.println("Please enter a valid username.");
         } else if (password.getText().equals("")) {
@@ -56,19 +62,57 @@ public class CreateAccountController implements Initializable {
         } else if (!password.getText().equals(passwordConf.getText())) {
             System.out.println("Password and Confirm Password must match.");
         } else {
-            System.out.println("Username: " + username.getText());
-            System.out.println("Password: " + password.getText());
+            String uname = username.getText();
+            String pword = password.getText();
+            System.out.println("Username: " + uname);
+            System.out.println("Password: " + pword);
 
-            // check DB for valid username/password combo
+            // check DB for valid username
             // add new info to DB
 
-            Node node = (Node) event.getSource();
-            Stage stage = (Stage) node.getScene().getWindow();
-            Parent root = FXMLLoader.load(getClass().getResource("ApplicationForm.fxml"));
+            String userQ = "SELECT COUNT(*) AS C FROM User WHERE "
+                    + "Username = '" + uname + "'";
+            Statement checkUser = conn.createStatement();
+            ResultSet user = checkUser.executeQuery(userQ);
+            user.next();
 
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
+            if (user.getInt("C") == 1) {
+                System.out.println("That username has already been registered.");
+            } else {
+                userQ = "INSERT INTO User VALUES('" + uname + "', '" + pword
+                        + "')";
+                checkUser = conn.createStatement();
+                checkUser.executeUpdate(userQ);
+
+                // set current user
+                Tables.setCurrentUser(uname);
+
+                Node node = (Node) event.getSource();
+                Stage stage = (Stage) node.getScene().getWindow();
+
+                /* code to delete user if they do not finish app */
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent event) {
+                        try {
+                            System.out.println("App window closed.");
+                            Statement delUser = conn.createStatement();
+                            delUser.executeUpdate("DELETE FROM User WHERE "
+                                    + "Username = '" + uname + "'");
+                        } catch (SQLException ex) {
+                            System.out.println("SQL error.");
+                        }
+                    }
+                });
+                /* end delete user code code */
+
+                Parent root = FXMLLoader.load(
+                        getClass().getResource("ApplicationForm.fxml"));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+            checkUser.close();
         }
 
     }
