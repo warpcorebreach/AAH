@@ -10,11 +10,19 @@ import java.sql.*;
  * @author Justin
  */
 public class Tables {
+    
+    //DB credentials
     private static final String username = "cs4400_Group_16";
     private static final String pword = "bigADQY9";
 
-    private static String curUser;
-    private static Connection conn;
+    //
+    private static String curUser = null;
+    private static Connection conn = null;
+    
+    //maximum number of times to try and connect/disconnect
+    //  from the DB
+    private static final int MAX_CONN_OPEN_ATTEMPTS = 3;
+    private static final int MAX_CONN_CLOSE_ATTEMPTS = 3;
 
     /**
      * Initialize the connection to the DB using the username and password
@@ -23,21 +31,110 @@ public class Tables {
      * @return boolean True if DB connection successful, false otherwise.
      */
     public static boolean initConnection() {
-        /* intialize DB connection */
-        conn = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            conn = DriverManager.getConnection("jdbc:mysql://"
-                    + "academic-mysql.cc.gatech.edu/cs4400_Group_16",
-                    username, pword);
-            if (!conn.isClosed()) {
-                return true;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        return false;
-    }
+        
+        int i = 0;
+        boolean isConnected = false;
+        
+        System.out.println("Attempting to establish database connection...");
+        
+        //sanity check- make sure the connection object is isn't already initialized
+        if(conn != null){
+            System.out.println("ERROR: cannot open database connection; connection object already initialized");
+            System.out.println("\tClose the connection first");
+        }//end if
+        //by this point we know the database connection hasn't already been initialized
+        else{
+            //try to connect for the specified number of times
+            for(i = 0; i < MAX_CONN_OPEN_ATTEMPTS; i++){
+                System.out.print("[" + (i+1) + "/" + MAX_CONN_OPEN_ATTEMPTS + "]: ");
+                try {
+                    //create new DB connection instance
+                    Class.forName("com.mysql.jdbc.Driver").newInstance();
+                    conn = DriverManager.getConnection("jdbc:mysql://"
+                            + "academic-mysql.cc.gatech.edu/cs4400_Group_16",
+                            username, pword);
+                    //we got a good connection.  We need to set the return flag
+                    //  and stop trying to connect
+                    if (conn != null && !conn.isClosed()) {
+                        isConnected = true;
+                        break;
+                    }
+                }//end try
+                //oh God no...
+                catch (Exception ex) {
+                    System.out.println("ERROR: cannot open connection");
+                    System.out.println("\t" + ex.getMessage());
+                }//end catch
+            }//end for            
+        }//end else
+        
+        //connection was opened successfully
+        if(isConnected){
+            System.out.println("Connection opened successfully.");
+        }//end if
+        //we didn't make it...
+        else{
+            System.out.println("FAILED to open connection after [" + MAX_CONN_OPEN_ATTEMPTS + "] attempts; timed out.");
+        }//end else
+        
+        return isConnected;
+        
+    }//end method initConnection
+    
+    /**
+     * This method closes the active DB connection
+     * 
+     * @return True on successful database close; false otherwise
+     */
+    static boolean closeConnection() {
+        
+        int i = 0;
+        boolean isClosed = false;
+        
+        System.out.println("Attempting to close database connection...");
+        
+        //sanity check
+        if(conn == null){
+            System.out.println("ERROR: cannot close connection; connection object is [null]");
+        }//end if
+        //at this point, we know the connection object is not null and therefore
+        //  must have been initialized by the call to initConnection()
+        else{
+            //try to close the connection a few times
+            for(i = 0; i < MAX_CONN_CLOSE_ATTEMPTS; i++){
+                try{
+                    System.out.print("[" + (i+1) + "/" + MAX_CONN_CLOSE_ATTEMPTS + "]: ");
+                    //attempt to close the connection
+                    conn.close();
+                    //if we got to here, then we know the connection
+                    //  was closed successfully.  otherwise, it would
+                    //  have thrown an exception and jumped to the catch
+                    //  clause.  Break out of the for loop- stop trying
+                    //  to close it.
+                    //Make sure we destroy the old reference too
+                    conn = null;
+                    break;
+                }//end try
+                //uh-oh...
+                catch(Exception ex){
+                    System.out.println("ERROR: cannot close connection");
+                    System.out.println("\t" + ex.getMessage());
+                }//end catch
+            }//end for
+        }//end else
+        
+        //connection was closed successfully
+        if(isClosed){
+            System.out.println("Connection closed successfully.");
+        }//end if
+        //we didn't make it...
+        else{
+            System.out.println("FAILED to close connection after [" + MAX_CONN_CLOSE_ATTEMPTS + "] attempts; timed out.");
+        }//end else
+        
+        return isClosed;
+        
+    }//end method closeConnection
 
     /**
      * Create tables in the DB. Also adds some entries to the created tables
