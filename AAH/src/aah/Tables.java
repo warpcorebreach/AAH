@@ -48,7 +48,7 @@ public class Tables {
     public static void createTables() throws SQLException {
         // create a new table User
         Statement sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE User("
+        sttable.executeUpdate("CREATE TABLE USER("
             + "Username VARCHAR(15) NOT NULL, "
             + "Password VARCHAR(20) NOT NULL, "
             + "PRIMARY KEY(Username))");
@@ -56,22 +56,26 @@ public class Tables {
 
         // create Manager table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE Management("
+        sttable.executeUpdate("CREATE TABLE MANAGEMENT("
             + "Username VARCHAR(15) NOT NULL, "
             + "PRIMARY KEY(Username))");
         sttable.close();
 
         // create Resident table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE Resident("
+        sttable.executeUpdate("CREATE TABLE RESIDENT("
             + "Username VARCHAR(15) NOT NULL, "
             + "Apt_No INT NOT NULL, "
-            + "PRIMARY KEY(Username))");
+            + "PRIMARY KEY(Username), "
+            + "FOREIGN KEY (Apt_No) REFERENCES APARTMENT(Apt_No), "
+            + "ON DELETE CASCADE  ON UPDATE CASCADE, "
+            + "FOREIGN KEY (Username) REFERENCES PROSPECTIVE_RESIDENT(Username), "
+            + "ON DELETE CASCADE ON UPDATE CASCADE)");
         sttable.close();
 
         // create Prospective Resident table
         sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE Prospective_Resident("
+        sttable.executeUpdate("CREATE TABLE PROSPECTIVE_RESIDENT("
             + "Username VARCHAR(15) NOT NULL, "
             + "Name VARCHAR(20) NOT NULL, "
             + "DOB DATE NOT NULL, "
@@ -84,8 +88,97 @@ public class Tables {
             + "Min_Rent INT NOT NULL, "
             + "Max_Rent INT NOT NULL, "
             + "PRIMARY KEY(Username), "
-            + "CONSTRAINT name_dob UNIQUE(Name, DOB))");
+            + "CONSTRAINT name_dob UNIQUE(Name, DOB), "
+            + "FOREIGN KEY(Username)REFERENCES USER(Username), "
+            + "ON DELETE CASCADE ON UPDATE CASCADE)");
         sttable.close();
+        
+        // create Payment_Info table
+        sttable = conn.createStatement();
+        sttable.executeUpdate("CREATE TABLE PAYMENT_INFO("
+            + "Card_No INT NOT NULL, "
+            + "Cvv INT NOT NULL, "
+            + "Name_On_Card VARCHAR(25) NOT NULL, "
+            + "Exp_Date DATE NOT NULL, "
+            + "Username VARCHAR(15) NOT NULL, "
+            + "PRIMARY KEY(Card_No), "
+            + "FOREIGN KEY(Username) REFERENCES RESIDENT(Username), "
+            + "ON DELETE CASCADE ON UPDATE CASCADE)");
+        sttable.close();
+        
+        // create Apartment table
+        sttable = conn.createStatement();
+        sttable.executeUpdate("CREATE TABLE APARTMENT("
+            + "Apt_No INT NOT NULL, "
+            + "Rent INT NOT NULL, "
+            + "Category CHAR(9) NOT NULL, "
+            + "Lease_Term INT, "
+            + "Sq_Ft INT NOT NULL, "
+            + "Available_On DATE, "
+            + "PRIMARY KEY(Apt_No)");
+        sttable.close();
+        
+        // create Maintenance_Request table
+        sttable = conn.createStatement();
+        sttable.executeUpdate("CREATE TABLE MAINTENANCE_REQUEST("
+            + "Request_Date DATE NOT NULL, "
+            + "Resolved_Date DATE, "
+            + "Apt_No INT NOT NULL, "
+            + "Issue_Type VARCHAR(50) NOT NULL, "
+            + "PRIMARY KEY(Request_Date, Apt_No, Issue_Type), "
+            + "FOREIGN KEY(Apt_No)REFERENCES APARTMENT(Apt_No), "
+            + "ON DELETE CASCADE ON UPDATE CASCADE, "
+            + "FOREIGN KEY(Issue_Type)REFERENCES ISSUE(Issue_Type), "
+            + "ON DELETE CASCADE ON UPDATE CASCADE)");
+        sttable.close();
+        
+        // create Issue table
+        sttable = conn.createStatement();
+        sttable.executeUpdate("CREATE TABLE ISSUE("
+            + "Issue_Type VARCHAR(50) NOT NULL, "
+            + "PRIMARY KEY(Issue_Type))");
+        sttable.close();
+        
+        // create Reminder table
+        sttable = conn.createStatement();
+        sttable.executeUpdate("CREATE TABLE REMINDER("
+            + "Date DATE NOT NULL, "
+            + "Apt_No INT NOT NULL, "
+            + "Message VARCHAR(100) NOT NULL, "
+            + "PRIMARY KEY(Date, Apt_No), "
+            + "FOREIGN KEY(Apt_No)REFERENCES APARTMENT(Apt_No), "
+            + "ON DELETE CASCADE ON UPDATE CASCADE)");
+        sttable.close();
+        
+        // create Pays_Rent table
+        sttable = conn.createStatement();
+        sttable.executeUpdate("CREATE TABLE PAYS_RENT("
+            + "Card_No INT NOT NULL, "
+            + "Month VARCHAR(10) NOT NULL, "
+            + "Year INT NOT NULL, "
+            + "Apt_No INT NOT NULL, "
+            + "Amt INT NOT NULL, "
+            + "Pay_Date DATE NOT NULL, "
+            + "PRIMARY KEY(Card_No, Month, Year), "
+            + "FOREIGN KEY(Card_No) REFERENCES PAYMENT_INFO(CardNo), "
+            + "ON DELETE CASCADE  ON UPDATE CASCADE, "
+            + "FOREIGN KEY(Month) REFERENCES DATE(Month), "
+            + "ON DELETE CASCADE ON UPDATE CASCADE, "
+            + "FOREIGN KEY(Year) REFERENCES Date(Year), "
+            + "ON DELETE CASCADE ON UPDATE CASCADE)");
+        sttable.close();
+        
+        // create Date table
+        sttable = conn.createStatement();
+        sttable.executeUpdate("CREATE TABLE DATE("
+            + "Month INT NOT NULL, "
+            + "Year INT NOT NULL, "
+            + "PRIMARY KEY(Month, Year))");
+        sttable.close();
+        
+        
+        
+        
 
         System.out.println("Tables created.");
 
