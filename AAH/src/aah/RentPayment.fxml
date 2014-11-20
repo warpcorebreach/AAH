@@ -8,8 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="aah.RentPaymentController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.RentPaymentController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
       <Label layoutX="217.0" layoutY="17.0" text="Rent Payment">
@@ -33,7 +32,7 @@
          </font>
       </Label>
       <DatePicker layoutX="260.0" layoutY="185.0" />
-      <Label layoutX="234.0" layoutY="246.0" text="Rent due: $1,435">
+      <Label layoutX="234.0" layoutY="247.0" text="Rent due: $1,435">
          <font>
             <Font size="18.0" />
          </font>
@@ -44,5 +43,6 @@
             <Font size="18.0" />
          </font>
       </Label>
+      <Button layoutX="446.0" layoutY="304.0" mnemonicParsing="false" text="Make Payment" />
    </children>
 </AnchorPane>

@@ -24,6 +24,11 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import java.sql.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -166,6 +171,16 @@ public class ApplicationFormController implements Initializable {
             newRes.close();
 
             System.out.println("Application submitted.");
+
+            // load and display app under review window
+            Node node = (Node) event.getSource();
+            Stage stage = (Stage) node.getScene().getWindow();
+            Parent root;
+            root = FXMLLoader.load(
+                    getClass().getResource("ProspResidentLogin.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
 
         }
     }
