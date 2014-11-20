@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="aah.MaintenanceRequestController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+      <Label layoutX="173.0" layoutY="17.0" text="Request Maintenance">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <Label fx:id="curDate" layoutX="365.0" layoutY="88.0" text="Request Date: 2014-11-17">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="71.0" layoutY="158.0" text="Apartment No.:" />
+      <Label layoutX="136.0" layoutY="206.0" text="Issue:" />
+      <TextField fx:id="aptNo" layoutX="194.0" layoutY="153.0" prefHeight="31.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="issueSel" layoutX="194.0" layoutY="201.0" onMouseClicked="#selectIssue" prefWidth="150.0" />
+      <Button fx:id="submit" layoutX="207.0" layoutY="289.0" mnemonicParsing="false" onAction="#submitRequest" text="Submit Request" />
+   </children>
+</AnchorPane>

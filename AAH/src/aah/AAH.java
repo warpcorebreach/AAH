@@ -55,7 +55,7 @@ public class AAH extends Application {
         boolean success = Tables.initConnection();
         if (success) {
             System.out.println("Connection successful!");
-            Tables.dropTables();
+            //Tables.dropTables();
             Tables.createTables();
             launch(args);
         } else {
