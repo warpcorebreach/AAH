@@ -2,6 +2,7 @@
 package aah;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -52,12 +53,23 @@ public class AAH extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws SQLException {
+        // connect to the DB
         boolean success = Tables.initConnection();
         if (success) {
             System.out.println("Connection successful!");
             //Tables.dropTables();
             Tables.createTables();
             launch(args);
+            try {
+                Connection conn = Tables.getConnection();
+                if (conn != null) {
+                    // close connection
+                    conn.close();
+                    System.out.println("Connection closed.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Exception: " + e.getMessage());
+            }
         } else {
             System.out.println("Connection failed.");
             return;
