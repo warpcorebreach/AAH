@@ -183,15 +183,15 @@ public class Tables {
         System.out.println("Tables created.");
 
         sttable = conn.createStatement();
-        sttable.executeUpdate("INSERT INTO USER "
+        sttable.executeUpdate("INSERT INTO User "
             + "VALUES('jcoates8', '1234')");
-        sttable.executeUpdate("INSERT INTO USER "
+        sttable.executeUpdate("INSERT INTO User "
             + "VALUES('jtrimm3', '1234')");
-        sttable.executeUpdate("INSERT INTO USER "
+        sttable.executeUpdate("INSERT INTO User "
             + "VALUES('wli', '1234')");
-        sttable.executeUpdate("INSERT INTO MANAGEMENT "
+        sttable.executeUpdate("INSERT INTO Management "
             + "VALUES('jcoates8')");
-        sttable.executeUpdate("INSERT INTO RESIDENT "
+        sttable.executeUpdate("INSERT INTO Resident "
             + "VALUES('jtrimm3', 12)");
         sttable.close();
 
@@ -206,22 +206,22 @@ public class Tables {
     public static void dropTables() throws SQLException {
         // drop User table
         Statement sttable1 = conn.createStatement();
-        sttable1.executeUpdate("DROP TABLE User");
+        sttable1.executeUpdate("DROP TABLE USER");
         System.out.println("Dropping TABLE User...");
         sttable1.close();
 
         sttable1 = conn.createStatement();
-        sttable1.executeUpdate("DROP TABLE Management");
+        sttable1.executeUpdate("DROP TABLE MANAGEMENT");
         System.out.println("Dropping TABLE Management...");
         sttable1.close();
 
         sttable1 = conn.createStatement();
-        sttable1.executeUpdate("DROP TABLE Resident");
+        sttable1.executeUpdate("DROP TABLE RESIDENT");
         System.out.println("Dropping TABLE Resident...");
         sttable1.close();
 
         sttable1 = conn.createStatement();
-        sttable1.executeUpdate("DROP TABLE Prospective_Resident");
+        sttable1.executeUpdate("DROP TABLE PROSPECTIVE_RESIDENT");
         System.out.println("Dropping TABLE Prospective_Resident...");
         sttable1.close();
     }
