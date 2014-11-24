@@ -67,9 +67,9 @@ public class RentPaymentController implements Initializable {
             String curUser = Tables.getCurrentUser();
             int baseRent = 0;
 
-            String aptRent = "SELECT Apt_No, Rent" +
-                    "FROM Apartment A JOIN Resident R" +
-                    "ON A.Apt_No = R.Apt_No" +
+            String aptRent = "SELECT A.Apt_No, Rent " +
+                    "FROM Apartment A JOIN Resident R " +
+                    "ON A.Apt_No = R.Apt_No " +
                     "WHERE Username = '" + curUser + "'";
             Statement getAptRent = conn.createStatement();
             ResultSet finalAptRent = getAptRent.executeQuery(aptRent);
@@ -78,13 +78,13 @@ public class RentPaymentController implements Initializable {
                 baseRent = finalAptRent.getInt("Rent");
             }
 
-            String toProrate = "SELECT EXTRACT(DAY FROM Move_Date) AS Day," +
-                    "EXTRACT(MONTH FROM Move_Date) AS Month," +
-                    "EXTRACT(MONTH FROM CURDATE()) AS cur_month, Count(*) AS count" +
-                    "FROM Prospective_Resident P JOIN Resident R" +
-                    "ON P.Username = R.Username" +
-                    "WHERE P.Username = '" + curUser + "'" +
-                    "AND Day > 7" +
+            String toProrate = "SELECT EXTRACT(DAY FROM Move_Date) AS day, " +
+                    "EXTRACT(MONTH FROM Move_Date) AS Month, " +
+                    "EXTRACT(MONTH FROM CURDATE()) AS cur_month, Count(*) AS count " +
+                    "FROM Prospective_Resident P JOIN Resident R " +
+                    "ON P.Username = R.Username " +
+                    "WHERE P.Username = '" + curUser + "' " +
+                    "AND day > 7 " +
                     "AND Month = cur_month";
             Statement pro = conn.createStatement();
             ResultSet prorate = pro.executeQuery(toProrate);
@@ -92,11 +92,11 @@ public class RentPaymentController implements Initializable {
             if (prorate.getInt("count") == 1) {
                 String proAmt = "SELECT (EXTRACT(DAY FROM CURDATE())" +
                         "- EXTRACT(DAY FROM Move_Date))" +
-                        "*(Rent / LAST_DAY(CURDATE())) AS prorated_rent" +
-                        "FROM rospective_Resident P JOIN Resident R" +
-                        "ON P.Username = R.Username" +
-                        "JOIN APARTMENT A" +
-                        "ON R.Apt_No = A.Apt_No" +
+                        "*(Rent / LAST_DAY(CURDATE())) AS prorated_rent " +
+                        "FROM Prospective_Resident P JOIN Resident R " +
+                        "ON P.Username = R.Username " +
+                        "JOIN APARTMENT A " +
+                        "ON R.Apt_No = A.Apt_No " +
                         "WHERE P.Username = '" + curUser + "'";
                 Statement proCalc = conn.createStatement();
                 ResultSet finalPro = proCalc.executeQuery(proAmt);
@@ -104,17 +104,15 @@ public class RentPaymentController implements Initializable {
                 baseRent = finalPro.getInt("prorated_rent");
             }
 
-            String delayed = "SELECT Apt_No, " + //now only calcs extra default amt
-                    "50*(EXTRACT(DAY FROM CURDATE())-3) AS extra_rent" +
-                    "FROM Apartment A JOIN Resident R" +
-                    "	ON A.Apt_No = R.Apt_No" +
+            String delayed = "SELECT A.Apt_No, " + //now only calcs extra default amt
+                    "50*(EXTRACT(DAY FROM CURDATE())-3) AS extra_rent " +
+                    "FROM Apartment A JOIN Resident R " +
+                    "ON A.Apt_No = R.Apt_No " +
                     "WHERE Username = '" + curUser + "'";
             Statement getDelay = conn.createStatement();
             ResultSet extra = getDelay.executeQuery(delayed);
             extra.next();
             rentDue = baseRent + extra.getInt("extraRent");
-
-            int curMonth;
 
             dateLabel.setText("Date: " + LocalDate.now().toString());
             aptLabel.setText("Apartment #: " + apt);
@@ -122,14 +120,11 @@ public class RentPaymentController implements Initializable {
 
             rentForMonth.setValue(LocalDate.now());
 
-            curMonth = rentForMonth.getValue().getMonthValue();
-            rentMonth = months[curMonth - 1];
-            rentYear = rentForMonth.getValue().getYear();
             cards = new ArrayList<>();
             // populate cards with the current user's available payment methods
 
-            String cardPots = "SELECT Card_No" +
-                    "FROM Payment_Info" +
+            String cardPots = "SELECT Card_No " +
+                    "FROM Payment_Info " +
                     "WHERE Username = '" + curUser + "'";
             Statement getCard = conn.createStatement();
             ResultSet cardNos = getCard.executeQuery(cardPots);
@@ -143,6 +138,9 @@ public class RentPaymentController implements Initializable {
 
     @FXML
     private void makePayment(ActionEvent event)throws IOException, SQLException {
+        int curMonth = rentForMonth.getValue().getMonthValue();
+        rentMonth = months[curMonth - 1];
+        rentYear = rentForMonth.getValue().getYear();
 
         String resQ = "INSERT INTO Pays_Rent VALUES"
                     + "('" + selectedCard + "', '" + rentMonth + "', '" + rentYear
