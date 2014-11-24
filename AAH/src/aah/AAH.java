@@ -62,7 +62,10 @@ public class AAH extends Application {
          * As of 11/20/2014 @ 12:44am We have maxed out all of our database
          * connections since we forgot to close a connection after the program
          * terminates.  This application is not runnable until fixed.
-         * --------------------*/
+         * --------------------
+         * UPDATE 11/20/2014 @ 1:13 am The connection should be closed properly
+         * when exiting the app, but we will continue to monitor the situation.
+         */
 
         boolean success = Tables.initConnection();
         if (success) {

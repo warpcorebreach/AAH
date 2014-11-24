@@ -146,18 +146,26 @@ public class Tables {
     public static void createTables() throws SQLException {
         // create a new table User
         Statement sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE User("
-            + "Username VARCHAR(15) NOT NULL, "
-            + "Password VARCHAR(20) NOT NULL, "
-            + "PRIMARY KEY(Username))");
-        sttable.close();
+        try {
+            sttable.executeUpdate("CREATE TABLE User("
+                + "Username VARCHAR(15) NOT NULL, "
+                + "Password VARCHAR(20) NOT NULL, "
+                + "PRIMARY KEY(Username))");
+            sttable.close();
+        } catch (SQLException e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
 
         // create Manager table
-        sttable = conn.createStatement();
-        sttable.executeUpdate("CREATE TABLE Management("
-            + "Username VARCHAR(15) NOT NULL, "
-            + "PRIMARY KEY(Username))");
-        sttable.close();
+        try {
+            sttable = conn.createStatement();
+            sttable.executeUpdate("CREATE TABLE Management("
+                + "Username VARCHAR(15) NOT NULL, "
+                + "PRIMARY KEY(Username))");
+            sttable.close();
+        } catch (SQLException e) {
+            System.out.println("Exception: " + e.getMessage());
+        }
 
         // create Resident table
         sttable = conn.createStatement();
