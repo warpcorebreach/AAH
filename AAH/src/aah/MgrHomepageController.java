@@ -5,6 +5,7 @@
  */
 package aah;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -73,13 +79,29 @@ public class MgrHomepageController implements Initializable {
     }
 
     @FXML
-    private void viewReport(ActionEvent even) {
+    private void viewReport(ActionEvent event) throws IOException {
         if (selected == null) {
             System.out.println("Please choose a report to view.");
         } else {
             System.out.println("Viewing " + selected);
-        }
-    }
+            Parent root;
+            Node node = (Node) event.getSource();
+            Stage stage = (Stage) node.getScene().getWindow();
+            if (selected == "Leasing Report") {
+                root = FXMLLoader.load(
+                        getClass().getResource("LeaseReport.fxml"));
+            } else if (selected == "Service Request Resolution Report") {
+                root = FXMLLoader.load(
+                        getClass().getResource("ServiceRequestReport.fxml"));
+            } else {
+                root = FXMLLoader.load(
+                        getClass().getResource("RentDefaultReport.fxml"));
+            }
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+       }
+   }
 
     @FXML
     private void select() {
