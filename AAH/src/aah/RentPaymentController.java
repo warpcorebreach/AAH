@@ -60,8 +60,8 @@ public class RentPaymentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            apt = 1111; // will be retrieved from DB
-            rentDue = 1234; // will be retrieved from DB
+            //apt = 1111; // will be retrieved from DB
+            //rentDue = 1234; // will be retrieved from DB
             conn = Tables.getConnection();
 
             String curUser = Tables.getCurrentUser();
