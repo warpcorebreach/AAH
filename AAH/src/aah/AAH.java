@@ -55,30 +55,21 @@ public class AAH extends Application {
     public static void main(String[] args) throws SQLException {
 
         System.out.println("[BEGIN main()]");
-        /*
-         * --------------------
-         *      NOTICE
-         * --------------------
-         * As of 11/20/2014 @ 12:44am We have maxed out all of our database
-         * connections since we forgot to close a connection after the program
-         * terminates.  This application is not runnable until fixed.
-         * --------------------
-         * UPDATE 11/20/2014 @ 1:13 am The connection should be closed properly
-         * when exiting the app, but we will continue to monitor the situation.
-         */
-
-        boolean success = Tables.initConnection();
-        if (success) {
-            System.out.println("Connection successful!");
+        
+        System.out.println("+--------------------------------------+");
+        System.out.println("|    Atlanta Apartment Homes Portal    |");
+        System.out.println("+--------------------------------------+");
+        
+        //boolean success = Tables.initConnection();
+        if (Tables.initConnection()) {
+            System.out.println("launching GUI...");
             //Tables.dropTables();
             //Tables.createTables();
             launch(args);
             Tables.closeConnection();
-        } else {
-            System.out.println("Connection failed.");
-            return;
-        }
-
+        }//end if 
+        
+        System.out.println("+--------------------------------------+");
         System.out.println("[END main()]");
     }
 
