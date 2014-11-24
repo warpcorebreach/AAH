@@ -20,6 +20,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import java.sql.*;
+import javafx.collections.FXCollections;
 
 /**
  * FXML Controller class
@@ -30,6 +31,8 @@ public class MaintenanceRequestController implements Initializable {
     private Connection conn;
     private String selectedIssue, user;
     private List<String> issues;
+    private int aptnumber;
+    private boolean test;
 
     @FXML
     private Button submit = new Button();
@@ -60,14 +63,32 @@ public class MaintenanceRequestController implements Initializable {
         issues.add("Door lock");
         issues.add("Toilet clogged");
         issues.add("Drain clogged");
-
+        issueSel.setItems(FXCollections.observableArrayList(issues));
         // get current user's apartment number to populate apt no field
 
     }
 
     @FXML
     private void submitRequest(ActionEvent event) {
-
+        if(selectedIssue != null) {
+            if(aptNo.getText() != null) {
+                String s = aptNo.getText();
+                try {
+                    aptnumber = Integer.parseInt(s);
+                    test = true;
+                } catch (NumberFormatException e) {
+                        System.out.println("Please enter an Valid Apt Number");
+                        test = false;
+                        }
+                if(test) {
+                System.out.println("ready to submit request");
+                }
+            } else {
+                System.out.println("Please enter an Apt Number");
+            }
+        } else {
+            System.out.println("Please selec a Issue");
+        }
     }
 
     @FXML
