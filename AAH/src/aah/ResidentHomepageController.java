@@ -60,8 +60,15 @@ public class ResidentHomepageController implements Initializable {
     }
 
     @FXML
-    private void payRent(ActionEvent event) {
-
+    private void payRent(ActionEvent event) throws IOException {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root;
+        root = FXMLLoader.load(
+                getClass().getResource("RentPayment.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
