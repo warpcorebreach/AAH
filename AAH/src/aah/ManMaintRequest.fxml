@@ -9,12 +9,18 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="aah.LeaseReportController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="aah.ManMaintRequestController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
-      <Label alignment="CENTER" layoutX="159.0" layoutY="17.0" text="3 Month Leasing Report">
+      <Label layoutX="144.0" layoutY="17.0" text="View Maintenance Requests">
          <font>
             <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <Button layoutX="511.0" layoutY="175.0" mnemonicParsing="false" text="Resolved" />
+      <Label layoutX="204.0" layoutY="236.0" text="Resolved Issues">
+         <font>
+            <Font name="System Bold" size="20.0" />
          </font>
       </Label>
    </children>

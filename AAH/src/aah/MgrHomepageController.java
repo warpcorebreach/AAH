@@ -77,12 +77,28 @@ public class MgrHomepageController implements Initializable {
     }
 
     @FXML
-    private void maintRequests(ActionEvent event) {
+    private void maintRequests(ActionEvent event) throws IOException {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root;
+        root = FXMLLoader.load(
+                getClass().getResource("ManMaintRequest.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
         System.out.println("Go to maintenance requests screen.");
     }
 
     @FXML
-    private void appReview(ActionEvent event) {
+    private void appReview(ActionEvent event) throws IOException {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root;
+        root = FXMLLoader.load(
+                getClass().getResource("AppReview.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
         System.out.println("Go to application review screen.");
     }
 

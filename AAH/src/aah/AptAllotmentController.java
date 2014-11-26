@@ -15,7 +15,7 @@ import javafx.fxml.Initializable;
  *
  * @author Julianna
  */
-public class RentDefaultReportController implements Initializable {
+public class AptAllotmentController implements Initializable {
 
     /**
      * Initializes the controller class.
