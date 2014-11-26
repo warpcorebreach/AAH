@@ -64,7 +64,15 @@ public class MgrHomepageController implements Initializable {
     }
 
     @FXML
-    private void rentReminders(ActionEvent event) {
+    private void rentReminders(ActionEvent event) throws IOException {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root;
+        root = FXMLLoader.load(
+                getClass().getResource("Reminder.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
         System.out.println("Go to rent reminders screen.");
     }
 
