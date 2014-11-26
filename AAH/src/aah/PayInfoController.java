@@ -9,12 +9,20 @@ package aah;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+//import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Date;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +32,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -38,6 +47,9 @@ public class PayInfoController implements Initializable {
     private Connection conn;
     private String curUser;
     private List<Integer> cards;
+    private List<Date> dates;
+    private Date selectedDate;
+    private int selectedCard;
     
     @FXML
     private TextField cardNameText = new TextField();
@@ -49,6 +61,9 @@ public class PayInfoController implements Initializable {
     private ChoiceBox expDate = new ChoiceBox();
     
     @FXML
+    private ChoiceBox cardBox = new ChoiceBox();
+    
+    @FXML
     private TextField cvvText = new TextField();
 
     @FXML
@@ -58,10 +73,35 @@ public class PayInfoController implements Initializable {
      * Initializes the controller class.
      */
     @Override
+    @FXML
     public void initialize(URL url, ResourceBundle rb) {
         conn = Tables.getConnection();
         curUser = Tables.getCurrentUser();
         cards = new ArrayList<>();
+        expDate.setValue("Choose a date");
+        
+        String aStr;
+        String bStr;
+        //SimpleDateFormat formatter = new SimpleDateFormat("MM/yy");
+        dates = new ArrayList<>();
+        
+        for (int y = 14; y < 25; y++) {
+            aStr = "" + y;
+            for (int x = 0; x < 12; x++) {
+                bStr = x + "/" + aStr;
+                String DateStr="20" + y + "-" + x + "-01";
+                try {
+                    Date d = new SimpleDateFormat("yyyy-MM-dd").parse(DateStr); 
+                    java.sql.Date date = new java.sql.Date(d.getTime());
+                    dates.add(date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        expDate.setItems(FXCollections.observableArrayList(dates));
+        
         try {
             String getQ = "SELECT Card_No" +
                             "FROM Payment_Info" +
@@ -74,6 +114,29 @@ public class PayInfoController implements Initializable {
         } catch(SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
+        cardBox.setItems(FXCollections.observableArrayList(cards));
+    }
+    
+    @FXML
+    private void selectDate() {
+        expDate.getSelectionModel().selectedIndexProperty().addListener(
+            new ChangeListener<Number>() {
+                public void changed(ObservableValue v, Number val, Number newVal) {
+                    Date i = dates.get(newVal.intValue());
+                    selectedDate = i;
+                }
+            });
+    }
+    
+    @FXML
+    private void selectCard() {
+        expDate.getSelectionModel().selectedIndexProperty().addListener(
+            new ChangeListener<Number>() {
+                public void changed(ObservableValue v, Number val, Number newVal) {
+                    int i = cards.get(newVal.intValue());
+                    selectedCard = i;
+                }
+            });
     }
     
     @FXML
@@ -82,10 +145,11 @@ public class PayInfoController implements Initializable {
         int cardNoInt = Integer.parseInt(cardNo);
         String cvv = cvvText.getText();
         int cvvInt = Integer.parseInt(cvv);
-        String cardName = cardNameText.getText();
+        String cardName = cardNameText.getText(); 
+        
         String addQ = "INSERT INTO Payment_Info VALUES"
-                        +"('" + cardNoInt + "', '" + cvvInt + "', '" + cardName + ")";
-                        //+ "', '" + Exp_Date + "', '" + curUser + ")";
+                        +"('" + cardNoInt + "', '" + cvvInt + "', '" + cardName
+                        + "', '" + selectedDate + "', '" + curUser + ")";
 
         Statement newCard = conn.createStatement();
         newCard.executeUpdate(addQ);
@@ -96,8 +160,8 @@ public class PayInfoController implements Initializable {
     
     @FXML
     private void deleteCard(ActionEvent event)throws IOException, SQLException {
-        String delQ = "DELETE FROM Payment_Info";// +
-                        //+ "WHERE Card_No = '" + $card_no + "'";
+        String delQ = "DELETE FROM Payment_Info" 
+                        + "WHERE Card_No = '" + selectedCard + "'";
         Statement delCard = conn.createStatement();
         delCard.executeUpdate(delQ);
         delCard.close();
