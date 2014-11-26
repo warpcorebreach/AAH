@@ -37,12 +37,12 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <ChoiceBox layoutX="260.0" layoutY="304.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="cardChoice" layoutX="260.0" layoutY="304.0" onDragDetected="#selectCard" prefWidth="150.0" />
       <Label layoutX="174.0" layoutY="306.0" text="Use card:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="payButton" layoutX="446.0" layoutY="304.0" mnemonicParsing="false" onAction="#loadHomepage" text="Make Payment" />
+      <Button fx:id="payButton" layoutX="446.0" layoutY="304.0" mnemonicParsing="false" onAction="#makePayment" text="Make Payment" />
    </children>
 </AnchorPane>
