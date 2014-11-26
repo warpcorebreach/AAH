@@ -112,7 +112,7 @@ public class RentPaymentController implements Initializable {
             Statement getDelay = conn.createStatement();
             ResultSet extra = getDelay.executeQuery(delayed);
             extra.next();
-            rentDue = baseRent + extra.getInt("extraRent");
+            rentDue = baseRent + extra.getInt("extra_rent");
 
             dateLabel.setText("Date: " + LocalDate.now().toString());
             aptLabel.setText("Apartment #: " + apt);
