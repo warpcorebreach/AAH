@@ -43,6 +43,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Button layoutX="446.0" layoutY="304.0" mnemonicParsing="false" text="Make Payment" />
+      <Button fx:id="payButton" layoutX="446.0" layoutY="304.0" mnemonicParsing="false" onAction="#loadHomepage" text="Make Payment" />
    </children>
 </AnchorPane>
