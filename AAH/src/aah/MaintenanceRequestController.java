@@ -5,6 +5,7 @@
  */
 package aah;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,7 +21,13 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import java.sql.*;
+import static java.sql.JDBCType.NULL;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -56,20 +63,45 @@ public class MaintenanceRequestController implements Initializable {
         user = Tables.getCurrentUser();
         // set request date label to display current date
         curDate.setText("Request Date: " + LocalDate.now());
+        // get current user's apartment number to populate apt no field
+        try {
+            String apt = "SELECT A.Apt_No, Rent " +
+                        "FROM Apartment A JOIN Resident R " +
+                        "ON A.Apt_No = R.Apt_No " +
+                        "WHERE Username = '" + user + "'";
+            Statement getApt = conn.createStatement();
+            ResultSet finalApt = getApt.executeQuery(apt);
+            if (finalApt.next()) {
+                aptnumber = finalApt.getInt("Apt_No");
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQL Error: " + ex.getMessage());
+        }
+        aptNo.setText("" + aptnumber);
 
         issues = new ArrayList<>();
-        issues.add("Garbage Disposal");
-        issues.add("Roaches");
-        issues.add("Door lock");
-        issues.add("Toilet clogged");
-        issues.add("Drain clogged");
-        issueSel.setItems(FXCollections.observableArrayList(issues));
-        // get current user's apartment number to populate apt no field
+        try {
+            String issue = "SELECT *"
+                            + "FROM Issue";
+            Statement getIssue = conn.createStatement();
+            ResultSet finalIssue = getIssue.executeQuery(issue);
+            while (finalIssue.next()) {
+                issues.add(finalIssue.getString("Issue"));
+            }
+            issueSel.setItems(FXCollections.observableArrayList(issues));
+        } catch(SQLException ex) {
+            System.out.println("SQL Error: " + ex.getMessage());
+        }
+//        issues.add("Garbage Disposal");
+//        issues.add("Roaches");
+//        issues.add("Door lock");
+//        issues.add("Toilet clogged");
+//        issues.add("Drain clogged");
 
     }
 
     @FXML
-    private void submitRequest(ActionEvent event) {
+    private void submitRequest(ActionEvent event) throws SQLException {
         if(selectedIssue != null) {
             if(aptNo.getText() != null) {
                 String s = aptNo.getText();
@@ -79,10 +111,17 @@ public class MaintenanceRequestController implements Initializable {
                 } catch (NumberFormatException e) {
                         System.out.println("Please enter an Valid Apt Number");
                         test = false;
-                        }
+                }
                 if(test) {
                 System.out.println("ready to submit request");
                 }
+                String maintQ = "INSERT INTO Maintenance_Request VALUES" 
+                                    + "('" + LocalDate.now() + "', '" + NULL 
+                                    + "', '" + aptnumber + "', '" + selectedIssue + "')";
+                Statement getMaint = conn.createStatement();
+                getMaint.executeUpdate(maintQ);
+                getMaint.close();
+                
             } else {
                 System.out.println("Please enter an Apt Number");
             }
@@ -109,4 +148,15 @@ public class MaintenanceRequestController implements Initializable {
             + "WHERE Username = '" + user + "'");
         return "";
     }
+    
+    @FXML
+    private void loadHomepage(ActionEvent event) throws IOException, SQLException {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root = FXMLLoader.load(
+                    getClass().getResource("ResidentHomepage.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+   }
 }

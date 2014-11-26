@@ -8,8 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="aah.ReminderController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.ReminderController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
       <Label layoutX="243.0" layoutY="24.0" text="Reminder">
@@ -23,6 +22,6 @@
       <Label layoutX="145.0" layoutY="200.0" text="immediately." />
       <ComboBox layoutX="168.0" layoutY="119.0" prefHeight="25.0" prefWidth="103.0" />
       <Button layoutX="458.0" layoutY="301.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="Send" />
-      <Label layoutX="444.0" layoutY="84.0" text="Date :  09/04/2014" underline="true" />
+      <Label fx:id="dateLabel" layoutX="444.0" layoutY="84.0" text="Date :  09/04/2014" underline="true" />
    </children>
 </AnchorPane>
