@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -7,11 +8,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="aah.ViewMessageController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.ViewMessageController">
    <children>
       <Label fx:id="message" layoutX="286.0" layoutY="192.0" text="Label" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
-      <Label layoutX="286.0" layoutY="27.0" text="Message" />
+      <Label layoutX="249.0" layoutY="17.0" text="Message">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font></Label>
    </children>
 </AnchorPane>

@@ -48,7 +48,7 @@ public class PayInfoController implements Initializable {
     private String curUser;
     private List<Integer> cards;
     private List<Date> dates;
-    private Date selectedDate;
+    private java.sql.Date selectedDate;
     private int selectedCard;
     
     @FXML
@@ -122,7 +122,7 @@ public class PayInfoController implements Initializable {
         expDate.getSelectionModel().selectedIndexProperty().addListener(
             new ChangeListener<Number>() {
                 public void changed(ObservableValue v, Number val, Number newVal) {
-                    Date i = dates.get(newVal.intValue());
+                    java.sql.Date i = (java.sql.Date) dates.get(newVal.intValue());
                     selectedDate = i;
                 }
             });
@@ -148,8 +148,8 @@ public class PayInfoController implements Initializable {
         String cardName = cardNameText.getText(); 
         
         String addQ = "INSERT INTO Payment_Info VALUES"
-                        +"('" + cardNoInt + "', '" + cvvInt + "', '" + cardName
-                        + "', '" + selectedDate + "', '" + curUser + ")";
+                        + "('" + cardNoInt + "', '" + cvvInt + "', '" + cardName
+                        + "', '" + selectedDate + "', '" + curUser + "')";
 
         Statement newCard = conn.createStatement();
         newCard.executeUpdate(addQ);
