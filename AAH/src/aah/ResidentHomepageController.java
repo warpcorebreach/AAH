@@ -7,6 +7,11 @@ package aah;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +30,9 @@ import javafx.stage.Stage;
  * @author Justin
  */
 public class ResidentHomepageController implements Initializable {
-    private int numMessages;
+    private int numMessages, apt;
+    private Connection conn;
+    private String curUser;
 
     @FXML
     private Hyperlink messages = new Hyperlink();
@@ -44,18 +51,42 @@ public class ResidentHomepageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        numMessages = 5;
-        if (numMessages == 0) {
-            messages.setVisible(false);
-        } else {
-            messages.setText("You have " + numMessages + " unread message(s)"
-                    + " from Management.");
-            messages.setVisible(true);
+        conn = Tables.getConnection();
+        curUser = Tables.getCurrentUser();
+        try {
+            String aptQ = "SELECT COUNT(*) as countRem" 
+                            + "FROM Reminder JOIN Apartment"
+                            + "ON Apartment.Apt_No = Resident.Apt_No"
+                            + "WHERE (SELECT Username FROM Resident" 
+                            + "JOIN Apartment ON Resident.Apt_No = Apartment.Apt_No"
+                            + "WHERE Username = '" + curUser + "')";
+            Statement getApt = conn.createStatement();
+            ResultSet finalApt = getApt.executeQuery(aptQ);
+            finalApt.next();
+            numMessages += finalApt.getInt("countRem");
+            if (numMessages == 0) {
+                messages.setVisible(false);
+            } else {
+                messages.setText("You have " + numMessages + " unread message(s)"
+                        + " from Management.");
+                messages.setVisible(true);
+            }
+        } catch (SQLException ex) {
+            System.out.println("SQL Error: " + ex.getMessage());
         }
+        
     }
 
     @FXML
-    private void viewMessages(ActionEvent event) {
+    private void viewMessages(ActionEvent event) throws IOException, SQLException {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root;
+        root = FXMLLoader.load(
+                getClass().getResource("ViewMessage.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
         System.out.println("Go to messages screen.");
     }
 
