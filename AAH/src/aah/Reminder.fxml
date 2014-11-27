@@ -18,10 +18,10 @@
       </Label>
       <Label layoutX="75.0" layoutY="123.0" text="Apartment No:" />
       <Label layoutX="75.0" layoutY="183.0" text="Message:" />
-      <Label layoutX="145.0" layoutY="183.0" text="Your payment is past due. Please pay" />
+      <Label fx:id="remLabel" layoutX="145.0" layoutY="183.0" text="Your payment is past due. Please pay" />
       <Label layoutX="145.0" layoutY="200.0" text="immediately." />
-      <ComboBox layoutX="168.0" layoutY="119.0" prefHeight="25.0" prefWidth="103.0" />
-      <Button layoutX="458.0" layoutY="301.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" text="Send" />
+      <ComboBox fx:id="apts" layoutX="168.0" layoutY="119.0" onAction="#selectApt" prefHeight="25.0" prefWidth="103.0" />
+      <Button fx:id="sendButton" layoutX="458.0" layoutY="301.0" mnemonicParsing="false" onAction="#sendReminder" prefHeight="25.0" prefWidth="85.0" text="Send" />
       <Label fx:id="dateLabel" layoutX="444.0" layoutY="84.0" text="Date :  09/04/2014" underline="true" />
    </children>
 </AnchorPane>

@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -136,6 +137,7 @@ public class RentPaymentController implements Initializable {
             while (cardNos.next()) {
                 cards.add(cardNos.getInt("Card_No"));
             }
+            cardChoice.setItems(FXCollections.observableArrayList(cards));
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
