@@ -163,7 +163,7 @@ public class ApplicationFormController implements Initializable {
                     + "', '" + gender + "', " + Integer.parseInt(lease)
                     + ", '" + selectedCat + "', '" + sqlMoveIn + "', "
                     + incomeIn + ", '" + addr + "', " + minRentIn + ", "
-                    + maxRentIn + ")";
+                    + maxRentIn + ");";
 
             Connection conn = Tables.getConnection();
             Statement newRes = conn.createStatement();

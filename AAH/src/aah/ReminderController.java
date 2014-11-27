@@ -72,7 +72,7 @@ public class ReminderController implements Initializable {
                             +  "FROM Pays_Rent"
                             +  "WHERE apt_no = rent_no "
                             +  "AND Month = '" + curMonth + "'"
-                            +  "AND Year = '" + curYear +"')";
+                            +  "AND Year = '" + curYear +"');";
             Statement getApt = conn.createStatement();
             ResultSet finalApt = getApt.executeQuery(aptQ);
             while (finalApt.next()) {
@@ -100,7 +100,7 @@ public class ReminderController implements Initializable {
     private void sendReminder (ActionEvent event) throws IOException, SQLException {
        String remQ = "INSERT INTO REMINDER VALUES"
                         + "('" + LocalDate.now() + "', '" + selectedApt + "', "
-                        + "'" + remLabel.getText() + "')";
+                        + "'" + remLabel.getText() + "');";
        Statement newRem = conn.createStatement();
        newRem.executeUpdate(remQ);
        newRem.close();

@@ -55,11 +55,11 @@ public class ResidentHomepageController implements Initializable {
         curUser = Tables.getCurrentUser();
         try {
             String aptQ = "SELECT COUNT(*) as countRem" 
-                            + "FROM Reminder JOIN Apartment"
-                            + "ON Apartment.Apt_No = Reminder.Apt_No"
-                            + "WHERE (SELECT Username FROM Resident" 
-                            + "JOIN Apartment ON Resident.Apt_No = Apartment.Apt_No"
-                            + "WHERE Username = '" + curUser + "')";
+                            + "FROM Reminder JOIN Apartment "
+                            + "ON Apartment.Apt_No = Reminder.Apt_No "
+                            + "WHERE (SELECT Username FROM Resident " 
+                            + "JOIN Apartment ON Resident.Apt_No = Apartment.Apt_No "
+                            + "WHERE Username = '" + curUser + "');";
             Statement getApt = conn.createStatement();
             ResultSet finalApt = getApt.executeQuery(aptQ);
             finalApt.next();

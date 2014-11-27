@@ -74,7 +74,7 @@ public class RentPaymentController implements Initializable {
             String aptRent = "SELECT A.Apt_No, Rent " +
                     "FROM Apartment A JOIN Resident R " +
                     "ON A.Apt_No = R.Apt_No " +
-                    "WHERE Username = '" + curUser + "'";
+                    "WHERE Username = '" + curUser + "';";
             Statement getAptRent = conn.createStatement();
             ResultSet finalAptRent = getAptRent.executeQuery(aptRent);
             if (finalAptRent.next()) {
@@ -89,7 +89,7 @@ public class RentPaymentController implements Initializable {
                     "ON P.Username = R.Username " +
                     "WHERE P.Username = '" + curUser + "' " +
                     "AND day > 7 " +
-                    "AND Month = cur_month";
+                    "AND Month = cur_month;";
             Statement pro = conn.createStatement();
             ResultSet prorate = pro.executeQuery(toProrate);
             prorate.next();
@@ -101,7 +101,7 @@ public class RentPaymentController implements Initializable {
                         "ON P.Username = R.Username " +
                         "JOIN APARTMENT A " +
                         "ON R.Apt_No = A.Apt_No " +
-                        "WHERE P.Username = '" + curUser + "'";
+                        "WHERE P.Username = '" + curUser + "';";
                 Statement proCalc = conn.createStatement();
                 ResultSet finalPro = proCalc.executeQuery(proAmt);
                 finalPro.next();
@@ -112,7 +112,7 @@ public class RentPaymentController implements Initializable {
                     "50*(EXTRACT(DAY FROM CURDATE())-3) AS extra_rent " +
                     "FROM Apartment A JOIN Resident R " +
                     "ON A.Apt_No = R.Apt_No " +
-                    "WHERE Username = '" + curUser + "'";
+                    "WHERE Username = '" + curUser + "';";
             Statement getDelay = conn.createStatement();
             ResultSet extra = getDelay.executeQuery(delayed);
             extra.next();
@@ -129,7 +129,7 @@ public class RentPaymentController implements Initializable {
 
             String cardPots = "SELECT Card_No " +
                     "FROM Payment_Info " +
-                    "WHERE Username = '" + curUser + "'";
+                    "WHERE Username = '" + curUser + "';";
             Statement getCard = conn.createStatement();
             ResultSet cardNos = getCard.executeQuery(cardPots);
             while (cardNos.next()) {
@@ -150,7 +150,7 @@ public class RentPaymentController implements Initializable {
         String resQ = "INSERT INTO Pays_Rent VALUES"
                     + "('" + selectedCard + "', '" + rentMonth + "', '" + rentYear
                     + "', '" + apt + "', " + rentDue
-                    + ", '" + rentForMonth + ")";
+                    + ", '" + rentForMonth + ");";
 
         Statement newRes = conn.createStatement();
         newRes.executeUpdate(resQ);

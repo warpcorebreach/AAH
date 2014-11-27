@@ -105,7 +105,7 @@ public class PayInfoController implements Initializable {
         try {
             String getQ = "SELECT Card_No" +
                             "FROM Payment_Info" +
-                            "WHERE Username = '" + curUser + "'";
+                            "WHERE Username = '" + curUser + "';";
             Statement getCard = conn.createStatement();
             ResultSet get = getCard.executeQuery(getQ);
             while (get.next()) {
@@ -149,7 +149,7 @@ public class PayInfoController implements Initializable {
         
         String addQ = "INSERT INTO Payment_Info VALUES"
                         + "('" + cardNoInt + "', '" + cvvInt + "', '" + cardName
-                        + "', '" + selectedDate + "', '" + curUser + "')";
+                        + "', '" + selectedDate + "', '" + curUser + "');";
 
         Statement newCard = conn.createStatement();
         newCard.executeUpdate(addQ);
@@ -161,7 +161,7 @@ public class PayInfoController implements Initializable {
     @FXML
     private void deleteCard(ActionEvent event)throws IOException, SQLException {
         String delQ = "DELETE FROM Payment_Info" 
-                        + "WHERE Card_No = '" + selectedCard + "'";
+                        + "WHERE Card_No = '" + selectedCard + "';";
         Statement delCard = conn.createStatement();
         delCard.executeUpdate(delQ);
         delCard.close();

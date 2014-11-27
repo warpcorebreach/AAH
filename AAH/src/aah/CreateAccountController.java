@@ -71,7 +71,7 @@ public class CreateAccountController implements Initializable {
             // add new info to DB
 
             String userQ = "SELECT COUNT(*) AS C FROM User WHERE "
-                    + "Username = '" + uname + "'";
+                    + "Username = '" + uname + "';";
             Statement checkUser = conn.createStatement();
             ResultSet user = checkUser.executeQuery(userQ);
             user.next();
@@ -80,7 +80,7 @@ public class CreateAccountController implements Initializable {
                 System.out.println("That username has already been registered.");
             } else {
                 userQ = "INSERT INTO User VALUES('" + uname + "', '" + pword
-                        + "')";
+                        + "');";
                 checkUser = conn.createStatement();
                 checkUser.executeUpdate(userQ);
 
@@ -98,7 +98,7 @@ public class CreateAccountController implements Initializable {
                             System.out.println("App window closed.");
                             Statement delUser = conn.createStatement();
                             delUser.executeUpdate("DELETE FROM User WHERE "
-                                    + "Username = '" + uname + "'");
+                                    + "Username = '" + uname + "');");
                         } catch (SQLException ex) {
                             System.out.println("SQL error.");
                         }

@@ -60,7 +60,7 @@ public class LoginController implements Initializable {
 
             String userQ = "SELECT COUNT(*) AS C FROM User WHERE "
                     + "Username = '" + uname + "' "
-                    + "AND Password = '" + password.getText() + "'";
+                    + "AND Password = '" + password.getText() + "';";
             Statement checkUser = conn.createStatement();
             ResultSet user = checkUser.executeQuery(userQ);
 
@@ -87,7 +87,7 @@ public class LoginController implements Initializable {
         Parent root;
 
         String homeQ = "SELECT COUNT(*) AS C FROM Management "
-                + "WHERE Username = '" + uname + "'";
+                + "WHERE Username = '" + uname + "';";
         Statement checkHome = conn.createStatement();
         ResultSet home = checkHome.executeQuery(homeQ);
 
@@ -98,7 +98,7 @@ public class LoginController implements Initializable {
                     getClass().getResource("MgrHomepage.fxml"));
         } else {
             homeQ = "SELECT COUNT(*) AS C FROM Resident "
-                + "WHERE Username = '" + uname + "'";
+                + "WHERE Username = '" + uname + "';";
             checkHome = conn.createStatement();
             home = checkHome.executeQuery(homeQ);
 

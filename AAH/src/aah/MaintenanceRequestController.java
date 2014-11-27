@@ -86,7 +86,7 @@ public class MaintenanceRequestController implements Initializable {
             Statement getIssue = conn.createStatement();
             ResultSet finalIssue = getIssue.executeQuery(issue);
             while (finalIssue.next()) {
-                issues.add(finalIssue.getString("Issue"));
+                issues.add(finalIssue.getString("Issue_Type"));
             }
             issueSel.setItems(FXCollections.observableArrayList(issues));
         } catch(SQLException ex) {
