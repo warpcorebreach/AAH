@@ -51,7 +51,7 @@ public class ManMaintRequestController implements Initializable {
         data = FXCollections.observableArrayList();
         try {
             String notResQ = "SELECT Request_Date, Apt_No, Issue_Type " +
-                                "FROM MAINTENANCE_REQUEST " +
+                                "FROM Maintenance_Request " +
                                 "WHERE Resolved_Date = NULL " +
                                 "ORDER BY Request_Date ASC;";
             Connection conn = Tables.getConnection();

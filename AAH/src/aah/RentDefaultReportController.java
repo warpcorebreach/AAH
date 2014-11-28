@@ -69,10 +69,10 @@ public class RentDefaultReportController implements Initializable {
                     selectedMonth = c;
                     try {
                         data = FXCollections.observableArrayList();
-                        String defQ = "SELECT APARTMENT.Apt_No as Apartment, Month, Amt - Rent AS Late_Fee," +
+                        String defQ = "SELECT Apartment.Apt_No as Apartment, Month, Amt - Rent AS Late_Fee," +
                                             "(Amt - Rent)/50 AS Days_Late " +
-                                            "FROM PAYS_RENT JOIN APARTMENT ON " +
-                                            "APARTMENT.Apt_No = PAYS_RENT.Apt_No " +
+                                            "FROM Pays_Rent JOIN Apartment ON " +
+                                            "Apartment.Apt_No = Pays_Rent.Apt_No " +
                                             "WHERE Days_Late > 0 " +
                                             "GROUP BY Month " +
                                             "ORDER BY Late_Fee DESC;";

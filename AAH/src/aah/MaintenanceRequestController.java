@@ -115,9 +115,9 @@ public class MaintenanceRequestController implements Initializable {
                 if(test) {
                 System.out.println("ready to submit request");
                 }
-                String maintQ = "INSERT INTO Maintenance_Request VALUES" 
-                                    + "('" + LocalDate.now() + "', '" + NULL 
-                                    + "', '" + aptnumber + "', '" + selectedIssue + "')";
+                String maintQ = "INSERT INTO Maintenance_Request(Request_Date, Apt_No,"
+                                    + "Issue_Type) VALUES('" + LocalDate.now()   
+                                    + "', '" + aptnumber + "', '" + selectedIssue + "');";
                 Statement getMaint = conn.createStatement();
                 getMaint.executeUpdate(maintQ);
                 getMaint.close();

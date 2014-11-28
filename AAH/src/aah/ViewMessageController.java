@@ -34,9 +34,9 @@ public class ViewMessageController implements Initializable {
         Connection conn = Tables.getConnection();
         curUser = Tables.getCurrentUser();
         try {
-            String remQ = "SELECT Date, Message, Apt_No"
-                            + "FROM REMINDER JOIN RESIDENT"
-                            + "ON REMINDER.Apt_No = RESIDENT.Apt_No"
+            String remQ = "SELECT Date, Message, Apt_No "
+                            + "FROM Reminder JOIN Resident "
+                            + "ON Reminder.Apt_No = Resident.Apt_No"
                             + "WHERE Username = '" + curUser + "';";
 
             Statement getRem = conn.createStatement();
@@ -45,7 +45,7 @@ public class ViewMessageController implements Initializable {
 
             message.setText(rem.getString("Message"));
             
-            String delQ = "DELETE FROM REMINDER"
+            String delQ = "DELETE FROM Reminder "
                         + "WHERE Date = '" + rem.getDate("Date")
                         + "AND Apt_No = '" + rem.getInt("Apt_No") + "';";
                         Statement del = conn.createStatement();

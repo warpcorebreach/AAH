@@ -77,12 +77,10 @@ public class PayInfoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         conn = Tables.getConnection();
         curUser = Tables.getCurrentUser();
-        cards = new ArrayList<>();
         expDate.setValue("Choose a date");
         
         String aStr;
         String bStr;
-        //SimpleDateFormat formatter = new SimpleDateFormat("MM/yy");
         dates = new ArrayList<>();
         
         for (int y = 14; y < 25; y++) {
@@ -102,9 +100,10 @@ public class PayInfoController implements Initializable {
         
         expDate.setItems(FXCollections.observableArrayList(dates));
         
+        cards = new ArrayList<>();
         try {
-            String getQ = "SELECT Card_No" +
-                            "FROM Payment_Info" +
+            String getQ = "SELECT Card_No " +
+                            "FROM Payment_Info " +
                             "WHERE Username = '" + curUser + "';";
             Statement getCard = conn.createStatement();
             ResultSet get = getCard.executeQuery(getQ);
@@ -118,38 +117,16 @@ public class PayInfoController implements Initializable {
     }
     
     @FXML
-    private void selectDate() {
-        expDate.getSelectionModel().selectedIndexProperty().addListener(
-            new ChangeListener<Number>() {
-                public void changed(ObservableValue v, Number val, Number newVal) {
-                    java.sql.Date i = (java.sql.Date) dates.get(newVal.intValue());
-                    selectedDate = i;
-                }
-            });
-    }
-    
-    @FXML
-    private void selectCard() {
-        expDate.getSelectionModel().selectedIndexProperty().addListener(
-            new ChangeListener<Number>() {
-                public void changed(ObservableValue v, Number val, Number newVal) {
-                    int i = cards.get(newVal.intValue());
-                    selectedCard = i;
-                }
-            });
-    }
-    
-    @FXML
     private void saveCard(ActionEvent event)throws IOException, SQLException {
         String cardNo = cardNumberText.getText();
-        int cardNoInt = Integer.parseInt(cardNo);
+        long cardNoInt = Integer.parseInt(cardNo);
         String cvv = cvvText.getText();
         int cvvInt = Integer.parseInt(cvv);
         String cardName = cardNameText.getText(); 
         
         String addQ = "INSERT INTO Payment_Info VALUES"
                         + "('" + cardNoInt + "', '" + cvvInt + "', '" + cardName
-                        + "', '" + selectedDate + "', '" + curUser + "');";
+                        + "', '" + expDate.getValue() + "', '" + curUser + "');";
 
         Statement newCard = conn.createStatement();
         newCard.executeUpdate(addQ);
@@ -160,8 +137,8 @@ public class PayInfoController implements Initializable {
     
     @FXML
     private void deleteCard(ActionEvent event)throws IOException, SQLException {
-        String delQ = "DELETE FROM Payment_Info" 
-                        + "WHERE Card_No = '" + selectedCard + "';";
+        String delQ = "DELETE FROM Payment_Info " 
+                        + "WHERE Card_No = '" + cardBox.getValue() + "';";
         Statement delCard = conn.createStatement();
         delCard.executeUpdate(delQ);
         delCard.close();

@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
@@ -62,15 +63,16 @@ public class ReminderController implements Initializable {
         curUser = Tables.getCurrentUser();
         int curMonth = LocalDate.now().getMonthValue();
         int curYear = LocalDate.now().getYear();
+        aptDefaults = new ArrayList<>();
         
         try {
-            String aptQ = "SELECT Apartment.Apt_No AS apt_no"
-                            + "FROM Apartment"
-                            +  "WHERE NOT EXISTS (SELECT Pays_Rent.Apt_No AS rent_no"
-                            +  "FROM Pays_Rent"
-                            +  "WHERE apt_no = rent_no "
+            String aptQ = "SELECT Apartment.Apt_No AS apt_no "
+                            + "FROM Apartment "
+                            +  "WHERE NOT EXISTS (SELECT Apt_No "
+                            +  "FROM Pays_Rent "
+                            +  "WHERE apt_no = Apt_No "
                             +  "AND Month = '" + curMonth + "'"
-                            +  "AND Year = '" + curYear +"');";
+                            +  "AND Year = '" + curYear + "');";
             Connection conn = Tables.getConnection();
             Statement getApt = conn.createStatement();
             ResultSet finalApt = getApt.executeQuery(aptQ);
@@ -85,25 +87,15 @@ public class ReminderController implements Initializable {
     } 
     
     @FXML
-    private void selectApt() {
-        apts.getSelectionModel().selectedIndexProperty().addListener(
-            new ChangeListener<Number>() {
-                public void changed(ObservableValue v, Number val, Number newVal) {
-                    int c = aptDefaults.get(newVal.intValue());
-                    selectedApt = c;
-                }
-            });
-    }
-    
-    @FXML
     private void sendReminder (ActionEvent event) throws IOException, SQLException {
-       String remQ = "INSERT INTO REMINDER VALUES"
-                        + "('" + LocalDate.now() + "', '" + selectedApt + "', "
+       String remQ = "INSERT INTO Reminder VALUES"
+                        + "('" + LocalDate.now() + "', '" + apts.getValue() + "', "
                         + "'" + remLabel.getText() + "');";
        Connection conn = Tables.getConnection();
        Statement newRem = conn.createStatement();
        newRem.executeUpdate(remQ);
        newRem.close();
+       System.out.println("Reminder sent.");
 
     }
     

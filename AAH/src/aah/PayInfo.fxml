@@ -41,9 +41,9 @@
       <TextField fx:id="cardNameText" layoutX="120.0" layoutY="130.0" />
       <TextField fx:id="cardNumberText" layoutX="120.0" layoutY="169.0" />
       <TextField fx:id="cvvText" layoutX="120.0" layoutY="254.0" prefHeight="25.0" prefWidth="84.0" />
-      <ChoiceBox fx:id="expDate" layoutX="119.0" layoutY="212.0" onDragDetected="#selectDate" prefHeight="25.0" prefWidth="84.0" />
+      <ChoiceBox fx:id="expDate" layoutX="119.0" layoutY="212.0" prefHeight="25.0" prefWidth="84.0" />
       <Button fx:id="saveButton" layoutX="186.0" layoutY="334.0" mnemonicParsing="false" onAction="#saveCard" prefHeight="25.0" prefWidth="84.0" text="Save" />
       <Button fx:id="deleteButton" layoutX="508.0" layoutY="334.0" mnemonicParsing="false" onAction="#deleteCard" prefHeight="25.0" prefWidth="69.0" text="Delete" />
-      <ChoiceBox fx:id="cardBox" layoutX="393.0" layoutY="130.0" onDragDetected="#selectCard" prefHeight="25.0" prefWidth="105.0" />
+      <ChoiceBox fx:id="cardBox" layoutX="393.0" layoutY="130.0" prefHeight="25.0" prefWidth="105.0" />
    </children>
 </AnchorPane>

@@ -41,7 +41,7 @@ public class ServiceRequestReportController implements Initializable {
             String servQ = "SELECT EXTRACT(MONTH FROM Request_Date) AS Res_Month, " +
                                 "Issue_Type, AVG(DATE_DIFF(Resolved_Date, Request_Date)+1) " +
                                 "AS resolved_time " +
-                                "FROM MAINTENANCE_REQUEST " +
+                                "FROM Maintenance_Request " +
                                 "WHERE Resolved_Date IS NOT NULL AND Res_Month >= 8 AND Res_Month <= 10 " +
                                 "GROUP BY DATE_FORMAT(Res_Month, %M), Issue_Type;";
             Connection conn = Tables.getConnection();

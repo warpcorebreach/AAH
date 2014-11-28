@@ -57,8 +57,8 @@ public class AptAllotmentController implements Initializable {
         data = FXCollections.observableArrayList();
         try {
             String allQ = "SELECT (Apt_No, APARTMENT.Category, Rent, Sq_Ft, Available_On, Name) " +
-                            "FROM APARTMENT JOIN PROSPECTIVE_RESIDENT " +
-                            "	ON APARTMENT.Category = PROSPECTIVE_RESIDENT.Category " +
+                            "FROM Apartment JOIN Prospective_Resident " +
+                            "	ON Apartment.Category = Prospective_Resident.Category " +
                             "WHERE (Rent >= Min_Rent AND Rent <= Max_Rent AND Move_Date >= Available_On " +
                             "	AND Pref_Lease = Lease_Term AND Username = $username) " +
                             "ORDER BY Rent DESC;";
