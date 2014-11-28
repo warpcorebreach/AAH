@@ -20,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -48,6 +49,44 @@ public class ManMaintRequestController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         data = FXCollections.observableArrayList();
+        try {
+            String notResQ = "SELECT Request_Date, Apt_No, Issue_Type " +
+                                "FROM MAINTENANCE_REQUEST " +
+                                "WHERE Resolved_Date = NULL " +
+                                "ORDER BY Request_Date ASC;";
+            Connection conn = Tables.getConnection();
+            Statement getUnRes = conn.createStatement();
+            ResultSet notRes = getUnRes.executeQuery(notResQ);
+            while (notRes.next()) {
+                Date start = notRes.getDate("Request_Date");
+                int apt = notRes.getInt("Apt_No");
+                String issue = notRes.getString("Issue_Type");
+                CheckBox check = new CheckBox();
+                ObservableList<String> row = FXCollections.observableArrayList();  
+                for(int i=1 ; i<=notRes.getMetaData().getColumnCount(); i++){                      
+                    row.add(notRes.getString(i));  
+                }
+                data.add(row); 
+            }
+            table.setItems(data); 
+            TableColumn notReqCol = new TableColumn("Date of Request");  
+            notReqCol.setMinWidth(100);  
+
+            TableColumn aptCol = new TableColumn("Apt No");  
+            aptCol.setMinWidth(100);          
+
+            TableColumn issCol = new TableColumn("Description of Issue");  
+            issCol.setMinWidth(100); 
+            
+            TableColumn boxes = new TableColumn("");  
+            boxes.setMinWidth(100); 
+
+            table.getColumns().addAll(notReqCol, aptCol, boxes);   
+            System.out.println("Table Value::" + table2); 
+            
+        } catch (SQLException ex) {
+            System.out.println("SQL Error: " + ex.getMessage());
+        }
         data2 = FXCollections.observableArrayList();
         try {
             String resQ = "SELECT Request_Date, Apt_No, Issue_Type, Resolved_Date " +
@@ -73,16 +112,16 @@ public class ManMaintRequestController implements Initializable {
             TableColumn reqCol = new TableColumn("Date of Request");  
             reqCol.setMinWidth(100);  
 
-            TableColumn aptCol = new TableColumn("Apt No");  
-            aptCol.setMinWidth(100);          
+            TableColumn apt2Col = new TableColumn("Apt No");  
+            apt2Col.setMinWidth(100);          
 
-            TableColumn issCol = new TableColumn("Description of Issue");  
-            issCol.setMinWidth(100);  
+            TableColumn iss2Col = new TableColumn("Description of Issue");  
+            iss2Col.setMinWidth(100);  
             
             TableColumn resCol = new TableColumn("Issue Resolved On");  
             resCol.setMinWidth(100);      
 
-            table.getColumns().addAll(reqCol, aptCol, issCol, resCol);   
+            table.getColumns().addAll(reqCol, apt2Col, iss2Col, resCol);   
             System.out.println("Table Value::" + table2); 
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
@@ -90,8 +129,15 @@ public class ManMaintRequestController implements Initializable {
     } 
     
     @FXML
-    private void makePayment(ActionEvent event)throws IOException, SQLException {
-        
+    private void resolve(ActionEvent event)throws IOException, SQLException {
+        String updateQ = "UPDATE Maintenance_Request " +
+                            "SET Date_Resolved = $date_resolved " +
+                            "WHERE Apt_No = $apt AND Request_Date = $date AND " +
+                            "Issue_Type = $issue;";
+        Connection conn = Tables.getConnection();
+        Statement newRes = conn.createStatement();
+        newRes.executeUpdate(updateQ);
+        newRes.close();
     }
     
 }
