@@ -36,7 +36,6 @@ import javafx.stage.Stage;
  */
 public class RentPaymentController implements Initializable {
     private int rentYear, apt, rentDue, selectedCard;
-    private Connection conn;
     private String rentMonth;
     private String[] months = {"January", "February", "March", "April", "May",
       "June", "July", "August", "September", "October", "November", "December"};
@@ -66,7 +65,6 @@ public class RentPaymentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            conn = Tables.getConnection();
 
             String curUser = Tables.getCurrentUser();
             int baseRent = 0;
@@ -75,6 +73,7 @@ public class RentPaymentController implements Initializable {
                     "FROM Apartment A JOIN Resident R " +
                     "ON A.Apt_No = R.Apt_No " +
                     "WHERE Username = '" + curUser + "';";
+            Connection conn = Tables.getConnection();
             Statement getAptRent = conn.createStatement();
             ResultSet finalAptRent = getAptRent.executeQuery(aptRent);
             if (finalAptRent.next()) {
@@ -151,7 +150,7 @@ public class RentPaymentController implements Initializable {
                     + "('" + selectedCard + "', '" + rentMonth + "', '" + rentYear
                     + "', '" + apt + "', " + rentDue
                     + ", '" + rentForMonth + ");";
-
+        Connection conn = Tables.getConnection();
         Statement newRes = conn.createStatement();
         newRes.executeUpdate(resQ);
         newRes.close();

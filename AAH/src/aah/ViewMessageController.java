@@ -23,7 +23,6 @@ import javafx.scene.control.Label;
  */
 public class ViewMessageController implements Initializable {
     
-    private Connection conn;
     private String curUser;
     @FXML
     private Label message = new Label();
@@ -32,7 +31,7 @@ public class ViewMessageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        conn = Tables.getConnection();
+        Connection conn = Tables.getConnection();
         curUser = Tables.getCurrentUser();
         try {
             String remQ = "SELECT Date, Message, Apt_No"

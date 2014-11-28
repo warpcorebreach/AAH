@@ -31,7 +31,6 @@ import javafx.scene.control.TableView;
  */
 public class RentDefaultReportController implements Initializable {
     
-    private Connection conn;
     private List<String> months;
     private String selectedMonth;
     private TableView table = new TableView();  
@@ -62,7 +61,7 @@ public class RentDefaultReportController implements Initializable {
     }    
     
     @FXML
-    private void selectCard() {
+    private void selectMonth() {
         monthSel.getSelectionModel().selectedIndexProperty().addListener(
             new ChangeListener<Number>() {
                 public void changed(ObservableValue v, Number val, Number newVal) {
@@ -77,6 +76,7 @@ public class RentDefaultReportController implements Initializable {
                                             "WHERE Days_Late > 0 " +
                                             "GROUP BY Month " +
                                             "ORDER BY Late_Fee DESC;";
+                        Connection conn = Tables.getConnection();
                         Statement getDef = conn.createStatement();
                         ResultSet defs = getDef.executeQuery(defQ);
                         while (defs.next()) {  
@@ -84,9 +84,9 @@ public class RentDefaultReportController implements Initializable {
                             int lateFee = defs.getInt("Late_Fee");   
                             int daysLate = defs.getInt("Days_Late");  
 
-                            ObservableList<String> row = FXCollections.observableArrayList();  
+                            ObservableList<Integer> row = FXCollections.observableArrayList();  
                             for(int i=1 ; i<=defs.getMetaData().getColumnCount(); i++){                      
-                            row.add(defs.getString(i));  
+                                row.add(defs.getInt(i));  
                             }                          
 
                             data.add(row);   

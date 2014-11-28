@@ -37,7 +37,6 @@ import javafx.stage.Stage;
  */
 public class ReminderController implements Initializable {
     
-    private Connection conn;
     private String curUser;
     private int selectedApt;
     private List<Integer> aptDefaults;
@@ -60,7 +59,6 @@ public class ReminderController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         dateLabel.setText("Date: " + LocalDate.now());
-        conn = Tables.getConnection();
         curUser = Tables.getCurrentUser();
         int curMonth = LocalDate.now().getMonthValue();
         int curYear = LocalDate.now().getYear();
@@ -73,6 +71,7 @@ public class ReminderController implements Initializable {
                             +  "WHERE apt_no = rent_no "
                             +  "AND Month = '" + curMonth + "'"
                             +  "AND Year = '" + curYear +"');";
+            Connection conn = Tables.getConnection();
             Statement getApt = conn.createStatement();
             ResultSet finalApt = getApt.executeQuery(aptQ);
             while (finalApt.next()) {
@@ -101,6 +100,7 @@ public class ReminderController implements Initializable {
        String remQ = "INSERT INTO REMINDER VALUES"
                         + "('" + LocalDate.now() + "', '" + selectedApt + "', "
                         + "'" + remLabel.getText() + "');";
+       Connection conn = Tables.getConnection();
        Statement newRem = conn.createStatement();
        newRem.executeUpdate(remQ);
        newRem.close();

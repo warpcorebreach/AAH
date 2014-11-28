@@ -17,6 +17,12 @@
          </font>
       </Label>
       <Label layoutX="176.0" layoutY="109.0" text="Month:" />
-      <ChoiceBox fx:id="monthSel" layoutX="232.0" layoutY="105.0" onDragDetected="#selectCard" prefHeight="25.0" prefWidth="125.0" />
+      <ChoiceBox fx:id="monthSel" layoutX="232.0" layoutY="105.0" onDragDetected="#selectMonth" prefHeight="25.0" prefWidth="125.0" />
+      <TableView fx:id="table" layoutX="114.0" layoutY="153.0" onSort="#onSelect" prefHeight="222.0" prefWidth="373.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="C1" />
+          <TableColumn prefWidth="75.0" text="C2" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>
