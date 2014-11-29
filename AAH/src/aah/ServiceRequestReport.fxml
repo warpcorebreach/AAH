@@ -16,10 +16,11 @@
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <TableView fx:id="table" layoutX="75.0" layoutY="93.0" onSort="#initialize" prefHeight="277.0" prefWidth="438.0">
+      <TableView fx:id="table" layoutX="126.0" layoutY="76.0" onSort="#initialize" prefHeight="319.0" prefWidth="349.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+          <TableColumn prefWidth="120.0" text="Month" />
+          <TableColumn prefWidth="105.0" text="Type of Request" />
+            <TableColumn prefWidth="123.0" text="Average No of Days" />
         </columns>
       </TableView>
    </children>

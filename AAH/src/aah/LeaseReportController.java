@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -27,7 +28,8 @@ public class LeaseReportController implements Initializable {
     //current user
     private String user = null;
     //table that holds lease report
-    private TableView leaseReport = null;
+    private TableView leaseReport = new TableView();
+    private ObservableList<ObservableList> data;
     
     /**
      * Initializes the controller class.

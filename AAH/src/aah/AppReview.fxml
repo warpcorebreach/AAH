@@ -8,20 +8,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.AppReviewController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.AppReviewController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="640.0" />
       <Label layoutX="187.0" layoutY="17.0" text="Application Review">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <TableView fx:id="table" layoutX="21.0" layoutY="97.0" prefHeight="243.0" prefWidth="555.0">
+      <TableView fx:id="table" layoutY="97.0" prefHeight="320.0" prefWidth="640.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+          <TableColumn prefWidth="72.0" text="Name" />
+          <TableColumn prefWidth="79.0" text="Date of Birth" />
+            <TableColumn prefWidth="54.0" text="Gender" />
+            <TableColumn prefWidth="97.0" text="Monthly Income" />
+            <TableColumn prefWidth="56.0" text="Apt Type" />
+            <TableColumn prefWidth="82.0" text="Move In Date" />
+            <TableColumn prefWidth="68.0" text="Lease Term" />
+            <TableColumn prefWidth="83.0" text="Reject/Accept" />
+            <TableColumn prefWidth="48.0" />
         </columns>
       </TableView>
-      <Button fx:id="nextButton" layoutX="493.0" layoutY="355.0" mnemonicParsing="false" onAction="#next" prefHeight="25.0" prefWidth="83.0" text="Next" />
+      <Button fx:id="nextButton" layoutX="525.0" layoutY="430.0" mnemonicParsing="false" onAction="#next" prefHeight="25.0" prefWidth="83.0" text="Next" />
    </children>
 </AnchorPane>
