@@ -29,22 +29,17 @@ public class LeaseReportController implements Initializable {
     //DEBUG MODE- set this to true to get debug prints
     private final boolean DEBUG = true;
     
-    //SQL queries
-    private final String QUERY_AUGUST = "SELECT * FROM ";
-    private final String QUERY_SEPTEMBER = "";
-    private final String QUERY_OCTOBER = "";
-    
+    //SQL query- use string substitution later to fill in fields
+    private final String QUERY = "SELECT COUNT(*) FROM [table] WHERE [month] = %MONTH% GROUP BY %APARTMENT_TYPE%;";
     
     //database connection
     private Connection conn = null;
-    //current user
-    private String user = null;
     //table that holds lease report
     private TableView leaseReport = new TableView();
-    private ObservableList<ObservableList> data;
+    private ObservableList<ObservableList> data = null;
     //button to redirect back to the manager's homepage    
     @FXML
-    private Button back = new Button();
+    private final Button back = new Button();
     
     /**
      * Initializes the controller class.
@@ -70,7 +65,12 @@ public class LeaseReportController implements Initializable {
      * This method auto-generates the leasing report data
      */
     private void showLeasingReport(ActionEvent event){
-        //TODO
+        //data array
+        data = FXCollections.observableArrayList();
+        
+        
+        //disable editing
+        leaseReport.setEditable(false);
     }//end method showLeasingReport
     
     /**

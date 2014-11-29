@@ -23,5 +23,6 @@
             <TableColumn fx:id="dayCol" prefWidth="123.0" text="Average No of Days" />
         </columns>
       </TableView>
+      <Button fx:id="back" layoutX="490.0" layoutY="361.0" mnemonicParsing="false" onMouseClicked="#showManagerHome" text="Back" />
    </children>
 </AnchorPane>
