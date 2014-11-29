@@ -30,7 +30,7 @@ import javafx.stage.Stage;
  * @author Justin
  */
 public class ResidentHomepageController implements Initializable {
-    private int numMessages, apt;
+    private int numMessages;
     private Connection conn;
     private String curUser;
 
@@ -54,12 +54,9 @@ public class ResidentHomepageController implements Initializable {
         conn = Tables.getConnection();
         curUser = Tables.getCurrentUser();
         try {
-            String aptQ = "SELECT COUNT(*) as countRem " 
-                            + "FROM Reminder JOIN Apartment "
-                            + "ON Reminder.Apt_No = Apartment.Apt_No "
-                            + "WHERE (SELECT Username FROM Resident " 
-                            + "JOIN Apartment ON Resident.Apt_No = Apartment.Apt_No "
-                            + "WHERE Username = '" + curUser + "');";
+            String aptQ = "SELECT COUNT(*) as countRem "
+                            + "FROM Reminder NATURAL JOIN Apartment NATURAL JOIN Resident "
+                            + "WHERE Username = '" + curUser + "';";
             Statement getApt = conn.createStatement();
             ResultSet finalApt = getApt.executeQuery(aptQ);
             finalApt.next();

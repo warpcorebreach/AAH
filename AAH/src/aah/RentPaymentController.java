@@ -35,10 +35,9 @@ import javafx.stage.Stage;
  * @author Justin
  */
 public class RentPaymentController implements Initializable {
-    private int rentYear, apt, rentDue, selectedCard;
-    private String rentMonth;
-    private String[] months = {"January", "February", "March", "April", "May",
-      "June", "July", "August", "September", "October", "November", "December"};
+    private int apt, rentDue;
+    private List<String> months;
+    private List<Integer> years;
     private List<Integer> cards;
 
     @FXML
@@ -52,9 +51,12 @@ public class RentPaymentController implements Initializable {
 
     @FXML
     private Label rentLabel = new Label();
-
+    
     @FXML
-    private DatePicker rentForMonth = new DatePicker();
+    private ChoiceBox rentForMonth = new ChoiceBox();
+    
+    @FXML
+    private ChoiceBox rentYear = new ChoiceBox();
 
     @FXML
     private ChoiceBox cardChoice = new ChoiceBox();
@@ -64,6 +66,26 @@ public class RentPaymentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        dateLabel.setText("Date: " + LocalDate.now());
+        months = new ArrayList<>();
+        months.add("January");
+        months.add("February");
+        months.add("March");
+        months.add("April");
+        months.add("May");
+        months.add("June");
+        months.add("July");
+        months.add("August");
+        months.add("September");
+        months.add("October");
+        months.add("November");
+        months.add("December");
+        rentForMonth.setItems(FXCollections.observableArrayList(months));
+        years = new ArrayList<>();
+        for (int x = 2010; x < 2021; x++) {
+            years.add(x);
+        }
+        rentYear.setItems(FXCollections.observableArrayList(years));
         try {
 
             String curUser = Tables.getCurrentUser();
@@ -78,17 +100,16 @@ public class RentPaymentController implements Initializable {
             ResultSet finalAptRent = getAptRent.executeQuery(aptRent);
             if (finalAptRent.next()) {
                 apt = finalAptRent.getInt("Apt_No");
+                aptLabel.setText("Apartment No.: " + apt);
                 baseRent = finalAptRent.getInt("Rent");
             }
 
-            String toProrate = "SELECT EXTRACT(DAY FROM Move_Date) AS day, " +
-                    "EXTRACT(MONTH FROM Move_Date) AS Month, " +
-                    "EXTRACT(MONTH FROM CURDATE()) AS cur_month, Count(*) AS count " +
+            String toProrate = "SELECT Count(*) AS count " +
                     "FROM Prospective_Resident P JOIN Resident R " +
                     "ON P.Username = R.Username " +
                     "WHERE P.Username = '" + curUser + "' " +
-                    "AND day > 7 " +
-                    "AND Month = cur_month;";
+                    "AND EXTRACT(DAY FROM Move_Date) > 7 " +
+                    "AND EXTRACT(MONTH FROM Move_Date) = EXTRACT(MONTH FROM CURDATE());";
             Statement pro = conn.createStatement();
             ResultSet prorate = pro.executeQuery(toProrate);
             prorate.next();
@@ -117,11 +138,7 @@ public class RentPaymentController implements Initializable {
             extra.next();
             rentDue = baseRent + extra.getInt("extra_rent");
 
-            dateLabel.setText("Date: " + LocalDate.now().toString());
-            aptLabel.setText("Apartment #: " + apt);
             rentLabel.setText("Rent due: $" + rentDue);
-
-            rentForMonth.setValue(LocalDate.now());
 
             cards = new ArrayList<>();
             // populate cards with the current user's available payment methods
@@ -142,31 +159,18 @@ public class RentPaymentController implements Initializable {
 
     @FXML
     private void makePayment(ActionEvent event)throws IOException, SQLException {
-        int curMonth = rentForMonth.getValue().getMonthValue();
-        rentMonth = months[curMonth - 1];
-        rentYear = rentForMonth.getValue().getYear();
 
         String resQ = "INSERT INTO Pays_Rent VALUES"
-                    + "('" + selectedCard + "', '" + rentMonth + "', '" + rentYear
+                    + "('" + cardChoice.getValue() + "', '" + rentForMonth.getValue() 
+                    + "', '" + rentYear.getValue()
                     + "', '" + apt + "', " + rentDue
-                    + ", '" + rentForMonth + ");";
+                    + ", '" + LocalDate.now() + "');";
         Connection conn = Tables.getConnection();
         Statement newRes = conn.createStatement();
         newRes.executeUpdate(resQ);
         newRes.close();
 
         System.out.println("Payment submitted.");
-    }
-
-    @FXML
-    private void selectCard() {
-        cardChoice.getSelectionModel().selectedIndexProperty().addListener(
-            new ChangeListener<Number>() {
-                public void changed(ObservableValue v, Number val, Number newVal) {
-                    int c = cards.get(newVal.intValue());
-                    selectedCard = c;
-                }
-            });
     }
     
     @FXML

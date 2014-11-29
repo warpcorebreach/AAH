@@ -21,7 +21,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="217.0" layoutY="136.0" text="Apartment No.: 1234">
+      <Label fx:id="aptLabel" layoutX="217.0" layoutY="136.0" text="Apartment No.: 1234">
          <font>
             <Font size="18.0" />
          </font>
@@ -31,18 +31,19 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <DatePicker layoutX="260.0" layoutY="185.0" />
-      <Label layoutX="234.0" layoutY="247.0" text="Rent due: $1,435">
+      <Label fx:id="rentLabel" layoutX="234.0" layoutY="247.0" text="Rent due: $1,435">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="cardChoice" layoutX="260.0" layoutY="304.0" onDragDetected="#selectCard" prefWidth="150.0" />
+      <ChoiceBox fx:id="cardChoice" layoutX="260.0" layoutY="304.0" prefWidth="150.0" />
       <Label layoutX="174.0" layoutY="306.0" text="Use card:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
       <Button fx:id="payButton" layoutX="446.0" layoutY="304.0" mnemonicParsing="false" onAction="#makePayment" text="Make Payment" />
+      <ChoiceBox fx:id="rentForMonth" layoutX="260.0" layoutY="188.0" prefHeight="25.0" prefWidth="110.0" />
+      <ChoiceBox fx:id="rentYear" layoutX="383.0" layoutY="188.0" prefHeight="25.0" prefWidth="67.0" />
    </children>
 </AnchorPane>

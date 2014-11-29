@@ -24,30 +24,33 @@ import javafx.scene.control.Label;
 public class ViewMessageController implements Initializable {
     
     private String curUser;
+    private int apt;
     @FXML
     private Label message = new Label();
     /**
      * Initializes the controller class.
      */
+    @FXML
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Connection conn = Tables.getConnection();
         curUser = Tables.getCurrentUser();
         try {
-            String remQ = "SELECT Date, Message, Apt_No "
+            String remQ = "SELECT Date, Reminder.Apt_No, Message " 
                             + "FROM Reminder JOIN Resident "
-                            + "ON Reminder.Apt_No = Resident.Apt_No"
+                            + "ON Reminder.Apt_No = Resident.Apt_No "
                             + "WHERE Username = '" + curUser + "';";
 
             Statement getRem = conn.createStatement();
             ResultSet rem = getRem.executeQuery(remQ);
             rem.next();
+            apt = rem.getInt("Reminder.Apt_No");
 
             message.setText(rem.getString("Message"));
             
             String delQ = "DELETE FROM Reminder "
-                        + "WHERE Date = '" + rem.getDate("Date")
-                        + "AND Apt_No = '" + rem.getInt("Apt_No") + "';";
+                        + "WHERE Date = '" + rem.getDate("Date") + "' "
+                        + "AND Apt_No = '" + apt + "';";
                         Statement del = conn.createStatement();
                         del.executeUpdate(delQ);
                         del.close();
