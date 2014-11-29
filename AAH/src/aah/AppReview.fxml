@@ -18,15 +18,15 @@
       </Label>
       <TableView fx:id="table" layoutY="97.0" prefHeight="320.0" prefWidth="640.0">
         <columns>
-          <TableColumn prefWidth="72.0" text="Name" />
-          <TableColumn prefWidth="79.0" text="Date of Birth" />
-            <TableColumn prefWidth="54.0" text="Gender" />
-            <TableColumn prefWidth="97.0" text="Monthly Income" />
-            <TableColumn prefWidth="56.0" text="Apt Type" />
-            <TableColumn prefWidth="82.0" text="Move In Date" />
-            <TableColumn prefWidth="68.0" text="Lease Term" />
-            <TableColumn prefWidth="83.0" text="Reject/Accept" />
-            <TableColumn prefWidth="48.0" />
+          <TableColumn fx:id="nameCol" prefWidth="72.0" text="Name" />
+          <TableColumn fx:id="dobCol" prefWidth="79.0" text="Date of Birth" />
+            <TableColumn fx:id="genCol" prefWidth="54.0" text="Gender" />
+            <TableColumn fx:id="inCol" prefWidth="97.0" text="Monthly Income" />
+            <TableColumn fx:id="typeCol" prefWidth="56.0" text="Apt Type" />
+            <TableColumn fx:id="moveCol" prefWidth="82.0" text="Move In Date" />
+            <TableColumn fx:id="leCol" prefWidth="68.0" text="Lease Term" />
+            <TableColumn fx:id="rejCol" prefWidth="83.0" text="Reject/Accept" />
+            <TableColumn fx:id="checkCol" prefWidth="48.0" />
         </columns>
       </TableView>
       <Button fx:id="nextButton" layoutX="525.0" layoutY="430.0" mnemonicParsing="false" onAction="#next" prefHeight="25.0" prefWidth="83.0" text="Next" />

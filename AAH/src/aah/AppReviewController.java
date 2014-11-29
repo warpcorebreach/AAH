@@ -41,6 +41,33 @@ public class AppReviewController implements Initializable {
     @FXML
     private TableView table = new TableView(); 
     
+    @FXML
+    private TableColumn nameCol;
+    
+    @FXML
+    private TableColumn dobCol;
+    
+    @FXML
+    private TableColumn genCol;
+    
+    @FXML
+    private TableColumn inCol;
+    
+    @FXML
+    private TableColumn typeCol;
+    
+    @FXML
+    private TableColumn moveCol;
+    
+    @FXML
+    private TableColumn leCol;
+    
+    @FXML
+    private TableColumn rejCol;
+    
+    @FXML
+    private TableColumn checkCol;
+    
     private ObservableList<ObservableList> data;  
 
     /**
@@ -83,31 +110,31 @@ public class AppReviewController implements Initializable {
                 data.add(row); 
             }
             table.setItems(data); 
-            TableColumn nameCol = new TableColumn("Name");  
+            nameCol = new TableColumn("Name");  
             nameCol.setMinWidth(100);  
 
-            TableColumn dobCol = new TableColumn("Date of Birth");  
+            dobCol = new TableColumn("Date of Birth");  
             dobCol.setMinWidth(100);          
 
-            TableColumn genCol = new TableColumn("Gender");  
+            genCol = new TableColumn("Gender");  
             genCol.setMinWidth(100);  
             
-            TableColumn inCol = new TableColumn("Monthly Income($)");  
+            inCol = new TableColumn("Monthly Income($)");  
             inCol.setMinWidth(100);  
             
-            TableColumn typeCol = new TableColumn("Type of Apartment Requested");  
+            typeCol = new TableColumn("Type of Apartment Requested");  
             typeCol.setMinWidth(100);  
 
-            TableColumn moveCol = new TableColumn("Preferred Move-in Date");  
+            moveCol = new TableColumn("Preferred Move-in Date");  
             moveCol.setMinWidth(100);          
 
-            TableColumn leCol = new TableColumn("Lease Term");  
+            leCol = new TableColumn("Lease Term");  
             leCol.setMinWidth(100);  
             
-            TableColumn rejCol = new TableColumn("Reject/Accept");  
+            rejCol = new TableColumn("Reject/Accept");  
             rejCol.setMinWidth(100); 
             
-            TableColumn checkCol = new TableColumn("");  
+            checkCol = new TableColumn("");  
             checkCol.setMinWidth(100); 
 
             table.getColumns().addAll(nameCol, dobCol, genCol, inCol, typeCol, 

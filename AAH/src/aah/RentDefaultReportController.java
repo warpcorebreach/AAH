@@ -35,6 +35,14 @@ public class RentDefaultReportController implements Initializable {
     private String selectedMonth;
     private TableView table = new TableView();  
     private ObservableList<ObservableList> data;   
+    @FXML
+    private TableColumn aptCol;
+    
+    @FXML
+    private TableColumn extraCol;
+    
+    @FXML
+    private TableColumn lateCol;
     
     @FXML
     private ChoiceBox monthSel = new ChoiceBox();
@@ -92,13 +100,14 @@ public class RentDefaultReportController implements Initializable {
                             data.add(row);   
                         }
                         table.setItems(data); 
-                        TableColumn aptCol = new TableColumn("Apartment");  
+                        
+                        aptCol = new TableColumn("Apartment");  
                         aptCol.setMinWidth(100);  
 
-                        TableColumn extraCol = new TableColumn("Extra Amount Paid($)");  
+                        extraCol = new TableColumn("Extra Amount Paid($)");  
                         extraCol.setMinWidth(100);          
 
-                        TableColumn lateCol = new TableColumn("Defaulted By");  
+                        lateCol = new TableColumn("Defaulted By");  
                         lateCol.setMinWidth(100);        
 
                         table.getColumns().addAll(aptCol, extraCol, lateCol);   

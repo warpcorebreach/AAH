@@ -18,11 +18,11 @@
       </Label>
       <Label layoutX="176.0" layoutY="109.0" text="Month:" />
       <ChoiceBox fx:id="monthSel" layoutX="232.0" layoutY="105.0" onDragDetected="#selectMonth" prefHeight="25.0" prefWidth="125.0" />
-      <TableView fx:id="table" layoutX="120.0" layoutY="151.0" onSort="#initialize" prefHeight="235.0" prefWidth="349.0">
+      <TableView fx:id="table" layoutX="120.0" layoutY="151.0" prefHeight="235.0" prefWidth="349.0">
          <columns>
-            <TableColumn prefWidth="114.0" text="Apartment" />
-            <TableColumn prefWidth="127.0" text="Extra Amount Paid($)" />
-            <TableColumn prefWidth="107.0" text="Defaulted By" />
+            <TableColumn fx:id="aptCol" prefWidth="114.0" text="Apartment" />
+            <TableColumn fx:id="extraCol" prefWidth="127.0" text="Extra Amount Paid($)" />
+            <TableColumn fx:id="lateCol" prefWidth="107.0" text="Defaulted By" />
          </columns>
       </TableView>
    </children>

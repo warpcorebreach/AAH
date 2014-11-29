@@ -29,6 +29,15 @@ public class ServiceRequestReportController implements Initializable {
     @FXML
     private TableView table = new TableView(); 
     
+    @FXML
+    private TableColumn monthCol;
+    
+    @FXML
+    private TableColumn reqCol;
+    
+    @FXML
+    private TableColumn dayCol;
+    
     private ObservableList<ObservableList> data;   
     /**
      * Initializes the controller class.
@@ -59,13 +68,13 @@ public class ServiceRequestReportController implements Initializable {
                 data.add(row);   
             }
             table.setItems(data); 
-            TableColumn monthCol = new TableColumn("Month");  
+            monthCol = new TableColumn("Month");  
             monthCol.setMinWidth(100);  
 
-            TableColumn reqCol = new TableColumn("Type of Request");  
+            reqCol = new TableColumn("Type of Request");  
             reqCol.setMinWidth(100);          
 
-            TableColumn dayCol = new TableColumn("Average No of Days");  
+            dayCol = new TableColumn("Average No of Days");  
             dayCol.setMinWidth(100);        
 
             table.getColumns().addAll(monthCol, reqCol, dayCol);   
