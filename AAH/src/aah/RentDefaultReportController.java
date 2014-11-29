@@ -23,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  * FXML Controller class
@@ -34,7 +35,11 @@ public class RentDefaultReportController implements Initializable {
     private List<String> months;
     private String selectedMonth;
     private TableView table = new TableView();  
-    private ObservableList<ObservableList> data;   
+    private ObservableList<AptDefaults> data
+            = FXCollections.observableArrayList();  
+    private int apt, extra, days;
+    private Connection conn;
+    
     @FXML
     private TableColumn aptCol;
     
@@ -52,6 +57,7 @@ public class RentDefaultReportController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        conn = Tables.getConnection();
         months = new ArrayList<>();
         months.add("January");
         months.add("February");
@@ -70,53 +76,42 @@ public class RentDefaultReportController implements Initializable {
     
     @FXML
     private void selectMonth() {
-        monthSel.getSelectionModel().selectedIndexProperty().addListener(
-            new ChangeListener<Number>() {
-                public void changed(ObservableValue v, Number val, Number newVal) {
-                    String c = months.get(newVal.intValue());
-                    selectedMonth = c;
-                    try {
-                        data = FXCollections.observableArrayList();
-                        String defQ = "SELECT Apartment.Apt_No as Apartment, Month, Amt - Rent AS Late_Fee," +
-                                            "(Amt - Rent)/50 AS Days_Late " +
-                                            "FROM Pays_Rent JOIN Apartment ON " +
-                                            "Apartment.Apt_No = Pays_Rent.Apt_No " +
-                                            "WHERE Days_Late > 0 " +
-                                            "GROUP BY Month " +
-                                            "ORDER BY Late_Fee DESC;";
-                        Connection conn = Tables.getConnection();
-                        Statement getDef = conn.createStatement();
-                        ResultSet defs = getDef.executeQuery(defQ);
-                        while (defs.next()) {  
-                            int apt = defs.getInt("Apartment");                                  
-                            int lateFee = defs.getInt("Late_Fee");   
-                            int daysLate = defs.getInt("Days_Late");  
+        try {
+            List<AptDefaults> report = new ArrayList<>();
+            String defQ = "SELECT Apartment.Apt_No as Apartment, Amt - Rent AS Late_Fee," +
+                                "(Amt - Rent)/50 AS Days_Late " +
+                                "FROM Pays_Rent JOIN Apartment ON " +
+                                "Apartment.Apt_No = Pays_Rent.Apt_No " +
+                                "WHERE Days_Late > 0 " +
+                                "AND Month = '" + monthSel.getValue() + "'" +
+                                "ORDER BY Late_Fee DESC;";;
+            Statement getDef = conn.createStatement();
+            ResultSet defs = getDef.executeQuery(defQ);
+            while (defs.next()) {  
+                apt = defs.getInt("Apartment");                                  
+                extra = defs.getInt("Late_Fee");   
+                days = defs.getInt("Days_Late");  
+                System.out.println(apt);
 
-                            ObservableList<Integer> row = FXCollections.observableArrayList();  
-                            for(int i=1 ; i<=defs.getMetaData().getColumnCount(); i++){                      
-                                row.add(defs.getInt(i));  
-                            }                          
+                report.add(new AptDefaults(apt,extra,days));
 
-                            data.add(row);   
-                        }
-                        table.setItems(data); 
-                        
-                        aptCol = new TableColumn("Apartment");  
-                        aptCol.setMinWidth(100);  
+            }          
+            getDef.close();
 
-                        extraCol = new TableColumn("Extra Amount Paid($)");  
-                        extraCol.setMinWidth(100);          
+            aptCol.setCellValueFactory(
+                new PropertyValueFactory<>("apt"));
+            extraCol.setCellValueFactory(
+                new PropertyValueFactory<>("extra"));
+            lateCol.setCellValueFactory(
+                new PropertyValueFactory<>("days"));
 
-                        lateCol = new TableColumn("Defaulted By");  
-                        lateCol.setMinWidth(100);        
+            data.addAll(report);
+            table.setItems(data);
 
-                        table.getColumns().addAll(aptCol, extraCol, lateCol);   
-                        System.out.println("Table Value::" + table); 
-                    }  catch (SQLException ex) {
-                        System.out.println("SQL Error: " + ex.getMessage());
-                    }
-                }
-            });
+        } catch (SQLException ex) {
+            System.out.println("SQL Error: " + ex.getMessage());
+        }
+
     }
     
 }
