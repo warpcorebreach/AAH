@@ -12,6 +12,8 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 /**
@@ -34,130 +37,148 @@ import javafx.stage.Stage;
  * @author Justin
  */
 public class AppReviewController implements Initializable {
-    
+
     @FXML
-    private Button nextButton = new Button();
-    
+    private Button approveButton = new Button();
+
     @FXML
-    private TableView table = new TableView(); 
-    
+    private Button rejectButton = new Button();
+
     @FXML
-    private TableColumn nameCol;
-    
+    private TableView table = new TableView();
+
     @FXML
-    private TableColumn dobCol;
-    
+    private TableColumn nameCol = new TableColumn();
+
     @FXML
-    private TableColumn genCol;
-    
+    private TableColumn dobCol = new TableColumn();
+
     @FXML
-    private TableColumn inCol;
-    
+    private TableColumn genCol = new TableColumn();
+
     @FXML
-    private TableColumn typeCol;
-    
+    private TableColumn inCol = new TableColumn();
+
     @FXML
-    private TableColumn moveCol;
-    
+    private TableColumn typeCol = new TableColumn();
+
     @FXML
-    private TableColumn leCol;
-    
+    private TableColumn moveCol = new TableColumn();
+
     @FXML
-    private TableColumn rejCol;
-    
-    @FXML
-    private TableColumn checkCol;
-    
-    private ObservableList<ObservableList> data;  
+    private TableColumn leCol = new TableColumn();
+
+    // contains ApartmentEntry objects which can be added to a TableView
+    private ObservableList<ApartmentEntry> data
+            = FXCollections.observableArrayList();
+
+    private String name;
+    private Date dob;
+    private String gen;
+    private int income;
+    private String cat;
+    private int min;
+    private int max;
+    private Date move;
+    private String term;
+    private String user;
+
+    private Connection conn;
+    private ApartmentEntry selected;
 
     /**
      * Initializes the controller class.
      */
-    @FXML
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        data = FXCollections.observableArrayList();
         try {   //we should fix this query AND WHILE LOOP
+            conn = Tables.getConnection();
+            List<ApartmentEntry> apps = new ArrayList<>();
+
             String revQ = "SELECT Name, DOB, Gender, Income, Category, Min_Rent, " +
-                            "Max_Rent, Move_Date, Lease_Term, Username " +
-                            "FROM Prospective_Resident " +
-                            "WHERE Prospective_Resident.Username NOT IN (SELECT Username FROM " +
-                            "	Resident) " +
-                            "AND ((Income/3) >= SELECT MAX(Rent) FROM Apartment " +
-                            "WHERE Apartment.Category = Prospective_Resident.Category) " +
-                            "AND (Move_Date >= SELECT MIN(Available_On) FROM Apartment WHERE " +
-                            "Apartment.Category = Prospective_Resident.Category);";
-            Connection conn = Tables.getConnection();
+                "Max_Rent, Move_Date, Pref_Lease, Username " +
+                "FROM Prospective_Resident " +
+                "WHERE Username NOT IN (SELECT Username FROM Resident) ";
             Statement getRev = conn.createStatement();
             ResultSet rev = getRev.executeQuery(revQ);
-            while (rev.next()) {
-                String name = rev.getString("Name");
-                Date dob = rev.getDate("DOB");
-                String Gen = rev.getString("Gender");
-                int income = rev.getInt("Income");
-                String cat = rev.getString("Category");
-                int min = rev.getInt("Min_Rent");
-                int max = rev.getInt("Max_Rent");
-                Date move = rev.getDate("Move_Date");
-                String term = rev.getString("Lease_Term");
-                String user = rev.getString("Username");
-                CheckBox check = new CheckBox();
-                
-                ObservableList<String> row = FXCollections.observableArrayList();  
-                for(int i=1 ; i<=rev.getMetaData().getColumnCount(); i++){                      
-                    row.add(rev.getString(i));  
-                }
-                data.add(row); 
+
+            while(rev.next()) {
+                name = rev.getString("Name");
+                dob = rev.getDate("DOB");
+                gen = rev.getString("Gender");
+                income = rev.getInt("Income");
+                cat = rev.getString("Category");
+                min = rev.getInt("Min_Rent");
+                max = rev.getInt("Max_Rent");
+                move = rev.getDate("Move_Date");
+                term = rev.getString("Pref_Lease");
+                user = rev.getString("Username");
+
+                System.out.println(name + " " + user);
+
+                apps.add(new ApartmentEntry(name, dob, gen, income, cat, min,
+                        max, move, term, user));
             }
-            table.setItems(data); 
-            nameCol = new TableColumn("Name");  
-            nameCol.setMinWidth(100);  
+            getRev.close();
 
-            dobCol = new TableColumn("Date of Birth");  
-            dobCol.setMinWidth(100);          
+            nameCol.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+            dobCol.setCellValueFactory(
+                new PropertyValueFactory<>("dob"));
+            genCol.setCellValueFactory(
+                new PropertyValueFactory<>("gen"));
+            inCol.setCellValueFactory(
+                new PropertyValueFactory<>("income"));
+            typeCol.setCellValueFactory(
+                new PropertyValueFactory<>("cat"));
+            moveCol.setCellValueFactory(
+                new PropertyValueFactory<>("move"));
+            leCol.setCellValueFactory(
+                new PropertyValueFactory<>("term"));
 
-            genCol = new TableColumn("Gender");  
-            genCol.setMinWidth(100);  
-            
-            inCol = new TableColumn("Monthly Income($)");  
-            inCol.setMinWidth(100);  
-            
-            typeCol = new TableColumn("Type of Apartment Requested");  
-            typeCol.setMinWidth(100);  
+            data.addAll(apps);
+            table.setItems(data);
 
-            moveCol = new TableColumn("Preferred Move-in Date");  
-            moveCol.setMinWidth(100);          
-
-            leCol = new TableColumn("Lease Term");  
-            leCol.setMinWidth(100);  
-            
-            rejCol = new TableColumn("Reject/Accept");  
-            rejCol.setMinWidth(100); 
-            
-            checkCol = new TableColumn("");  
-            checkCol.setMinWidth(100); 
-
-            table.getColumns().addAll(nameCol, dobCol, genCol, inCol, typeCol, 
-                    moveCol, leCol, rejCol, checkCol);
-         
-            System.out.println("Table Value::" + table); 
-            
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
     }
-    
+
     @FXML
-    private void next(ActionEvent event)throws IOException, SQLException {
-        
-        Node node = (Node) event.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
-        Parent root;
-        root = FXMLLoader.load(
-                getClass().getResource("AptAllotment.fxml"));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+    private void accept() {
+        System.out.println("===== Application Approved =====");
+        System.out.println();
+        System.out.println(selected.getCat());
+        System.out.println(selected.getDob());
+        System.out.println(selected.getGen());
+        System.out.println(selected.getIncome());
+        System.out.println(selected.getMax());
+        System.out.println(selected.getMin());
+        System.out.println(selected.getMove());
+        System.out.println(selected.getName());
+        System.out.println(selected.getTerm());
+        System.out.println(selected.getUser());
+    }
+
+    @FXML
+    private void reject() {
+        System.out.println("===== Application Rejected =====");
+        System.out.println();
+        System.out.println(selected.getCat());
+        System.out.println(selected.getDob());
+        System.out.println(selected.getGen());
+        System.out.println(selected.getIncome());
+        System.out.println(selected.getMax());
+        System.out.println(selected.getMin());
+        System.out.println(selected.getMove());
+        System.out.println(selected.getName());
+        System.out.println(selected.getTerm());
+        System.out.println(selected.getUser());
+    }
+
+    @FXML
+    private void select() {
+        selected = (ApartmentEntry) table.getSelectionModel().getSelectedItem();
     }
 
 }
