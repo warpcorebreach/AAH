@@ -41,6 +41,9 @@ public class AAH extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        //save the stage object
+        Tables.setStage(stage);
+        //load and display the homepage
         Parent root = FXMLLoader.load(
                 getClass().getResource("Login.fxml"));
 

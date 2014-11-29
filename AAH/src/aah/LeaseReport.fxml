@@ -23,5 +23,6 @@
             <TableColumn prefWidth="124.0" text="No. of Apartments" />
         </columns>
       </TableView>
+      <Button fx:id="back" layoutX="498.0" layoutY="361.0" mnemonicParsing="false" onAction="#showManagerHome" onMouseClicked="#showManagerHome" text="Back" />
    </children>
 </AnchorPane>

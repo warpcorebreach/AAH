@@ -3,6 +3,8 @@ package aah;
 
 import java.sql.*;
 
+import javafx.stage.*;
+
 /**
  * Contains some static methods for connecting to the DB, adding tables, and
  * dropping tables.
@@ -23,6 +25,9 @@ public class Tables {
     //  from the DB
     private static final int MAX_CONN_OPEN_ATTEMPTS = 3;
     private static final int MAX_CONN_CLOSE_ATTEMPTS = 3;
+    
+    //stage object
+    private static Stage stage = null;
 
     /**
      * Initialize the connection to the DB using the username and password
@@ -343,5 +348,26 @@ public class Tables {
     public static void setCurrentUser(String u) {
         curUser = u;
     }
+    
+    /**
+     * This method saves the Stage object from the call to start(Stage stage)
+     * in AAH.java
+     * 
+     * @param s The stage object to save for later 
+     */
+    public static void setStage(Stage s){
+        stage = s;
+    }//end method setStage
+    
+    /**
+     * This method returns the root stage object for use in other
+     * GUI parts of the program
+     * 
+     * @return The stage object that was given to us from start(Stage stage)
+     *          in AAH.java
+     */
+    public static Stage getStage(){
+        return stage;
+    }//end method getStage
 
 }
