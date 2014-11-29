@@ -107,7 +107,12 @@ public class ApplicationFormController implements Initializable {
         LocalDate moveInChoice = moveIn.getValue();
         String nameIn = name.getText();
         String gender = (genderMale.isSelected()) ? "M" : "F";
-        String lease = selectedLease.substring(0, 1);
+        int lease;
+        if (selectedLease.equals("12 months")) {
+            lease = Integer.parseInt(selectedLease.substring(0,2));
+        } else {
+            lease = Integer.parseInt(selectedLease.substring(0,1));
+        }
         String addr = prevAddr.getText();
         int incomeIn = Integer.parseInt(income.getText());
 
@@ -160,7 +165,7 @@ public class ApplicationFormController implements Initializable {
             // all fields properly filled, add application to DB
             String resQ = "INSERT INTO Prospective_Resident VALUES"
                     + "('" + curUser + "', '" + nameIn + "', '" + sqlDOB
-                    + "', '" + gender + "', " + Integer.parseInt(lease)
+                    + "', '" + gender + "', " + lease
                     + ", '" + selectedCat + "', '" + sqlMoveIn + "', "
                     + incomeIn + ", '" + addr + "', " + minRentIn + ", "
                     + maxRentIn + ");";

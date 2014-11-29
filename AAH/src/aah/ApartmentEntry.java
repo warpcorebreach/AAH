@@ -36,7 +36,7 @@ public class ApartmentEntry {
         this.min = min;
         this.max = max;
         this.move = move;
-        this.term = term;
+        this.term = term + " months";
         this.user = user;
     }
 
