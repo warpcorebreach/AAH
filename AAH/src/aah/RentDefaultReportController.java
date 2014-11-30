@@ -18,6 +18,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -33,12 +34,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class RentDefaultReportController implements Initializable {
     
     private List<String> months;
-    private String selectedMonth;
-    private TableView table = new TableView();  
+    private String selectedMonth; 
     private ObservableList<AptDefaults> data
             = FXCollections.observableArrayList();  
     private int apt, extra, days;
     private Connection conn;
+    
+    @FXML
+    private TableView table = new TableView(); 
     
     @FXML
     private TableColumn aptCol;
@@ -73,25 +76,31 @@ public class RentDefaultReportController implements Initializable {
         months.add("December");
         monthSel.setItems(FXCollections.observableArrayList(months));
     }    
-    
+ 
     @FXML
-    private void selectMonth() {
+    private void select() {
+        monthSel.getSelectionModel().selectedIndexProperty().addListener(
+            new ChangeListener<Number>() {
+                public void changed(ObservableValue v, Number val, Number newVal) { 
+                    String c = months.get(newVal.intValue());
+                    selectedMonth = c;  
+                }
+        });
         try {
             List<AptDefaults> report = new ArrayList<>();
             String defQ = "SELECT Apartment.Apt_No as Apartment, Amt - Rent AS Late_Fee," +
-                                "(Amt - Rent)/50 AS Days_Late " +
-                                "FROM Pays_Rent JOIN Apartment ON " +
-                                "Apartment.Apt_No = Pays_Rent.Apt_No " +
-                                "WHERE Days_Late > 0 " +
-                                "AND Month = '" + monthSel.getValue() + "'" +
-                                "ORDER BY Late_Fee DESC;";;
+                                        "(Amt - Rent)/50 AS Days_Late " +
+                                        "FROM Pays_Rent JOIN Apartment ON " +
+                                        "Apartment.Apt_No = Pays_Rent.Apt_No " +
+                                        "WHERE (Amt - Rent)/50 > 0 " +
+                                        "AND Month = '" + selectedMonth + "'" +
+                                        "ORDER BY Amt - Rent DESC;";
             Statement getDef = conn.createStatement();
             ResultSet defs = getDef.executeQuery(defQ);
             while (defs.next()) {  
                 apt = defs.getInt("Apartment");                                  
                 extra = defs.getInt("Late_Fee");   
                 days = defs.getInt("Days_Late");  
-                System.out.println(apt);
 
                 report.add(new AptDefaults(apt,extra,days));
 
@@ -111,7 +120,6 @@ public class RentDefaultReportController implements Initializable {
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
-
     }
     
 }

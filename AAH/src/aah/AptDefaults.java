@@ -20,4 +20,16 @@ public class AptDefaults {
         this.extra = extra;
         this.days = days;
     }
+    
+    public int getApt() {
+        return apt;
+    }
+    
+    public int getExtra() {
+        return extra;
+    }
+    
+    public int getDays() {
+        return days;
+    }
 }
