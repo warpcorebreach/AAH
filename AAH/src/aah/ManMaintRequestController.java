@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -60,10 +61,13 @@ public class ManMaintRequestController implements Initializable {
     private ObservableList<MaintRequestEntry> data
             = FXCollections.observableArrayList();
     
-    private ObservableList<ObservableList> data2;
+    private ObservableList<MaintRequestEntry> data2
+             = FXCollections.observableArrayList();
     private Date requestDate;
     private int aptno;
     private String issue;
+    private Date resolvedDate;
+    private MaintRequestEntry selected;
     /**
      * Initializes the controller class.
      */
@@ -85,7 +89,7 @@ public class ManMaintRequestController implements Initializable {
                 issue = notRes.getString("Issue_Type");
                 CheckBox check = new CheckBox();
                 System.out.println(aptno + " " + requestDate + " " + issue);
-                entrys.add(new MaintRequestEntry(requestDate,aptno,issue));
+                entrys.add(new MaintRequestEntry(requestDate,aptno,issue, null));
               /*  ObservableList<String> row = FXCollections.observableArrayList();  
                 for(int i=1 ; i<=notRes.getMetaData().getColumnCount(); i++){                      
                     row.add(notRes.getString(i));  
@@ -101,26 +105,11 @@ public class ManMaintRequestController implements Initializable {
                 new PropertyValueFactory<>("issue"));
                 data.addAll(entrys);
                 table.setItems(data);
-     /*       TableColumn notReqCol = new TableColumn("Date of Request");  
-            notReqCol.setMinWidth(100);  
-
-            TableColumn aptCol = new TableColumn("Apt No");  
-            aptCol.setMinWidth(100);          
-
-            TableColumn issCol = new TableColumn("Description of Issue");  
-            issCol.setMinWidth(100); 
-            
-            TableColumn boxes = new TableColumn("");  
-            boxes.setMinWidth(100); 
-
-            table.getColumns().addAll(notReqCol, aptCol, boxes);   */ 
-            System.out.println("Table Value::" + table2); 
-            
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
-     /*   data2 = FXCollections.observableArrayList();
-        try {
+        try {                
+            List<MaintRequestEntry> entrys2 = new ArrayList<>();
             String resQ = "SELECT Request_Date, Apt_No, Issue_Type, Resolved_Date " +
                             "FROM Maintenance_Request " +
                             "WHERE Resolved_Date IS NOT NULL " +
@@ -129,47 +118,44 @@ public class ManMaintRequestController implements Initializable {
             Statement getRes = conn.createStatement();
             ResultSet res = getRes.executeQuery(resQ);
             while (res.next()) {
-                Date start = res.getDate("Request_Date");
-                int apt = res.getInt("Apt_No");
-                String issue = res.getString("Issue_Type");
-                Date end = res.getDate("Resolved_Date");
-                
-                ObservableList<String> row2 = FXCollections.observableArrayList();  
-                for(int i=1 ; i<=res.getMetaData().getColumnCount(); i++){                      
-                    row2.add(res.getString(i));  
-                }
-                data2.add(row2); 
+                requestDate = res.getDate("Request_Date");
+                aptno = res.getInt("Apt_No");
+                issue = res.getString("Issue_Type");
+                resolvedDate = res.getDate("Resolved_Date");
+
+                entrys2.add(new MaintRequestEntry(requestDate, aptno, issue, resolvedDate));
             }
-            table2.setItems(data2); 
-            TableColumn reqCol = new TableColumn("Date of Request");  
-            reqCol.setMinWidth(100);  
-
-            TableColumn apt2Col = new TableColumn("Apt No");  
-            apt2Col.setMinWidth(100);          
-
-            TableColumn iss2Col = new TableColumn("Description of Issue");  
-            iss2Col.setMinWidth(100);  
-            
-            TableColumn resCol = new TableColumn("Issue Resolved On");  
-            resCol.setMinWidth(100);      
-
-            table.getColumns().addAll(reqCol, apt2Col, iss2Col, resCol);   
-            System.out.println("Table Value::" + table2); 
+            getRes.close();
+                dor2.setCellValueFactory(
+                new PropertyValueFactory<>("requestDate"));
+                aptCol2.setCellValueFactory(
+                new PropertyValueFactory<>("aptno"));
+                desCol2.setCellValueFactory(
+                new PropertyValueFactory<>("issue"));
+                resolved.setCellValueFactory(
+                new PropertyValueFactory<>("resolvedDate"));
+                data2.addAll(entrys2);
+                table2.setItems(data2);
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
-        } */
+        } 
     } 
     
     @FXML
     private void resolve(ActionEvent event)throws IOException, SQLException {
+        if(selected != null) {
         String updateQ = "UPDATE Maintenance_Request " +
-                            "SET Date_Resolved = $date_resolved " +
-                            "WHERE Apt_No = $apt AND Request_Date = $date AND " +
-                            "Issue_Type = $issue;";
+                            "SET Date_Resolved = '"+ LocalDate.now() +"' " +
+                            "WHERE Apt_No = '" + selected.getAptno() + "' AND Request_Date = '" + selected.getRequestDate() +"' AND " +
+                            "Issue_Type = '"+ selected.getIssue() + "'";
         Connection conn = Tables.getConnection();
         Statement newRes = conn.createStatement();
         newRes.executeUpdate(updateQ);
         newRes.close();
+        }
     }
-    
+    @FXML
+    private void select() {
+        selected = (MaintRequestEntry) table.getSelectionModel().getSelectedItem();
+    }
 }

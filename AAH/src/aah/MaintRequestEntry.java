@@ -16,12 +16,12 @@ public class MaintRequestEntry {
     private final Date requestDate;
     private final int aptno;
     private final String issue;
-    //private final Date resolvedDate;
-    public MaintRequestEntry(Date requestDate, int aptno, String issue) {
+    private final Date resolvedDate;
+    public MaintRequestEntry(Date requestDate, int aptno, String issue, Date resolvedDate) {
         this.requestDate = requestDate;
         this.aptno = aptno;
         this.issue = issue;
-      //  this.resolvedDate = resolvedDate;
+        this.resolvedDate = resolvedDate;
     }
     public Date getRequestDate() {
         return requestDate;
@@ -32,7 +32,7 @@ public class MaintRequestEntry {
     public String getIssue() {
         return issue;
     }
- /*   public Date getResolvedDate() {
+    public Date getResolvedDate() {
         return resolvedDate;
-    } */
+    } 
 }
