@@ -13,6 +13,8 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +25,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  * FXML Controller class
@@ -39,8 +42,23 @@ public class ManMaintRequestController implements Initializable {
     
     @FXML
     private Button resolveButton = new Button();
+    @FXML
+    private TableColumn dor = new TableColumn();
+    @FXML
+    private TableColumn aptCol = new TableColumn();
+    @FXML
+    private TableColumn desCol = new TableColumn();
+    @FXML
+    private TableColumn dor2 = new TableColumn();
+    @FXML
+    private TableColumn aptCol2 = new TableColumn();
+    @FXML
+    private TableColumn desCol2 = new TableColumn();
+    @FXML
+    private TableColumn resolved = new TableColumn();
     
-    private ObservableList<ObservableList> data;  
+    private ObservableList<MaintRequestEntry> data
+            = FXCollections.observableArrayList();
     
     private ObservableList<ObservableList> data2;
     /**
@@ -50,6 +68,7 @@ public class ManMaintRequestController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         data = FXCollections.observableArrayList();
         try {
+                        List<MaintRequestEntry> entrys = new ArrayList<>();
             String notResQ = "SELECT Request_Date, Apt_No, Issue_Type " +
                                 "FROM Maintenance_Request " +
                                 "WHERE Resolved_Date = NULL " +
@@ -62,14 +81,22 @@ public class ManMaintRequestController implements Initializable {
                 int apt = notRes.getInt("Apt_No");
                 String issue = notRes.getString("Issue_Type");
                 CheckBox check = new CheckBox();
-                ObservableList<String> row = FXCollections.observableArrayList();  
+                entrys.add(new MaintRequestEntry(start,apt,issue,null));
+              /*  ObservableList<String> row = FXCollections.observableArrayList();  
                 for(int i=1 ; i<=notRes.getMetaData().getColumnCount(); i++){                      
                     row.add(notRes.getString(i));  
                 }
-                data.add(row); 
+                data.add(row); */
             }
-            table.setItems(data); 
-            TableColumn notReqCol = new TableColumn("Date of Request");  
+                dor.setCellValueFactory(
+                new PropertyValueFactory<>("requestDate"));
+                aptCol.setCellValueFactory(
+                new PropertyValueFactory<>("aptno"));
+                desCol.setCellValueFactory(
+                new PropertyValueFactory<>("issue"));
+                data.addAll(entrys);
+            table.setItems(data);
+     /*       TableColumn notReqCol = new TableColumn("Date of Request");  
             notReqCol.setMinWidth(100);  
 
             TableColumn aptCol = new TableColumn("Apt No");  
@@ -81,13 +108,13 @@ public class ManMaintRequestController implements Initializable {
             TableColumn boxes = new TableColumn("");  
             boxes.setMinWidth(100); 
 
-            table.getColumns().addAll(notReqCol, aptCol, boxes);   
+            table.getColumns().addAll(notReqCol, aptCol, boxes);   */ 
             System.out.println("Table Value::" + table2); 
             
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
-        data2 = FXCollections.observableArrayList();
+     /*   data2 = FXCollections.observableArrayList();
         try {
             String resQ = "SELECT Request_Date, Apt_No, Issue_Type, Resolved_Date " +
                             "FROM Maintenance_Request " +
@@ -125,7 +152,7 @@ public class ManMaintRequestController implements Initializable {
             System.out.println("Table Value::" + table2); 
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
-        }
+        } */
     } 
     
     @FXML
