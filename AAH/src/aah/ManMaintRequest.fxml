@@ -22,11 +22,11 @@
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <TableView fx:id="table" layoutX="115.0" layoutY="88.0" prefHeight="148.0" prefWidth="371.0">
+      <TableView fx:id="table" layoutX="4.0" layoutY="88.0" prefHeight="148.0" prefWidth="482.0">
         <columns>
-          <TableColumn fx:id="dor" prefWidth="75.0" text="Date of Request" />
-          <TableColumn fx:id="aptCol" prefWidth="75.0" text="Apt No" />
-            <TableColumn fx:id="desCol" prefWidth="75.0" text="Describtion of Issue" />
+          <TableColumn fx:id="dor" prefWidth="172.0" text="Date of Request" />
+          <TableColumn fx:id="aptCol" prefWidth="103.0" text="Apt No" />
+            <TableColumn fx:id="desCol" prefWidth="206.0" text="Describtion of Issue" />
         </columns>
       </TableView>
       <TableView fx:id="table2" layoutX="118.0" layoutY="266.0" prefHeight="125.0" prefWidth="364.0">

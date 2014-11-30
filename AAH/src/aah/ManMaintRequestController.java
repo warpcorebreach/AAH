@@ -69,7 +69,6 @@ public class ManMaintRequestController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        data = FXCollections.observableArrayList();
         try {            
             Connection conn = Tables.getConnection();
             List<MaintRequestEntry> entrys = new ArrayList<>();
@@ -86,7 +85,7 @@ public class ManMaintRequestController implements Initializable {
                 issue = notRes.getString("Issue_Type");
                 CheckBox check = new CheckBox();
                 System.out.println(aptno + " " + requestDate + " " + issue);
-                entrys.add(new MaintRequestEntry(requestDate,aptno,issue,null));
+                entrys.add(new MaintRequestEntry(requestDate,aptno,issue));
               /*  ObservableList<String> row = FXCollections.observableArrayList();  
                 for(int i=1 ; i<=notRes.getMetaData().getColumnCount(); i++){                      
                     row.add(notRes.getString(i));  
@@ -101,7 +100,7 @@ public class ManMaintRequestController implements Initializable {
                 desCol.setCellValueFactory(
                 new PropertyValueFactory<>("issue"));
                 data.addAll(entrys);
-            table.setItems(data);
+                table.setItems(data);
      /*       TableColumn notReqCol = new TableColumn("Date of Request");  
             notReqCol.setMinWidth(100);  
 
