@@ -131,6 +131,14 @@ public class PayInfoController implements Initializable {
         Statement newCard = conn.createStatement();
         newCard.executeUpdate(addQ);
         newCard.close();
+        
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root = FXMLLoader.load(
+                    getClass().getResource("CardSave.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
 
         System.out.println("Card added.");
     }
@@ -142,18 +150,15 @@ public class PayInfoController implements Initializable {
         Statement delCard = conn.createStatement();
         delCard.executeUpdate(delQ);
         delCard.close();
-
-        System.out.println("Card deleted.");
-    }
-    
-    @FXML
-    private void loadHomepage(ActionEvent event) throws IOException, SQLException {
+        
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         Parent root = FXMLLoader.load(
-                    getClass().getResource("ResidentHomepage.fxml"));
+                    getClass().getResource("CardDelete.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-   }
+
+        System.out.println("Card deleted.");
+    }
 }
