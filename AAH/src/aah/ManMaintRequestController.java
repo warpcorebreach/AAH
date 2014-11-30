@@ -61,33 +61,39 @@ public class ManMaintRequestController implements Initializable {
             = FXCollections.observableArrayList();
     
     private ObservableList<ObservableList> data2;
+    private Date requestDate;
+    private int aptno;
+    private String issue;
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         data = FXCollections.observableArrayList();
-        try {
-                        List<MaintRequestEntry> entrys = new ArrayList<>();
+        try {            
+            Connection conn = Tables.getConnection();
+            List<MaintRequestEntry> entrys = new ArrayList<>();
             String notResQ = "SELECT Request_Date, Apt_No, Issue_Type " +
                                 "FROM Maintenance_Request " +
-                                "WHERE Resolved_Date = NULL " +
+                                "WHERE Resolved_Date IS NULL "  +
                                 "ORDER BY Request_Date ASC;";
-            Connection conn = Tables.getConnection();
+
             Statement getUnRes = conn.createStatement();
             ResultSet notRes = getUnRes.executeQuery(notResQ);
             while (notRes.next()) {
-                Date start = notRes.getDate("Request_Date");
-                int apt = notRes.getInt("Apt_No");
-                String issue = notRes.getString("Issue_Type");
+                requestDate = notRes.getDate("Request_Date");
+                aptno = notRes.getInt("Apt_No");
+                issue = notRes.getString("Issue_Type");
                 CheckBox check = new CheckBox();
-                entrys.add(new MaintRequestEntry(start,apt,issue,null));
+                System.out.println(aptno + " " + requestDate + " " + issue);
+                entrys.add(new MaintRequestEntry(requestDate,aptno,issue,null));
               /*  ObservableList<String> row = FXCollections.observableArrayList();  
                 for(int i=1 ; i<=notRes.getMetaData().getColumnCount(); i++){                      
                     row.add(notRes.getString(i));  
                 }
                 data.add(row); */
             }
+            getUnRes.close();
                 dor.setCellValueFactory(
                 new PropertyValueFactory<>("requestDate"));
                 aptCol.setCellValueFactory(
