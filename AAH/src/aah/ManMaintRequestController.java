@@ -147,7 +147,7 @@ public class ManMaintRequestController implements Initializable {
         String updateQ = "UPDATE Maintenance_Request " +
                             "SET Date_Resolved = '"+ LocalDate.now() +"' " +
                             "WHERE Apt_No = '" + selected.getAptno() + "' AND Request_Date = '" + selected.getRequestDate() +"' AND " +
-                            "Issue_Type = '"+ selected.getIssue() + "'";
+                            "Issue_Type = '"+ selected.getIssue() + "';";
         Connection conn = Tables.getConnection();
         Statement newRes = conn.createStatement();
         newRes.executeUpdate(updateQ);

@@ -52,6 +52,9 @@ public class ReminderController implements Initializable {
     private Button sendButton = new Button();
     
     @FXML
+    private Button backButton = new Button();
+    
+    @FXML
     private ChoiceBox apts = new ChoiceBox();
 
     /**
@@ -95,6 +98,7 @@ public class ReminderController implements Initializable {
        Statement newRem = conn.createStatement();
        newRem.executeUpdate(remQ);
        newRem.close();
+       
        System.out.println("Reminder sent.");
 
     }
