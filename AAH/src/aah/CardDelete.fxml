@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.HomeLoader">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="320.0" />
+      <Button fx:id="payInfo" layoutX="33.0" layoutY="188.0" mnemonicParsing="false" onAction="#loadPaymentInfo" text="Payment Info" />
+      <Button fx:id="load" layoutX="220.0" layoutY="188.0" mnemonicParsing="false" onAction="#loadHomepage" text="Homepage" />
+      <Label layoutX="84.0" layoutY="17.0" text="Card Deleted">
+         <font>
+            <Font name="System Bold" size="25.0" />
+         </font>
+      </Label>
+      <Label layoutX="13.0" layoutY="103.0" text="Your card has been deleted. Would you like to return to" />
+      <Label layoutX="59.0" layoutY="120.0" text="your payment info or to the homepage?" />
+   </children>
+</AnchorPane>

@@ -169,19 +169,16 @@ public class RentPaymentController implements Initializable {
         Statement newRes = conn.createStatement();
         newRes.executeUpdate(resQ);
         newRes.close();
-
-        System.out.println("Payment submitted.");
-    }
-    
-    @FXML
-    private void loadHomepage(ActionEvent event) throws IOException, SQLException {
+        
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         Parent root = FXMLLoader.load(
-                    getClass().getResource("ResidentHomepage.fxml"));
+                    getClass().getResource("RentReceived.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-   }
+
+        System.out.println("Payment submitted.");
+    }
 
 }

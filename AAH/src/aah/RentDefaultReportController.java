@@ -89,12 +89,12 @@ public class RentDefaultReportController implements Initializable {
         try {
             List<AptDefaults> report = new ArrayList<>();
             String defQ = "SELECT Apartment.Apt_No as Apartment, Amt - Rent AS Late_Fee," +
-                                        "(Amt - Rent)/50 AS Days_Late " +
-                                        "FROM Pays_Rent JOIN Apartment ON " +
-                                        "Apartment.Apt_No = Pays_Rent.Apt_No " +
-                                        "WHERE (Amt - Rent)/50 > 0 " +
-                                        "AND Month = '" + selectedMonth + "'" +
-                                        "ORDER BY Amt - Rent DESC;";
+                            "(Amt - Rent)/50 AS Days_Late " +
+                            "FROM Pays_Rent JOIN Apartment ON " +
+                            "Apartment.Apt_No = Pays_Rent.Apt_No " +
+                            "WHERE (Amt - Rent)/50 > 0 " +
+                            "AND Month = '" + selectedMonth + "'" +
+                            "ORDER BY Amt - Rent DESC;";
             Statement getDef = conn.createStatement();
             ResultSet defs = getDef.executeQuery(defQ);
             while (defs.next()) {  

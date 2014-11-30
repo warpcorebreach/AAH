@@ -93,16 +93,11 @@ public class MaintenanceRequestController implements Initializable {
         } catch(SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
-//        issues.add("Garbage Disposal");
-//        issues.add("Roaches");
-//        issues.add("Door lock");
-//        issues.add("Toilet clogged");
-//        issues.add("Drain clogged");
 
     }
 
     @FXML
-    private void submitRequest(ActionEvent event) throws SQLException {
+    private void submitRequest(ActionEvent event) throws SQLException, IOException {
         if(selectedIssue != null) {
             if(aptNo.getText() != null) {
                 String s = aptNo.getText();
@@ -122,6 +117,15 @@ public class MaintenanceRequestController implements Initializable {
                 Statement getMaint = conn.createStatement();
                 getMaint.executeUpdate(maintQ);
                 getMaint.close();
+                
+                Node node = (Node) event.getSource();
+                Stage stage = (Stage) node.getScene().getWindow();
+                Parent root;
+                root = FXMLLoader.load(
+                        getClass().getResource("MaintRequestMessage.fxml"));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
                 
             } else {
                 System.out.println("Please enter an Apt Number");
