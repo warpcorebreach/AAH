@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.ServiceRequestReportController">
+<AnchorPane id="AnchorPane" onMouseEntered="#display0ResultQuery" onMouseMoved="#display0ResultQuery" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.ServiceRequestReportController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
       <Label layoutX="111.0" layoutY="17.0" text="Service Request Resolution Report">
@@ -16,13 +16,14 @@
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <TableView fx:id="table" layoutX="126.0" layoutY="76.0" prefHeight="319.0" prefWidth="349.0">
+      <TableView fx:id="table" layoutX="11.0" layoutY="108.0" prefHeight="278.0" prefWidth="579.0">
         <columns>
-          <TableColumn fx:id="monthCol" prefWidth="120.0" text="Month" />
-          <TableColumn fx:id="reqCol" prefWidth="105.0" text="Type of Request" />
-            <TableColumn fx:id="dayCol" prefWidth="123.0" text="Average No of Days" />
+          <TableColumn fx:id="monthCol" prefWidth="116.0" text="Month" />
+          <TableColumn fx:id="reqCol" prefWidth="332.0" text="Type of Request" />
+            <TableColumn fx:id="dayCol" prefWidth="130.0" text="Average No of Days" />
         </columns>
       </TableView>
-      <Button fx:id="back" layoutX="490.0" layoutY="361.0" mnemonicParsing="false" onMouseClicked="#showManagerHome" text="Back" />
+      <Button fx:id="back" layoutX="539.0" layoutY="76.0" mnemonicParsing="false" onAction="#showManagerHome" onMouseClicked="#showManagerHome" text="Back" />
+      <Label fx:id="messages" layoutX="23.0" layoutY="80.0" prefHeight="17.0" prefWidth="502.0" textFill="RED" />
    </children>
 </AnchorPane>

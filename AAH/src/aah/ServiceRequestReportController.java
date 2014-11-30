@@ -15,6 +15,7 @@ import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.*;
 import javafx.stage.*;
 
 /**
@@ -27,22 +28,33 @@ public class ServiceRequestReportController implements Initializable {
     //DEBUG mode- switch to true to get debug prints
     private final boolean DEBUG = true;
     
-    @FXML
-    private TableView table = new TableView(); 
-    
-    @FXML
-    private TableColumn monthCol;
-    
-    @FXML
-    private TableColumn reqCol;
-    
-    @FXML
-    private TableColumn dayCol;
-    
+    //DB connection
+    private Connection conn = null;
+    //data from the SQL queries
     private ObservableList<ObservableList> data;
+    //SQL queries
+    private final String SERVICE_REQUEST_REPORT_QUERY = "SELECT EXTRACT(MONTH FROM Request_Date) AS Res_Month, Issue_Type, " + 
+                                                            "AVG(DATEDIFF(Resolved_Date, Request_Date)+1) AS resolved_time " +
+                                                        "FROM Maintenance_Request " +
+                                                        "WHERE Resolved_Date IS NOT NULL " +
+                                                        "GROUP BY DATE_FORMAT(Res_Month, '%M'), Issue_Type " +
+                                                        "HAVING Res_Month >= 8 AND Res_Month <= 10;";
+    //string for error message
+    private final String EMPTY_QUERY_MSG = "NOTICE: No service requests have been resolved for the months of August, September, and October.";
     
+    
+    @FXML
+    private TableView table = new TableView();    
+    @FXML
+    private TableColumn monthCol;    
+    @FXML
+    private TableColumn reqCol;    
+    @FXML
+    private TableColumn dayCol;    
     @FXML
     private final Button back = new Button();
+    @FXML
+    private final Label messages = new Label();
     
     /**
      * Initializes the controller class.
@@ -50,48 +62,96 @@ public class ServiceRequestReportController implements Initializable {
     @FXML
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        /*
-        data = FXCollections.observableArrayList();
-        try {
-            String servQ = "SELECT EXTRACT(MONTH FROM Request_Date) AS Res_Month, " +
-                                "Issue_Type, AVG(DATE_DIFF(Resolved_Date, Request_Date)+1) " +
-                                "AS resolved_time " +
-                                "FROM Maintenance_Request " +
-                                "WHERE Resolved_Date IS NOT NULL AND Res_Month >= 8 AND Res_Month <= 10 " +
-                                "GROUP BY DATE_FORMAT(Res_Month, %M), Issue_Type;";
-            Connection conn = Tables.getConnection();
-            Statement getServ = conn.createStatement();
-            ResultSet servs = getServ.executeQuery(servQ);
-            while (servs.next()) {
-                String monthInt = servs.getString("Res_Month");
-                String issue = servs.getString("Issue_Type");
-                int time = servs.getInt("resolved_time");
-                
-                ObservableList<String> row = FXCollections.observableArrayList();  
-                for(int i=1 ; i<=servs.getMetaData().getColumnCount(); i++){                      
-                    row.add(servs.getString(i));  
+        if(DEBUG){
+            System.out.print("getting database connection... ");
+        }//end if
+        //get the database connection
+        conn = Tables.getConnection();
+        //sanity check
+        if(conn != null){
+            if(DEBUG){
+                System.out.println("done.");
+            }//end if
+            try{
+                 if(DEBUG){
+                    System.out.print("building query... ");
                 }
-                data.add(row);   
-            }
-            table.setItems(data); 
-            monthCol = new TableColumn("Month");  
-            monthCol.setMinWidth(100);  
-
-            reqCol = new TableColumn("Type of Request");  
-            reqCol.setMinWidth(100);          
-
-            dayCol = new TableColumn("Average No of Days");  
-            dayCol.setMinWidth(100);        
-
-            table.getColumns().addAll(monthCol, reqCol, dayCol);   
-            System.out.println("Table Value::" + table); 
-                    
-        } catch (SQLException ex) {
-            System.out.println("SQL Error: " + ex.getMessage());
-        }
-        */
-    }    
- 
+                //make a query object
+                Statement query = conn.createStatement();
+                if(DEBUG){
+                    System.out.print("done.\nexecuting query... ");
+                }
+                ResultSet res = query.executeQuery(SERVICE_REQUEST_REPORT_QUERY);
+                if(DEBUG){
+                    System.out.println("done.\nlooping through results... ");
+                }//end if
+                List<ServiceRequestReportEntry> l = new ArrayList<>();
+                ObservableList<ServiceRequestReportEntry> data = FXCollections.observableArrayList();
+                //this would evaluate to true if no rows were returned since
+                //  there would be no next
+                if(!res.next()){
+                    if(DEBUG){
+                        System.out.println(" --RETURNED EMPTY SET-- ");
+                    }//end if
+                }//end if
+                //we got some stuff back
+                else{
+                    //do something with that first row
+                    do {
+                        System.out.println("{res_month=" + res.getString("Res_Month") + ", " +
+                                        "Issue_Type=" + res.getString("Issue_Type") + ", " +
+                                        "resolved_time=" + res.getString("resolved_time") + "}");
+                        l.add(new ServiceRequestReportEntry(
+                                res.getString("Res_Month"), 
+                                res.getString("Issue_Type"), 
+                                res.getString("resolved_time")
+                            ));
+                    }//end do
+                    //move on to the next one
+                    while(res.next());
+                }//end else
+                if(DEBUG){
+                    System.out.print("done.\nclosing query... ");
+                }//end if
+                //close the satement
+                query.close();
+                if(DEBUG){
+                    System.out.println("done.\n");
+                }//end if
+                //set columns
+                monthCol = new TableColumn();
+                reqCol = new TableColumn();
+                dayCol = new TableColumn();
+                monthCol.setCellValueFactory(new PropertyValueFactory<>("res_month"));
+                reqCol.setCellValueFactory(new PropertyValueFactory<>("Issue_Type"));
+                dayCol.setCellValueFactory(new PropertyValueFactory<>("resolved_time"));                
+                //add all the data to the table
+                data.addAll(l);
+                table.setItems(data);
+            }//end try
+            catch(Exception ex){
+                System.out.println("\nERROR: could not execute query");
+                System.out.println("\t" + ex.getMessage());
+            }//end catch
+        }//end if
+        //connection object is null - something went wrong here
+        else{            
+            System.out.println("\nERROR: connection object is null\n\tredirecting to login...");
+        }//end else        
+    }//end method initialize    
+    
+    @FXML
+    private void display0ResultQuery(){
+        if(DEBUG){
+            System.out.println("[BEGIN display0ResultQuery()]");
+            System.out.print("changing label text... ");
+        }//end if
+        messages.setText(EMPTY_QUERY_MSG);
+        if(DEBUG){
+            System.out.println("done.\n[END display0ResultQuery()]");
+        }//end if
+    }//end method display0ResultQuery 
+    
     @FXML
     private void showManagerHome(ActionEvent event){
         if(DEBUG){
