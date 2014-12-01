@@ -68,6 +68,8 @@ public class ManMaintRequestController implements Initializable {
     private String issue;
     private Date resolvedDate;
     private MaintRequestEntry selected;
+    private List<MaintRequestEntry> entrys = new ArrayList<>();
+    private List<MaintRequestEntry> entrys2 = new ArrayList<>();
     /**
      * Initializes the controller class.
      */
@@ -75,7 +77,7 @@ public class ManMaintRequestController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {            
             Connection conn = Tables.getConnection();
-            List<MaintRequestEntry> entrys = new ArrayList<>();
+
             String notResQ = "SELECT Request_Date, Apt_No, Issue_Type " +
                                 "FROM Maintenance_Request " +
                                 "WHERE Resolved_Date IS NULL "  +
@@ -109,7 +111,7 @@ public class ManMaintRequestController implements Initializable {
             System.out.println("SQL Error: " + ex.getMessage());
         }
         try {                
-            List<MaintRequestEntry> entrys2 = new ArrayList<>();
+
             String resQ = "SELECT Request_Date, Apt_No, Issue_Type, Resolved_Date " +
                             "FROM Maintenance_Request " +
                             "WHERE Resolved_Date IS NOT NULL " +
@@ -144,14 +146,19 @@ public class ManMaintRequestController implements Initializable {
     @FXML
     private void resolve(ActionEvent event)throws IOException, SQLException {
         if(selected != null) {
-        String updateQ = "UPDATE Maintenance_Request " +
-                            "SET Date_Resolved = '"+ LocalDate.now() +"' " +
-                            "WHERE Apt_No = '" + selected.getAptno() + "' AND Request_Date = '" + selected.getRequestDate() +"' AND " +
-                            "Issue_Type = '"+ selected.getIssue() + "';";
+            System.out.println(selected.getAptno() + selected.getIssue() + selected.getRequestDate());
+            System.out.println(LocalDate.now());
+        String updateQu = "UPDATE Maintenance_Request " +
+                           "SET Resolved_Date = '"+ LocalDate.now() +"' " +
+                           "WHERE Apt_No = '" + selected.getAptno() + "' AND Request_Date = '" + selected.getRequestDate() +"' AND " +
+                           "Issue_Type = '"+ selected.getIssue() + "';";
         Connection conn = Tables.getConnection();
         Statement newRes = conn.createStatement();
-        newRes.executeUpdate(updateQ);
+        newRes.executeUpdate(updateQu);
         newRes.close();
+        data.remove(selected);
+        selected.setResolvedDate(new Date(114,LocalDate.now().getMonthValue()-1,LocalDate.now().getDayOfMonth()));
+        data2.add(selected);
         }
     }
     @FXML

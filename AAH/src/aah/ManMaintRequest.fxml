@@ -16,13 +16,13 @@
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <Button fx:id="resolveButton" layoutX="511.0" layoutY="175.0" mnemonicParsing="false" text="Resolved" />
+      <Button fx:id="resolveButton" layoutX="511.0" layoutY="175.0" mnemonicParsing="false" onAction="#resolve" text="Resolved" />
       <Label layoutX="204.0" layoutY="236.0" text="Resolved Issues">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <TableView fx:id="table" layoutX="4.0" layoutY="88.0" prefHeight="148.0" prefWidth="482.0">
+      <TableView fx:id="table" layoutX="4.0" layoutY="88.0" onMouseClicked="#select" prefHeight="148.0" prefWidth="482.0">
         <columns>
           <TableColumn fx:id="dor" prefWidth="172.0" text="Date of Request" />
           <TableColumn fx:id="aptCol" prefWidth="103.0" text="Apt No" />

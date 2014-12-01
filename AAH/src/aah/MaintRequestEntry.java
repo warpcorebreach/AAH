@@ -16,7 +16,7 @@ public class MaintRequestEntry {
     private final Date requestDate;
     private final int aptno;
     private final String issue;
-    private final Date resolvedDate;
+    private Date resolvedDate;
     public MaintRequestEntry(Date requestDate, int aptno, String issue, Date resolvedDate) {
         this.requestDate = requestDate;
         this.aptno = aptno;
@@ -35,4 +35,7 @@ public class MaintRequestEntry {
     public Date getResolvedDate() {
         return resolvedDate;
     } 
+    public void setResolvedDate(Date d) {
+        resolvedDate = d;
+    }
 }
