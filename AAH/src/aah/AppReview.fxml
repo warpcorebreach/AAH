@@ -8,15 +8,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.AppReviewController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.AppReviewController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="800.0" />
-      <Label layoutX="287.0" layoutY="17.0" text="Application Review">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="820.0" />
+      <Label layoutX="297.0" layoutY="17.0" text="Application Review">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <TableView fx:id="table" layoutY="97.0" onMouseClicked="#select" prefHeight="320.0" prefWidth="800.0">
+      <TableView fx:id="table" layoutY="97.0" onMouseClicked="#select" prefHeight="320.0" prefWidth="820.0">
         <columns>
           <TableColumn fx:id="nameCol" prefWidth="126.0" text="Name" />
           <TableColumn fx:id="dobCol" prefWidth="104.0" text="Date of Birth" />
@@ -25,8 +25,9 @@
             <TableColumn fx:id="typeCol" minWidth="0.0" prefWidth="83.0" text="Apt Type" />
             <TableColumn fx:id="moveCol" prefWidth="108.0" text="Move In Date" />
             <TableColumn fx:id="leCol" prefWidth="111.0" text="Lease Term" />
+            <TableColumn fx:id="statusCol" prefWidth="98.0" text="Status" />
         </columns>
       </TableView>
-      <Button fx:id="approveButton" layoutX="362.0" layoutY="429.0" mnemonicParsing="false" onAction="#accept" text="Approve" />
+      <Button fx:id="approveButton" layoutX="372.0" layoutY="431.0" mnemonicParsing="false" onAction="#accept" text="Approve" />
    </children>
 </AnchorPane>

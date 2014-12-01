@@ -44,6 +44,9 @@ public class AptAllotmentController implements Initializable {
     private Button allotButton = new Button();
 
     @FXML
+    private Button backButton = new Button();
+
+    @FXML
     private Label nameLabel = new Label();
 
     @FXML
@@ -165,6 +168,18 @@ public class AptAllotmentController implements Initializable {
     @FXML
     private void select() {
         selected = (AllotmentEntry) table.getSelectionModel().getSelectedItem();
+    }
+
+    @FXML
+    private void goBack(ActionEvent event) throws IOException {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root;
+        root = FXMLLoader.load(
+                getClass().getResource("AppReview.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
 }

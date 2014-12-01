@@ -25,7 +25,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -65,6 +64,9 @@ public class AppReviewController implements Initializable {
     @FXML
     private TableColumn leCol = new TableColumn();
 
+    @FXML
+    private TableColumn statusCol = new TableColumn();
+
     // contains ApartmentEntry objects which can be added to a TableView
     private ObservableList<ApartmentEntry> data
             = FXCollections.observableArrayList();
@@ -92,10 +94,19 @@ public class AppReviewController implements Initializable {
             conn = Tables.getConnection();
             List<ApartmentEntry> apps = new ArrayList<>();
 
+            /*****
+             * Get accepted applications
+             */
             String revQ = "SELECT Name, DOB, Gender, Income, Category, Min_Rent, " +
                 "Max_Rent, Move_Date, Pref_Lease, Username " +
                 "FROM Prospective_Resident " +
-                "WHERE Username NOT IN (SELECT Username FROM Resident) ";
+                "WHERE Username NOT IN (SELECT Username FROM Resident) " +
+                "AND (Income/3) >= (SELECT MIN(Rent) FROM Apartment A JOIN " +
+                "Prospective_Resident P ON A.Category = P.Category) " +
+                "AND Move_Date >= (SELECT MIN(Available_on) FROM " +
+                "Apartment A JOIN Prospective_Resident P ON " +
+                "A.Category = P.Category)";
+
             Statement getRev = conn.createStatement();
             ResultSet rev = getRev.executeQuery(revQ);
 
@@ -112,11 +123,58 @@ public class AppReviewController implements Initializable {
                 user = rev.getString("Username");
 
                 System.out.println(name + " " + user);
+                System.out.println("Application Accepted");
+                System.out.println();
 
                 apps.add(new ApartmentEntry(name, dob, gen, income, cat, min,
-                        max, move, term, user));
+                        max, move, term, user, "Accepted"));
             }
             getRev.close();
+            /*****
+             * End get accepted applications
+             */
+
+
+            /*****
+             * Get rejected applications
+             */
+            revQ = "SELECT Name, DOB, Gender, Income, Category, Min_Rent, " +
+                "Max_Rent, Move_Date, Pref_Lease, Username " +
+                "FROM Prospective_Resident " +
+                "WHERE Username NOT IN (SELECT Username FROM Resident) " +
+                "AND (Income/3) < (SELECT MIN(Rent) FROM Apartment A JOIN " +
+                "Prospective_Resident P ON A.Category = P.Category) " +
+                "OR Move_Date < (SELECT MIN(Available_on) FROM " +
+                "Apartment A JOIN Prospective_Resident P ON " +
+                "A.Category = P.Category)";
+
+            getRev = conn.createStatement();
+            rev = getRev.executeQuery(revQ);
+
+            while(rev.next()) {
+                name = rev.getString("Name");
+                dob = rev.getDate("DOB");
+                gen = rev.getString("Gender");
+                income = rev.getInt("Income");
+                cat = rev.getString("Category");
+                min = rev.getInt("Min_Rent");
+                max = rev.getInt("Max_Rent");
+                move = rev.getDate("Move_Date");
+                term = rev.getString("Pref_Lease");
+                user = rev.getString("Username");
+
+                System.out.println(name + " " + user);
+                System.out.println("Application Rejected");
+                System.out.println();
+
+                apps.add(new ApartmentEntry(name, dob, gen, income, cat, min,
+                        max, move, term, user, "Rejected"));
+            }
+            getRev.close();
+            /*****
+             * End get rejected applications
+             */
+
 
             nameCol.setCellValueFactory(
                 new PropertyValueFactory<>("name"));
@@ -132,6 +190,8 @@ public class AppReviewController implements Initializable {
                 new PropertyValueFactory<>("move"));
             leCol.setCellValueFactory(
                 new PropertyValueFactory<>("term"));
+            statusCol.setCellValueFactory(
+                new PropertyValueFactory<>("status"));
 
             data.addAll(apps);
             table.setItems(data);
@@ -143,32 +203,37 @@ public class AppReviewController implements Initializable {
 
     @FXML
     private void accept(ActionEvent event) throws IOException {
-        System.out.println();
-        System.out.println("===== Application Approved =====");
-        System.out.println();
-        System.out.println(selected.getCat());
-        System.out.println(selected.getDob());
-        System.out.println(selected.getGen());
-        System.out.println(selected.getIncome());
-        System.out.println(selected.getMax());
-        System.out.println(selected.getMin());
-        System.out.println(selected.getMove());
-        System.out.println(selected.getName());
-        System.out.println(selected.getTerm());
-        System.out.println(selected.getUser());
+        if (selected.getStatus().equals("Rejected")) {
+            System.out.println("This applications has been rejected by our " +
+                    "system.");
+        } else {
+            System.out.println();
+            System.out.println("===== Application Approved =====");
+            System.out.println();
+            System.out.println(selected.getCat());
+            System.out.println(selected.getDob());
+            System.out.println(selected.getGen());
+            System.out.println(selected.getIncome());
+            System.out.println(selected.getMax());
+            System.out.println(selected.getMin());
+            System.out.println(selected.getMove());
+            System.out.println(selected.getName());
+            System.out.println(selected.getTerm());
+            System.out.println(selected.getUser());
 
-        Tables.setCurName(selected.getName());
-        Tables.setCurrentUser(selected.getUser());
+            Tables.setCurName(selected.getName());
+            Tables.setCurrentUser(selected.getUser());
 
-        Node node = (Node) event.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
-        Parent root;
-        root = FXMLLoader.load(
-                getClass().getResource("AptAllotment.fxml"));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-        System.out.println("Go to apartment allotment screen.");
+            Node node = (Node) event.getSource();
+            Stage stage = (Stage) node.getScene().getWindow();
+            Parent root;
+            root = FXMLLoader.load(
+                    getClass().getResource("AptAllotment.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
+
     }
 
     @FXML

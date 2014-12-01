@@ -27,8 +27,8 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Button fx:id="allotButton" layoutX="457.0" layoutY="346.0" mnemonicParsing="false" onAction="#assign" text="Assign Apartment" />
-      <TableView fx:id="table" layoutX="22.0" layoutY="171.0" onMouseClicked="#select" prefHeight="164.0" prefWidth="557.0">
+      <Button fx:id="allotButton" layoutX="423.0" layoutY="346.0" mnemonicParsing="false" onAction="#assign" text="Assign Apartment" />
+      <TableView fx:id="table" layoutX="40.0" layoutY="171.0" onMouseClicked="#select" prefHeight="164.0" prefWidth="522.0">
         <columns>
           <TableColumn fx:id="aptCol" prefWidth="85.0" text="Apt. No" />
           <TableColumn fx:id="catCol" prefWidth="98.0" text="Category" />
@@ -38,5 +38,6 @@
             <TableColumn prefWidth="39.0" />
         </columns>
       </TableView>
+      <Button fx:id="backButton" layoutX="39.0" layoutY="346.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
    </children>
 </AnchorPane>

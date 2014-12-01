@@ -25,9 +25,11 @@ public class ApartmentEntry {
     private final Date move;
     private final String term;
     private final String user;
+    private final String status;
 
     public ApartmentEntry(String name, Date dob, String gen, int income,
-            String cat, int min, int max, Date move, String term, String user) {
+            String cat, int min, int max, Date move, String term, String user,
+            String status) {
         this.name = name;
         this.dob = dob;
         this.gen = gen;
@@ -38,6 +40,11 @@ public class ApartmentEntry {
         this.move = move;
         this.term = term + " months";
         this.user = user;
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public String getName() {
