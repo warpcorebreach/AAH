@@ -24,6 +24,6 @@
         </columns>
       </TableView>
       <Button fx:id="back" layoutX="539.0" layoutY="76.0" mnemonicParsing="false" onAction="#showManagerHome" onMouseClicked="#showManagerHome" text="Back" />
-      <Label fx:id="messages" layoutX="23.0" layoutY="80.0" prefHeight="17.0" prefWidth="502.0" textFill="RED" />
+      <Label fx:id="messages" layoutX="23.0" layoutY="80.0" prefHeight="17.0" prefWidth="502.0" textFill="RED" wrapText="true" />
    </children>
 </AnchorPane>
