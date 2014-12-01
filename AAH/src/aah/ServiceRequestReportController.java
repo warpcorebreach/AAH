@@ -31,37 +31,55 @@ public class ServiceRequestReportController implements Initializable {
     //DB connection
     private Connection conn = null;
     //data from the SQL queries
-    private ObservableList<ObservableList> data;
+    private ObservableList<ServiceRequestReportEntry> data = null;
     //SQL queries
-    private final String SERVICE_REQUEST_REPORT_QUERY = "SELECT EXTRACT(MONTH FROM Request_Date) AS Res_Month, Issue_Type, " + 
-                                                            "AVG(DATEDIFF(Resolved_Date, Request_Date)+1) AS resolved_time " +
+    private final String SERVICE_REQUEST_REPORT_QUERY = "SELECT EXTRACT(MONTH FROM Request_Date) AS Res_Month, Issue_Type, " +
+                                                        "AVG(DATEDIFF(Resolved_Date, Request_Date)+1) AS resolved_time " +
                                                         "FROM Maintenance_Request " +
                                                         "WHERE Resolved_Date IS NOT NULL " +
-                                                        "GROUP BY DATE_FORMAT(Res_Month, '%M'), Issue_Type " +
+                                                        "GROUP BY Res_Month, Issue_Type " +
                                                         "HAVING Res_Month >= 8 AND Res_Month <= 10;";
     //string for error message
     private final String EMPTY_QUERY_MSG = "NOTICE: No service requests have been resolved for the months of August, September, and October.";
     
-    
     @FXML
-    private TableView table = new TableView();    
+    private final TableView table = new TableView();    
     @FXML
-    private TableColumn monthCol;    
+    private TableColumn monthCol = null;    
     @FXML
-    private TableColumn reqCol;    
+    private TableColumn reqCol = null;    
     @FXML
-    private TableColumn dayCol;    
+    private TableColumn dayCol = null;
     @FXML
-    private final Button back = new Button();
+    private final Button back = new Button();    
     @FXML
     private final Label messages = new Label();
     
-    /**
-     * Initializes the controller class.
-     */
+    /*
     @FXML
+    private TableView table = new TableView();
+    @FXML
+    private TableColumn monthCol = new TableColumn();
+    @FXML
+    private TableColumn reqCol = new TableColumn();
+    @FXML
+    private TableColumn dayCol = new TableColumn();
+    
+    private String name;
+    private java.sql.Date dob;
+    private String gen;
+    private int income;
+    private String cat;
+    private int min;
+    private int max;
+    private java.sql.Date move;
+    private String term;
+    private String user;
+    */
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         if(DEBUG){
             System.out.print("getting database connection... ");
         }//end if
@@ -91,21 +109,25 @@ public class ServiceRequestReportController implements Initializable {
                 //  there would be no next
                 if(!res.next()){
                     if(DEBUG){
-                        System.out.println(" --RETURNED EMPTY SET-- ");
+                        System.out.print(" --RETURNED EMPTY SET-- \nsetting message label text... ");
+                    }//end if
+                    messages.setText(EMPTY_QUERY_MSG);
+                    if(DEBUG){
+                        System.out.println("done.");
                     }//end if
                 }//end if
                 //we got some stuff back
                 else{
+                    int i = 0;
                     //do something with that first row
                     do {
-                        System.out.println("{res_month=" + res.getString("Res_Month") + ", " +
-                                        "Issue_Type=" + res.getString("Issue_Type") + ", " +
-                                        "resolved_time=" + res.getString("resolved_time") + "}");
                         l.add(new ServiceRequestReportEntry(
                                 res.getString("Res_Month"), 
                                 res.getString("Issue_Type"), 
                                 res.getString("resolved_time")
                             ));
+                        System.out.println("[" + i + "]: " + l.get(i));
+                        i++;
                     }//end do
                     //move on to the next one
                     while(res.next());
@@ -137,21 +159,10 @@ public class ServiceRequestReportController implements Initializable {
         //connection object is null - something went wrong here
         else{            
             System.out.println("\nERROR: connection object is null\n\tredirecting to login...");
-        }//end else        
+        }//end else 
+        
     }//end method initialize    
-    
-    @FXML
-    private void display0ResultQuery(){
-        if(DEBUG){
-            System.out.println("[BEGIN display0ResultQuery()]");
-            System.out.print("changing label text... ");
-        }//end if
-        messages.setText(EMPTY_QUERY_MSG);
-        if(DEBUG){
-            System.out.println("done.\n[END display0ResultQuery()]");
-        }//end if
-    }//end method display0ResultQuery 
-    
+        
     @FXML
     private void showManagerHome(ActionEvent event){
         if(DEBUG){
@@ -196,4 +207,4 @@ public class ServiceRequestReportController implements Initializable {
         }//end catch
     }//end method showManagerHome
     
-}
+}//end class ServiceRequestReportController

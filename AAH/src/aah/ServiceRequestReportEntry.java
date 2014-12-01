@@ -29,6 +29,15 @@ class ServiceRequestReportEntry {
         this.month = month;
         this.category = category;
         this.num = num;
-    }//end cosntructor    
+    }//end cosntructor
+    
+    @Override
+    public String toString(){
+        return (
+                "{res_month=" + month + ", " +
+                "Issue_Type=" + category + ", " +
+                "resolved_time=" + num + "}"
+               );
+    }//end method toString
     
 }//end class ServiceRequestReportEntry

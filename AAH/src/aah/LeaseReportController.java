@@ -15,6 +15,7 @@ import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.*;
 
 
@@ -28,49 +29,131 @@ public class LeaseReportController implements Initializable {
     
     //DEBUG MODE- set this to true to get debug prints
     private final boolean DEBUG = true;
-    
-    //SQL query- use string substitution later to fill in fields
-    private final String QUERY = "SELECT COUNT(*) FROM [table] WHERE [month] = %MONTH% GROUP BY %APARTMENT_TYPE%;";
+ 
+    //SQL queries
+    private final String LEASE_REPORT_QUERY = "SELECT Month, Category, Count(P.Apt_No) AS apt_count " +
+                                                "FROM Pays_Rent P JOIN Apartment A " +
+                                                "ON P.Apt_No = A.Apt_No " +
+                                                "GROUP BY Month, Category " +
+                                                "HAVING Month = 'August' OR Month = 'September' OR Month = 'October';";
+    private final String EMPTY_QUERY_MSG = "NOTICE: No apartments were leased for the months of August, September, and October.";
     
     //database connection
     private Connection conn = null;
     //table that holds lease report
     private TableView leaseReport = new TableView();
-    private ObservableList<ObservableList> data = null;
-    //button to redirect back to the manager's homepage    
+    private ObservableList<LeaseReportEntry> data = null;
+    
     @FXML
     private final Button back = new Button();
+    @FXML
+    private TableColumn monthCol = null;    
+    @FXML
+    private TableColumn categoryCol = null;    
+    @FXML
+    private TableColumn numberCol = null; 
+    @FXML
+    private final Label messages = new Label();
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        if(DEBUG){
+            System.out.print("getting database connection... ");
+        }//end if
         //get the database connection
         conn = Tables.getConnection();
         //did something go wrong? send them out back to login
         if(conn == null){            
-            System.out.println("ERROR: connection object is [null] for scene [LeaseReport]");
+            System.out.println("\nERROR: connection object is [null] for scene [LeaseReport]");
             System.out.println("\tHeading back to [Login]");
             //THIS DOESN'T WORK
             showLogin(new ActionEvent());          
         }//end if
         //connection is good
         else{
-            showLeasingReport(new ActionEvent());
-        }//end else        
+            if(DEBUG){
+                System.out.println("done.");
+            }//end if
+            showLeasingReport();
+        }//end else
+        
     }//end initialize    
     
     /**
      * This method auto-generates the leasing report data
      */
-    private void showLeasingReport(ActionEvent event){
+    private void showLeasingReport(){
         //data array
         data = FXCollections.observableArrayList();
-        
-        
-        //disable editing
-        leaseReport.setEditable(false);
+         try{
+                 if(DEBUG){
+                    System.out.print("building query... ");
+                }
+                //make a query object
+                Statement query = conn.createStatement();
+                if(DEBUG){
+                    System.out.print("done.\nexecuting query... ");
+                }
+                ResultSet res = query.executeQuery(LEASE_REPORT_QUERY);
+                if(DEBUG){
+                    System.out.println("done.\nlooping through results... ");
+                }//end if
+                List<LeaseReportEntry> l = new ArrayList<>();
+                ObservableList<LeaseReportEntry> data = FXCollections.observableArrayList();
+                //this would evaluate to true if no rows were returned since
+                //  there would be no next
+                if(!res.next()){
+                    if(DEBUG){
+                        System.out.print(" --RETURNED EMPTY SET-- \nsetting message label text...");
+                    }//end if
+                    messages.setText(EMPTY_QUERY_MSG);
+                    if(DEBUG){
+                        System.out.println("done.");
+                    }//end if
+                }//end if
+                //we got some stuff back
+                else{
+                    int i = 0;
+                    //do something with that first row
+                    do {
+                        l.add(new LeaseReportEntry(
+                                res.getString("Month"), 
+                                res.getString("Category"), 
+                                res.getString("apt_count")
+                            ));
+                        System.out.println(l.get(i));
+                        i++;
+                    }//end do
+                    //move on to the next one
+                    while(res.next());
+                }//end else
+                if(DEBUG){
+                    System.out.print("done.\nclosing query... ");
+                }//end if
+                //close the satement
+                query.close();
+                if(DEBUG){
+                    System.out.println("done.\n");
+                }//end if
+                //set columns
+                monthCol = new TableColumn();
+                categoryCol = new TableColumn();
+                numberCol = new TableColumn();
+                monthCol.setCellValueFactory(new PropertyValueFactory<>("res_month"));
+                categoryCol.setCellValueFactory(new PropertyValueFactory<>("Issue_Type"));
+                numberCol.setCellValueFactory(new PropertyValueFactory<>("resolved_time"));                
+                //add all the data to the table
+                data.addAll(l);
+                leaseReport.setItems(data);
+            }//end try
+            catch(Exception ex){
+                System.out.println("\nERROR: could not execute query");
+                System.out.println("\t" + ex.getMessage());
+            }//end catch
     }//end method showLeasingReport
     
     /**
