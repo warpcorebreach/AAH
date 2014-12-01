@@ -137,7 +137,18 @@ public class RentPaymentController implements Initializable {
             ResultSet extra = getDelay.executeQuery(delayed);
             extra.next();
             rentDue = baseRent + extra.getInt("extra_rent");
-
+            
+            int monthValue = LocalDate.now().getMonthValue();
+            String monthQ = "SELECT EXTRACT(Month from Pay_Date) as month " +
+                                "FROM Pays_Rent " +
+                                "WHERE Apt_No = '" + apt + "';";
+            Statement getMonth = conn.createStatement();
+            ResultSet monthRes = getMonth.executeQuery(monthQ);
+            monthRes.next();
+            if (monthValue == monthRes.getInt("month")) {
+                rentDue = baseRent;
+            }
+            
             rentLabel.setText("Rent due: $" + rentDue);
 
             cards = new ArrayList<>();
@@ -159,26 +170,48 @@ public class RentPaymentController implements Initializable {
 
     @FXML
     private void makePayment(ActionEvent event)throws IOException, SQLException {
-
-        String resQ = "INSERT INTO Pays_Rent VALUES"
-                    + "('" + cardChoice.getValue() + "', '" + rentForMonth.getValue() 
-                    + "', '" + rentYear.getValue()
-                    + "', '" + apt + "', " + rentDue
-                    + ", '" + LocalDate.now() + "');";
-        Connection conn = Tables.getConnection();
-        Statement newRes = conn.createStatement();
-        newRes.executeUpdate(resQ);
-        newRes.close();
         
-        Node node = (Node) event.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
-        Parent root = FXMLLoader.load(
-                    getClass().getResource("RentReceived.fxml"));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        Parent root = null;
+        
+        String payQ = "SELECT Month, Year " +
+                            "FROM Pays_Rent " +
+                            "WHERE Apt_No = '" + apt + "';";
+        Connection conn = Tables.getConnection();
+        Statement getPay = conn.createStatement();
+        ResultSet payRes = getPay.executeQuery(payQ);
+        while (payRes.next()) {
+            
+            if (((rentForMonth.getValue()).equals(payRes.getString("Month"))) 
+                    && ((int)rentYear.getValue() == payRes.getInt("Year"))) {
+                Node node = (Node) event.getSource();
+                Stage stage = (Stage) node.getScene().getWindow();
+                root = FXMLLoader.load(
+                        getClass().getResource("PayDone.fxml"));
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            }
+        }
+        if (root == null ) {
+            String resQ = "INSERT INTO Pays_Rent VALUES"
+                        + "('" + cardChoice.getValue() + "', '" + rentForMonth.getValue() 
+                        + "', '" + rentYear.getValue()
+                        + "', '" + apt + "', " + rentDue
+                        + ", '" + LocalDate.now() + "');";
+            Statement newRes = conn.createStatement();
+            newRes.executeUpdate(resQ);
+            newRes.close();
 
-        System.out.println("Payment submitted.");
+            Node node = (Node) event.getSource();
+            Stage stage = (Stage) node.getScene().getWindow();
+            root = FXMLLoader.load(
+                        getClass().getResource("RentReceived.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+            System.out.println("Payment submitted.");
+        }
+         
     }
 
 }
