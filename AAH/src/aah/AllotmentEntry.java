@@ -8,7 +8,7 @@ package aah;
 import java.sql.Date;
 
 /**
- *
+ * Encapsulates data used to populate the Apartment Allotment Table
  * @author Justin
  */
 public class AllotmentEntry {
