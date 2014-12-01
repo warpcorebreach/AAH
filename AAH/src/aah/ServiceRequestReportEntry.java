@@ -8,30 +8,41 @@ package aah;
 /**
  * This class serves as a way to ecapsulate 1 row of data in the Service
  * Request Report.
- * 
+ *
  * @author Brendan
  */
-class ServiceRequestReportEntry {
-    
+public class ServiceRequestReportEntry {
+
     //data values
-    private String month = null;
-    private String category = null;
-    private String num = null;
-    
+    private final String month;
+    private final String category;
+    private final String num;
+
     /**
      * Creates a service request report entry
-     * 
+     *
      * @param month The month that is associated with this query
      * @param category The category of apartment
      * @param num How many apartments of this type were rented
      */
-    public ServiceRequestReportEntry(String month, String category, String num){
+    public ServiceRequestReportEntry(String month, String category, String num) {
         this.month = month;
         this.category = category;
         this.num = num;
     }//end cosntructor
-    
-    @Override
+
+    public String getMonth() {
+        return month;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
     public String toString(){
         return (
                 "{res_month=" + month + ", " +
@@ -39,5 +50,5 @@ class ServiceRequestReportEntry {
                 "resolved_time=" + num + "}"
                );
     }//end method toString
-    
+
 }//end class ServiceRequestReportEntry

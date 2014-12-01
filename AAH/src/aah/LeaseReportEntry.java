@@ -6,22 +6,22 @@
 package aah;
 
 /**
- * Encapsulates a data row of the Lease Report 
- * 
+ * Encapsulates a data row of the Lease Report
+ *
  * @author Brendan
  */
 class LeaseReportEntry {
-    
-    private String month = null;
-    private String category = null;
-    private String apt_count = null;
-    
+
+    private final String month;
+    private final String category;
+    private final String apt_count;
+
     public LeaseReportEntry(String month, String category, String apt_count){
         this.month = month;
         this.category = category;
         this.apt_count = apt_count;
     }//end constructor
-    
+
     @Override
     public String toString(){
         return (
@@ -29,6 +29,6 @@ class LeaseReportEntry {
                 "Category=" + category + ", " +
                 "apt_number=" + apt_count + "}"
                );
-    }//end method toString 
-    
+    }//end method toString
+
 }//end class

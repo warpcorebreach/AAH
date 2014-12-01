@@ -25,11 +25,11 @@ import javafx.stage.*;
  * @author Brendan
  */
 public class LeaseReportController implements Initializable {
-    
-    
+
+
     //DEBUG MODE- set this to true to get debug prints
     private final boolean DEBUG = true;
- 
+
     //SQL queries
     private final String LEASE_REPORT_QUERY = "SELECT Month, Category, Count(P.Apt_No) AS apt_count " +
                                                 "FROM Pays_Rent P JOIN Apartment A " +
@@ -37,41 +37,43 @@ public class LeaseReportController implements Initializable {
                                                 "GROUP BY Month, Category " +
                                                 "HAVING Month = 'August' OR Month = 'September' OR Month = 'October';";
     private final String EMPTY_QUERY_MSG = "NOTICE: No apartments were leased for the months of August, September, and October.";
-    
+
     //database connection
-    private Connection conn = null;
+    private Connection conn;
     //table that holds lease report
+    @FXML
     private TableView leaseReport = new TableView();
-    private ObservableList<LeaseReportEntry> data = null;
-    
+
+    private ObservableList<LeaseReportEntry> data;
+
     @FXML
     private final Button back = new Button();
     @FXML
-    private TableColumn monthCol = null;    
+    private TableColumn monthCol = new TableColumn();
     @FXML
-    private TableColumn categoryCol = null;    
+    private TableColumn categoryCol = new TableColumn();
     @FXML
-    private TableColumn numberCol = null; 
+    private TableColumn numberCol = new TableColumn();
     @FXML
     private final Label messages = new Label();
-    
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         if(DEBUG){
             System.out.print("getting database connection... ");
         }//end if
         //get the database connection
         conn = Tables.getConnection();
         //did something go wrong? send them out back to login
-        if(conn == null){            
+        if(conn == null){
             System.out.println("\nERROR: connection object is [null] for scene [LeaseReport]");
             System.out.println("\tHeading back to [Login]");
             //THIS DOESN'T WORK
-            showLogin(new ActionEvent());          
+            showLogin(new ActionEvent());
         }//end if
         //connection is good
         else{
@@ -80,9 +82,9 @@ public class LeaseReportController implements Initializable {
             }//end if
             showLeasingReport();
         }//end else
-        
-    }//end initialize    
-    
+
+    }//end initialize
+
     /**
      * This method auto-generates the leasing report data
      */
@@ -121,8 +123,8 @@ public class LeaseReportController implements Initializable {
                     //do something with that first row
                     do {
                         l.add(new LeaseReportEntry(
-                                res.getString("Month"), 
-                                res.getString("Category"), 
+                                res.getString("Month"),
+                                res.getString("Category"),
                                 res.getString("apt_count")
                             ));
                         System.out.println(l.get(i));
@@ -140,12 +142,12 @@ public class LeaseReportController implements Initializable {
                     System.out.println("done.\n");
                 }//end if
                 //set columns
-                monthCol = new TableColumn();
-                categoryCol = new TableColumn();
-                numberCol = new TableColumn();
-                monthCol.setCellValueFactory(new PropertyValueFactory<>("res_month"));
-                categoryCol.setCellValueFactory(new PropertyValueFactory<>("Issue_Type"));
-                numberCol.setCellValueFactory(new PropertyValueFactory<>("resolved_time"));                
+                //monthCol = new TableColumn();
+                //categoryCol = new TableColumn();
+                //numberCol = new TableColumn();
+                monthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
+                categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+                numberCol.setCellValueFactory(new PropertyValueFactory<>("apt_count"));
                 //add all the data to the table
                 data.addAll(l);
                 leaseReport.setItems(data);
@@ -155,7 +157,7 @@ public class LeaseReportController implements Initializable {
                 System.out.println("\t" + ex.getMessage());
             }//end catch
     }//end method showLeasingReport
-    
+
     /**
      * This method redirects the user back to the login page
      */
@@ -200,7 +202,7 @@ public class LeaseReportController implements Initializable {
                 }//end if
         }//end catch
     }//end method showLogin
-    
+
     @FXML
     private void showManagerHome(ActionEvent event){
         if(DEBUG){
@@ -244,5 +246,5 @@ public class LeaseReportController implements Initializable {
                 }//end if
         }//end catch
     }//end method showManagerHome
-            
+
 }//end class LeaseReportController

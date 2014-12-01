@@ -18,9 +18,9 @@
       </Label>
       <TableView fx:id="table" layoutX="11.0" layoutY="108.0" prefHeight="282.0" prefWidth="579.0">
         <columns>
-          <TableColumn prefWidth="133.0" text="Month" />
-          <TableColumn prefWidth="315.0" text="Category" />
-            <TableColumn prefWidth="130.0" text="No. of Apartments" />
+          <TableColumn fx:id="monthCol" prefWidth="133.0" text="Month" />
+          <TableColumn fx:id="categoryCol" prefWidth="315.0" text="Category" />
+            <TableColumn fx:id="numberCol" prefWidth="130.0" text="No. of Apartments" />
         </columns>
       </TableView>
       <Button fx:id="back" layoutX="537.0" layoutY="77.0" mnemonicParsing="false" onAction="#showManagerHome" onMouseClicked="#showManagerHome" text="Back" />
