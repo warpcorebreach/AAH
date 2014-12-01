@@ -16,7 +16,7 @@
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <TableView fx:id="table" layoutX="11.0" layoutY="108.0" prefHeight="282.0" prefWidth="579.0">
+      <TableView fx:id="leaseReport" layoutX="11.0" layoutY="108.0" prefHeight="282.0" prefWidth="579.0">
         <columns>
           <TableColumn fx:id="monthCol" prefWidth="133.0" text="Month" />
           <TableColumn fx:id="categoryCol" prefWidth="315.0" text="Category" />

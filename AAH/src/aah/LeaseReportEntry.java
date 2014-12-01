@@ -10,7 +10,7 @@ package aah;
  *
  * @author Brendan
  */
-class LeaseReportEntry {
+public class LeaseReportEntry {
 
     private final String month;
     private final String category;

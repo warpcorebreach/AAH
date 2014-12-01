@@ -164,7 +164,14 @@ public class ServiceRequestReportController implements Initializable {
 
             int i = 0;
             while(rev.next()) {
-                month = rev.getString("Res_Month");
+                int monthInt = rev.getInt("Res_Month");
+                if (monthInt == 8) {
+                    month = "August";
+                } else if (monthInt == 9) {
+                    month = "September";
+                } else if (monthInt == 10) {
+                    month = "October";
+                }
                 req = rev.getString("Issue_Type");
                 day = rev.getString("resolved_time");
                 apps.add(new ServiceRequestReportEntry(month, req, day));

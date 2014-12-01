@@ -42,20 +42,23 @@ public class LeaseReportController implements Initializable {
     private Connection conn;
     //table that holds lease report
     @FXML
-    private final TableView leaseReport = new TableView();
-
-    private ObservableList<LeaseReportEntry> data;
+    private TableView leaseReport = new TableView();
 
     @FXML
-    private final Button back = new Button();
+    private Button back = new Button();
     @FXML
-    private final TableColumn monthCol = new TableColumn();
+    private TableColumn monthCol = new TableColumn();
     @FXML
-    private final TableColumn categoryCol = new TableColumn();
+    private TableColumn categoryCol = new TableColumn();
     @FXML
-    private final TableColumn numberCol = new TableColumn();
+    private TableColumn numberCol = new TableColumn();
     @FXML
     private final Label messages = new Label();
+    
+    private ObservableList<LeaseReportEntry> data = FXCollections.observableArrayList();
+    private String month;
+    private String cat;
+    private String num;
 
     /**
      * Initializes the controller class.
@@ -63,142 +66,37 @@ public class LeaseReportController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        if(DEBUG){
-            System.out.print("getting database connection... ");
-        }//end if
-        //get the database connection
-        conn = Tables.getConnection();
-        //did something go wrong? send them out back to login
-        if(conn == null){
-            System.out.println("\nERROR: connection object is [null] for scene [LeaseReport]");
-            System.out.println("\tHeading back to [Login]");
-            //THIS DOESN'T WORK
-            showLogin(new ActionEvent());
-        }//end if
-        //connection is good
-        else{
-            if(DEBUG){
-                System.out.println("done.");
-            }//end if
-            showLeasingReport();
-        }//end else
+        try {   //we should fix this query AND WHILE LOOP
+            conn = Tables.getConnection();
+            List<LeaseReportEntry> apps = new ArrayList<>();
+            Statement getRev = conn.createStatement();
+            ResultSet rev = getRev.executeQuery(LEASE_REPORT_QUERY);
 
-    }//end initialize
-
-    /**
-     * This method auto-generates the leasing report data
-     */
-    private void showLeasingReport(){
-        //data array
-        data = FXCollections.observableArrayList();
-         try{
-                 if(DEBUG){
-                    System.out.print("building query... ");
-                }
-                //make a query object
-                Statement query = conn.createStatement();
-                if(DEBUG){
-                    System.out.print("done.\nexecuting query... ");
-                }
-                ResultSet res = query.executeQuery(LEASE_REPORT_QUERY);
-                if(DEBUG){
-                    System.out.println("done.\nlooping through results... ");
-                }//end if
-                List<LeaseReportEntry> l = new ArrayList<>();
-                ObservableList<LeaseReportEntry> data = FXCollections.observableArrayList();
-                //this would evaluate to true if no rows were returned since
-                //  there would be no next
-                if(!res.next()){
-                    if(DEBUG){
-                        System.out.print(" --RETURNED EMPTY SET-- \nsetting message label text...");
-                    }//end if
-                    messages.setText(EMPTY_QUERY_MSG);
-                    if(DEBUG){
-                        System.out.println("done.");
-                    }//end if
-                }//end if
-                //we got some stuff back
-                else{
-                    int i = 0;
-                    //do something with that first row
-                    do {
-                        l.add(new LeaseReportEntry(
-                                res.getString("Month"),
-                                res.getString("Category"),
-                                res.getString("apt_count")
-                            ));
-                        System.out.println(l.get(i));
-                        i++;
-                    }//end do
-                    //move on to the next one
-                    while(res.next());
-                }//end else
-                if(DEBUG){
-                    System.out.print("done.\nclosing query... ");
-                }//end if
-                //close the satement
-                query.close();
-                if(DEBUG){
-                    System.out.println("done.\n");
-                }//end if
-                //set columns
-                monthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
-                categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
-                numberCol.setCellValueFactory(new PropertyValueFactory<>("apt_count"));
-                //add all the data to the table
-                data.addAll(l);
-                leaseReport.setItems(data);
-            }//end try
-            catch(Exception ex){
-                System.out.println("\nERROR: could not execute query");
-                System.out.println("\t" + ex.getMessage());
-            }//end catch
-    }//end method showLeasingReport
-
-    /**
-     * This method redirects the user back to the login page
-     */
-    private void showLogin(ActionEvent event){
-        if(DEBUG){
-            System.out.println("[BEGIN showLogin()]");
-        }//end if
-        try{
-            if(DEBUG){
-                System.out.println("getting stage...");
+            int i = 0;
+            while(rev.next()) {
+                month = rev.getString("Month");
+                cat = rev.getString("Category");
+                num = rev.getString("apt_count");
+                apps.add(new LeaseReportEntry(month, cat, num));
+                System.out.println(apps.get(i));
+                i++;
             }
-            //get the stage
-            Stage s = Tables.getStage();
-            //make sure nothing went wrong here...
-            if(s != null){
-                if(DEBUG){
-                    System.out.println("loading Login.fxml...");
-                }//end if
-                //redirect over to the manager's home
-                Parent p = FXMLLoader.load(getClass().getResource("Login.fxml"));
-                Scene sc = new Scene(p);
-                s.setScene(sc);
-                if(DEBUG){
-                    System.out.println("done. displaying scene...\n[END showLogin()]");
-                }//end if
-                s.show();
-            }//end if
-            else{
-                System.out.println("ERROR: call to Tables.getStage() returned null reference");
-                System.out.println("\tcannot redirect.");
-                if(DEBUG){
-                    System.out.println("[END showLogin()]");
-                }//end if
-            }//end else
-        }//end try
-        //uh-oh... something went wrong
-        catch(Exception ex){
-            System.out.println("ERROR: could not redirect to manager's homepage");
-            System.out.println("\t" + ex.getMessage());
-            if(DEBUG){
-                    System.out.println("[END showLogin()]");
-                }//end if
-        }//end catch
-    }//end method showLogin
+            getRev.close();
+
+            monthCol.setCellValueFactory(
+                new PropertyValueFactory<>("month"));
+            categoryCol.setCellValueFactory(
+                new PropertyValueFactory<>("category"));
+            numberCol.setCellValueFactory(
+                new PropertyValueFactory<>("apt_count"));
+
+            data.addAll(apps);
+            leaseReport.setItems(data);
+
+        } catch (SQLException ex) {
+            System.out.println("SQL Error: " + ex.getMessage());
+        }
+    }//end method initialize
 
     @FXML
     private void showManagerHome(ActionEvent event){
@@ -244,4 +142,4 @@ public class LeaseReportController implements Initializable {
         }//end catch
     }//end method showManagerHome
 
-}//end class LeaseReportController
+}//end class ServiceRequestReportController
