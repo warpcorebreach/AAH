@@ -158,6 +158,7 @@ public class AppReviewController implements Initializable {
         System.out.println(selected.getUser());
 
         Tables.setCurName(selected.getName());
+        Tables.setCurrentUser(selected.getUser());
 
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();

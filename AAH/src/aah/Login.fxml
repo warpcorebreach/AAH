@@ -18,11 +18,11 @@
          </font>
       </Label>
       <TextField fx:id="username" layoutX="207.0" layoutY="151.0" />
+      <PasswordField fx:id="password" layoutX="207.0" layoutY="191.0" />
       <Label layoutX="126.0" layoutY="156.0" text="Username:" />
       <Label layoutX="130.0" layoutY="196.0" text="Password:" />
       <Button fx:id="loginButton" layoutX="463.0" layoutY="167.0" mnemonicParsing="false" onAction="#login" text="Login" />
       <Button fx:id="newAcctButton" layoutX="207.0" layoutY="304.0" mnemonicParsing="false" onAction="#createAccount" text="Create New Account" />
       <Label layoutX="121.0" layoutY="309.0" text="New Users:" />
-      <PasswordField fx:id="password" layoutX="207.0" layoutY="191.0" />
     </children>
 </AnchorPane>
