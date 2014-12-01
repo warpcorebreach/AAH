@@ -39,32 +39,32 @@ import javafx.stage.Stage;
  * @author Julianna
  */
 public class RentDefaultReportController implements Initializable {
-    
+
     private List<String> months;
-    private String selectedMonth; 
+    private String selectedMonth;
     private ObservableList<AptDefaults> data
-            = FXCollections.observableArrayList();  
+            = FXCollections.observableArrayList();
     private int apt, extra, days;
     private Connection conn;
-    
+
     @FXML
-    private TableView table = new TableView(); 
-    
+    private TableView table = new TableView();
+
     @FXML
     private TableColumn aptCol;
-    
+
     @FXML
     private TableColumn extraCol;
-    
+
     @FXML
     private TableColumn lateCol;
-    
+
     @FXML
     private ChoiceBox monthSel = new ChoiceBox();
-    
+
     @FXML
     private Button backButton = new Button();
-    
+
     /**
      * Initializes the controller class.
      */
@@ -85,15 +85,15 @@ public class RentDefaultReportController implements Initializable {
         months.add("November");
         months.add("December");
         monthSel.setItems(FXCollections.observableArrayList(months));
-    }    
- 
+    }
+
     @FXML
     private void select() {
         monthSel.getSelectionModel().selectedIndexProperty().addListener(
             new ChangeListener<Number>() {
-                public void changed(ObservableValue v, Number val, Number newVal) { 
+                public void changed(ObservableValue v, Number val, Number newVal) {
                     String c = months.get(newVal.intValue());
-                    selectedMonth = c;  
+                    selectedMonth = c;
                 }
         });
         try {
@@ -107,14 +107,14 @@ public class RentDefaultReportController implements Initializable {
                             "ORDER BY Amt - Rent DESC;";
             Statement getDef = conn.createStatement();
             ResultSet defs = getDef.executeQuery(defQ);
-            while (defs.next()) {  
-                apt = defs.getInt("Apartment");                                  
-                extra = defs.getInt("Late_Fee");   
-                days = defs.getInt("Days_Late");  
+            while (defs.next()) {
+                apt = defs.getInt("Apartment");
+                extra = defs.getInt("Late_Fee");
+                days = defs.getInt("Days_Late");
 
                 report.add(new AptDefaults(apt,extra,days));
 
-            }          
+            }
             getDef.close();
 
             aptCol.setCellValueFactory(
@@ -124,6 +124,7 @@ public class RentDefaultReportController implements Initializable {
             lateCol.setCellValueFactory(
                 new PropertyValueFactory<>("days"));
 
+            data.clear();
             data.addAll(report);
             table.setItems(data);
 
@@ -131,7 +132,7 @@ public class RentDefaultReportController implements Initializable {
             System.out.println("SQL Error: " + ex.getMessage());
         }
     }
-    
+
     @FXML
     private void loadHomepage(ActionEvent event) throws IOException, SQLException {
         Node node = (Node) event.getSource();
@@ -142,5 +143,5 @@ public class RentDefaultReportController implements Initializable {
         stage.setScene(scene);
         stage.show();
    }
-    
+
 }

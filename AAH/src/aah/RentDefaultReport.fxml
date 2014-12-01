@@ -17,7 +17,7 @@
          </font>
       </Label>
       <Label layoutX="176.0" layoutY="109.0" text="Month:" />
-      <ChoiceBox fx:id="monthSel" layoutX="232.0" layoutY="105.0" onDragDetected="#select" prefHeight="25.0" prefWidth="125.0" />
+      <ChoiceBox fx:id="monthSel" layoutX="232.0" layoutY="105.0" onMouseEntered="#select" prefHeight="25.0" prefWidth="125.0" />
       <TableView fx:id="table" layoutX="120.0" layoutY="151.0" onSort="#select" prefHeight="235.0" prefWidth="349.0">
          <columns>
             <TableColumn fx:id="aptCol" prefWidth="114.0" text="Apartment" />
