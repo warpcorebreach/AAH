@@ -42,18 +42,18 @@ public class LeaseReportController implements Initializable {
     private Connection conn;
     //table that holds lease report
     @FXML
-    private TableView leaseReport = new TableView();
+    private final TableView leaseReport = new TableView();
 
     private ObservableList<LeaseReportEntry> data;
 
     @FXML
     private final Button back = new Button();
     @FXML
-    private TableColumn monthCol = new TableColumn();
+    private final TableColumn monthCol = new TableColumn();
     @FXML
-    private TableColumn categoryCol = new TableColumn();
+    private final TableColumn categoryCol = new TableColumn();
     @FXML
-    private TableColumn numberCol = new TableColumn();
+    private final TableColumn numberCol = new TableColumn();
     @FXML
     private final Label messages = new Label();
 
@@ -142,9 +142,6 @@ public class LeaseReportController implements Initializable {
                     System.out.println("done.\n");
                 }//end if
                 //set columns
-                //monthCol = new TableColumn();
-                //categoryCol = new TableColumn();
-                //numberCol = new TableColumn();
                 monthCol.setCellValueFactory(new PropertyValueFactory<>("month"));
                 categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
                 numberCol.setCellValueFactory(new PropertyValueFactory<>("apt_count"));
