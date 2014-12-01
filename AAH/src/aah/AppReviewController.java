@@ -41,6 +41,9 @@ public class AppReviewController implements Initializable {
     private Button approveButton = new Button();
 
     @FXML
+    private Button backButton = new Button();
+
+    @FXML
     private TableView table = new TableView();
 
     @FXML
@@ -222,7 +225,7 @@ public class AppReviewController implements Initializable {
             System.out.println(selected.getUser());
 
             Tables.setCurName(selected.getName());
-            Tables.setCurrentUser(selected.getUser());
+            Tables.setNewResident(selected.getUser());
 
             Node node = (Node) event.getSource();
             Stage stage = (Stage) node.getScene().getWindow();
@@ -239,6 +242,18 @@ public class AppReviewController implements Initializable {
     @FXML
     private void select() {
         selected = (ApartmentEntry) table.getSelectionModel().getSelectedItem();
+    }
+
+    @FXML
+    private void goBack(ActionEvent event) throws IOException {
+        Node node = (Node) event.getSource();
+            Stage stage = (Stage) node.getScene().getWindow();
+            Parent root;
+            root = FXMLLoader.load(
+                    getClass().getResource("MgrHomepage.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
     }
 
 }

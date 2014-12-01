@@ -82,7 +82,7 @@ public class AptAllotmentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            newResUName = Tables.getCurrentUser();
+            newResUName = Tables.getNewResident();
             curName = Tables.getCurName();
             List<AllotmentEntry> entries = new ArrayList<>();
 

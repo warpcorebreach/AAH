@@ -29,5 +29,6 @@
         </columns>
       </TableView>
       <Button fx:id="approveButton" layoutX="372.0" layoutY="431.0" mnemonicParsing="false" onAction="#accept" text="Approve" />
+      <Button fx:id="backButton" layoutX="741.0" layoutY="431.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
    </children>
 </AnchorPane>
