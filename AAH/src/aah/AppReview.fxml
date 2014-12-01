@@ -27,7 +27,6 @@
             <TableColumn fx:id="leCol" prefWidth="111.0" text="Lease Term" />
         </columns>
       </TableView>
-      <Button fx:id="approveButton" layoutX="287.0" layoutY="428.0" mnemonicParsing="false" onAction="#accept" text="Approve" />
-      <Button fx:id="rejectButton" layoutX="449.0" layoutY="428.0" mnemonicParsing="false" onAction="#reject" text="Reject" />
+      <Button fx:id="approveButton" layoutX="362.0" layoutY="429.0" mnemonicParsing="false" onAction="#accept" text="Approve" />
    </children>
 </AnchorPane>

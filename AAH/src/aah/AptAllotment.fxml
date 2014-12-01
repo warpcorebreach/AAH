@@ -11,7 +11,7 @@
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.AptAllotmentController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
-      <Label layoutX="174.0" layoutY="23.0" text="Apartment Allotment">
+      <Label layoutX="174.0" layoutY="17.0" text="Apartment Allotment">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
@@ -21,7 +21,7 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="nameLabel" layoutX="174.0" layoutY="116.0" text="fillNameIn" />
+      <Label fx:id="nameLabel" layoutX="174.0" layoutY="114.0" text="Default" />
       <Label layoutX="236.0" layoutY="148.0" text="Apartment Availability" underline="true">
          <font>
             <Font name="System Bold" size="12.0" />
@@ -30,12 +30,12 @@
       <Button fx:id="allotButton" layoutX="457.0" layoutY="346.0" mnemonicParsing="false" onAction="#assign" text="Assign Apartment" />
       <TableView fx:id="table" layoutX="22.0" layoutY="171.0" prefHeight="164.0" prefWidth="557.0">
         <columns>
-          <TableColumn prefWidth="97.0" text="Apartment No" />
-          <TableColumn prefWidth="86.0" text="Category" />
-            <TableColumn prefWidth="100.0" text="Monthly Rent($)" />
-            <TableColumn prefWidth="81.0" text="Sq Ft." />
-            <TableColumn prefWidth="92.0" text="Available From" />
-            <TableColumn prefWidth="100.0" />
+          <TableColumn fx:id="aptCol" prefWidth="85.0" text="Apt. No" />
+          <TableColumn fx:id="catCol" prefWidth="98.0" text="Category" />
+            <TableColumn fx:id="rentCol" prefWidth="111.0" text="Monthly Rent" />
+            <TableColumn fx:id="feetCol" prefWidth="89.0" text="Sq Ft." />
+            <TableColumn fx:id="dateCol" prefWidth="134.0" text="Available From" />
+            <TableColumn prefWidth="39.0" />
         </columns>
       </TableView>
    </children>

@@ -13,6 +13,8 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +30,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 /**
@@ -36,17 +39,36 @@ import javafx.stage.Stage;
  * @author Julianna
  */
 public class AptAllotmentController implements Initializable {
-    
+
     @FXML
     private Button allotButton = new Button();
-    
+
     @FXML
     private Label nameLabel = new Label();
-    
+
     @FXML
-    private TableView table = new TableView(); 
-    
-    private ObservableList<ObservableList> data;   
+    private TableView table = new TableView();
+
+    @FXML
+    private TableColumn aptCol = new TableColumn();
+
+    @FXML
+    private TableColumn catCol = new TableColumn();
+
+    @FXML
+    private TableColumn rentCol = new TableColumn();
+
+    @FXML
+    private TableColumn feetCol = new TableColumn();
+
+    @FXML
+    private TableColumn dateCol = new TableColumn();
+
+    private ObservableList<AllotmentEntry> data
+            = FXCollections.observableArrayList();
+    private int apt, rent, feet;
+    private String cat, curName;
+    private Date avail;
 
     /**
      * Initializes the controller class.
@@ -54,81 +76,77 @@ public class AptAllotmentController implements Initializable {
     @FXML
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        data = FXCollections.observableArrayList();
         try {
-            String allQ = "SELECT (Apt_No, APARTMENT.Category, Rent, Sq_Ft, Available_On, Name) " +
-                            "FROM Apartment JOIN Prospective_Resident " +
-                            "	ON Apartment.Category = Prospective_Resident.Category " +
-                            "WHERE (Rent >= Min_Rent AND Rent <= Max_Rent AND Move_Date >= Available_On " +
-                            "	AND Pref_Lease = Lease_Term AND Username = $username) " +
-                            "ORDER BY Rent DESC;";
+            curName = Tables.getCurName();
+            List<AllotmentEntry> entries = new ArrayList<>();
+
+            String allQ = "SELECT Apt_No, A.Category, Rent, Sq_Ft, Available_On, Name " +
+                            "FROM Apartment A JOIN Prospective_Resident P " +
+                            "ON A.Category = P.Category " +
+                            "WHERE Rent >= Min_Rent AND Rent <= Max_Rent "+//AND Move_Date >= Available_On " +
+                            //"AND (Pref_Lease = Lease_Term OR Lease_Term = NULL) AND Name = '" + curName + "' " +
+                            "AND Name = '" + curName + "' " +
+                            "ORDER BY Rent DESC";
             Connection conn = Tables.getConnection();
             Statement getAll = conn.createStatement();
             ResultSet allot = getAll.executeQuery(allQ);
+
+            int i = 0;
             while (allot.next()) {
-                int apt = allot.getInt("Apt_No");
-                String cat = allot.getString("Category");
-                int rent = allot.getInt("Rent");
-                int feet = allot.getInt("Sq_Ft");
-                Date avail = allot.getDate("Available_On");
-                String name = allot.getString("Name");
-                CheckBox check = new CheckBox();
-                
-                ObservableList<String> row = FXCollections.observableArrayList();  
-                for(int i=1 ; i<=allot.getMetaData().getColumnCount(); i++){                      
-                    row.add(allot.getString(i));  
-                }
-                data.add(row); 
+                apt = allot.getInt("Apt_No");
+                cat = allot.getString("A.Category");
+                rent = allot.getInt("Rent");
+                feet = allot.getInt("Sq_Ft");
+                avail = allot.getDate("Available_On");
+
+                entries.add(new AllotmentEntry(apt, cat, rent, feet, avail));
+                System.out.println(entries.get(i));
+                i++;
             }
-            table.setItems(data); 
-            TableColumn aptCol = new TableColumn("Apartment No");  
-            aptCol.setMinWidth(100);  
 
-            TableColumn catCol = new TableColumn("Category");  
-            catCol.setMinWidth(200);          
+            aptCol.setCellValueFactory(
+                new PropertyValueFactory<>("apt"));
+            catCol.setCellValueFactory(
+                new PropertyValueFactory<>("cat"));
+            rentCol.setCellValueFactory(
+                new PropertyValueFactory<>("rent"));
+            feetCol.setCellValueFactory(
+                new PropertyValueFactory<>("feet"));
+            dateCol.setCellValueFactory(
+                new PropertyValueFactory<>("date"));
 
-            TableColumn rentCol = new TableColumn("Monthly Rent($)");  
-            rentCol.setMinWidth(100);  
-            
-            TableColumn feetCol = new TableColumn("Sq Ft.");  
-            feetCol.setMinWidth(100); 
-            
-            TableColumn dateCol = new TableColumn("Available From");  
-            dateCol.setMinWidth(200); 
-            
-            TableColumn checkCol = new TableColumn("");  
-            checkCol.setMinWidth(100); 
+            nameLabel.setText(curName);
+            data.addAll(entries);
+            table.setItems(data);
 
-            table.getColumns().addAll(aptCol, catCol, rentCol, feetCol, dateCol, checkCol);  
-            
-            try {
-                ActionEvent event = null;
-                Node node = (Node) event.getSource();
-                Stage stage = (Stage) node.getScene().getWindow();
-                Parent root;
-                root = FXMLLoader.load(
-                        getClass().getResource("AptAllotment.fxml"));
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
-            } catch (IOException ex) {
-                System.out.println("IO Error: " + ex.getMessage());
-            }
-            System.out.println("Table Value::" + table); 
-            
+//            try {
+//                ActionEvent event = null;
+//                Node node = (Node) event.getSource();
+//                Stage stage = (Stage) node.getScene().getWindow();
+//                Parent root;
+//                root = FXMLLoader.load(
+//                        getClass().getResource("AptAllotment.fxml"));
+//                Scene scene = new Scene(root);
+//                stage.setScene(scene);
+//                stage.show();
+//            } catch (IOException ex) {
+//                System.out.println("IO Error: " + ex.getMessage());
+//            }
+
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
+            ex.printStackTrace();
         }
-    }  
-    
+    }
+
     @FXML
     private void assign(ActionEvent event)throws IOException, SQLException {
         String assQ = "INSERT INTO Resident VALUES ($username, $apt_no);";
         Connection conn = Tables.getConnection();
         Statement assRes = conn.createStatement();
         assRes.executeUpdate(assQ);
-        assRes.close(); 
-        
+        assRes.close();
+
         String upQ = "UPDATE APARTMENT " +
                         "SET Available_On = " +
                         "DATE_ADD((SELECT Available_On " +
@@ -145,5 +163,5 @@ public class AptAllotmentController implements Initializable {
         upRes.close();
         conn.close();
     }
-    
+
 }

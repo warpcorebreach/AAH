@@ -42,9 +42,6 @@ public class AppReviewController implements Initializable {
     private Button approveButton = new Button();
 
     @FXML
-    private Button rejectButton = new Button();
-
-    @FXML
     private TableView table = new TableView();
 
     @FXML
@@ -145,7 +142,8 @@ public class AppReviewController implements Initializable {
     }
 
     @FXML
-    private void accept() {
+    private void accept(ActionEvent event) throws IOException {
+        System.out.println();
         System.out.println("===== Application Approved =====");
         System.out.println();
         System.out.println(selected.getCat());
@@ -158,22 +156,18 @@ public class AppReviewController implements Initializable {
         System.out.println(selected.getName());
         System.out.println(selected.getTerm());
         System.out.println(selected.getUser());
-    }
 
-    @FXML
-    private void reject() {
-        System.out.println("===== Application Rejected =====");
-        System.out.println();
-        System.out.println(selected.getCat());
-        System.out.println(selected.getDob());
-        System.out.println(selected.getGen());
-        System.out.println(selected.getIncome());
-        System.out.println(selected.getMax());
-        System.out.println(selected.getMin());
-        System.out.println(selected.getMove());
-        System.out.println(selected.getName());
-        System.out.println(selected.getTerm());
-        System.out.println(selected.getUser());
+        Tables.setCurName(selected.getName());
+
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root;
+        root = FXMLLoader.load(
+                getClass().getResource("AptAllotment.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+        System.out.println("Go to apartment allotment screen.");
     }
 
     @FXML

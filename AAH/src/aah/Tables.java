@@ -19,13 +19,14 @@ public class Tables {
 
     //
     private static String curUser = null;
+    private static String curName = null;
     private static Connection conn = null;
 
     //maximum number of times to try and connect/disconnect
     //  from the DB
     private static final int MAX_CONN_OPEN_ATTEMPTS = 3;
     private static final int MAX_CONN_CLOSE_ATTEMPTS = 3;
-    
+
     //stage object
     private static Stage stage = null;
 
@@ -348,26 +349,34 @@ public class Tables {
     public static void setCurrentUser(String u) {
         curUser = u;
     }
-    
+
     /**
      * This method saves the Stage object from the call to start(Stage stage)
      * in AAH.java
-     * 
-     * @param s The stage object to save for later 
+     *
+     * @param s The stage object to save for later
      */
     public static void setStage(Stage s){
         stage = s;
     }//end method setStage
-    
+
     /**
      * This method returns the root stage object for use in other
      * GUI parts of the program
-     * 
+     *
      * @return The stage object that was given to us from start(Stage stage)
      *          in AAH.java
      */
     public static Stage getStage(){
         return stage;
     }//end method getStage
+
+    public static void setCurName(String n) {
+        curName = n;
+    }
+
+    public static String getCurName() {
+        return curName;
+    }
 
 }
