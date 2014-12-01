@@ -169,6 +169,7 @@ public class ServiceRequestReportController implements Initializable {
                 day = rev.getString("resolved_time");
                 apps.add(new ServiceRequestReportEntry(month, req, day));
                 System.out.println(apps.get(i));
+                i++;
             }
             getRev.close();
 
