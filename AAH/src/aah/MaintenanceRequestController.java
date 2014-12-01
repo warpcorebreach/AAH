@@ -29,6 +29,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
+import java.sql.Date;
 
 /**
  * FXML Controller class
@@ -111,21 +112,42 @@ public class MaintenanceRequestController implements Initializable {
                 if(test) {
                 System.out.println("ready to submit request");
                 }
-                String maintQ = "INSERT INTO Maintenance_Request(Request_Date, Apt_No,"
-                                    + "Issue_Type) VALUES('" + LocalDate.now()   
-                                    + "', '" + aptnumber + "', '" + selectedIssue + "');";
-                Statement getMaint = conn.createStatement();
-                getMaint.executeUpdate(maintQ);
-                getMaint.close();
+                String existQ = "SELECT Request_Date, Issue_Type " +
+                                    "FROM Maintenance_Request " +
+                                    "WHERE Apt_No = '" + aptnumber + "';";
+                Statement getExist = conn.createStatement();
+                ResultSet exists = getExist.executeQuery(existQ);
+                Parent root = null;
                 
-                Node node = (Node) event.getSource();
-                Stage stage = (Stage) node.getScene().getWindow();
-                Parent root;
-                root = FXMLLoader.load(
-                        getClass().getResource("MaintRequestMessage.fxml"));
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
+                while (exists.next()) {
+                    if ((issueSel.getValue().equals(exists.getString("Issue_Type")))
+                            && (Date.valueOf(LocalDate.now()) == (java.sql.Date)exists.getDate("Request_Date"))) {
+                        Node node = (Node) event.getSource();
+                        Stage stage = (Stage) node.getScene().getWindow();
+                        root = FXMLLoader.load(
+                                    getClass().getResource("IssueExists.fxml"));
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+                    }
+                }
+                
+                if (root == null) {
+                    String maintQ = "INSERT INTO Maintenance_Request(Request_Date, Apt_No,"
+                                        + "Issue_Type) VALUES('" + LocalDate.now()   
+                                        + "', '" + aptnumber + "', '" + selectedIssue + "');";
+                    Statement getMaint = conn.createStatement();
+                    getMaint.executeUpdate(maintQ);
+                    getMaint.close();
+
+                    Node node = (Node) event.getSource();
+                    Stage stage = (Stage) node.getScene().getWindow();
+                    root = FXMLLoader.load(
+                            getClass().getResource("MaintRequestMessage.fxml"));
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                }
                 
             } else {
                 System.out.println("Please enter an Apt Number");
