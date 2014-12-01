@@ -145,6 +145,7 @@ public class PayInfoController implements Initializable {
     
     @FXML
     private void deleteCard(ActionEvent event)throws IOException, SQLException {
+        if(cardBox.getValue() != null) {
         String delQ = "DELETE FROM Payment_Info " 
                         + "WHERE Card_No = '" + cardBox.getValue() + "';";
         Statement delCard = conn.createStatement();
@@ -160,5 +161,8 @@ public class PayInfoController implements Initializable {
         stage.show();
 
         System.out.println("Card deleted.");
+    } else {
+    System.out.println("{Please select a card");
     }
+}
 }
