@@ -136,8 +136,11 @@ public class RentPaymentController implements Initializable {
             Statement getDelay = conn.createStatement();
             ResultSet extra = getDelay.executeQuery(delayed);
             extra.next();
-            rentDue = baseRent + extra.getInt("extra_rent");
-            
+            if (extra.getInt("extra_rent") > 0) {
+                rentDue = baseRent + extra.getInt("extra_rent");
+            } else {
+                rentDue = baseRent;
+            }
             int monthValue = LocalDate.now().getMonthValue();
             String monthQ = "SELECT EXTRACT(Month from Pay_Date) as month " +
                                 "FROM Pays_Rent " +
