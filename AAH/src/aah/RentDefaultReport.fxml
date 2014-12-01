@@ -25,5 +25,6 @@
             <TableColumn fx:id="lateCol" prefWidth="107.0" text="Defaulted By" />
          </columns>
       </TableView>
+      <Button fx:id="backButton" layoutX="518.0" layoutY="349.0" mnemonicParsing="false" onAction="#loadHomepage" text="Back" />
    </children>
 </AnchorPane>
