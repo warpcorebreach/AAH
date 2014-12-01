@@ -50,7 +50,7 @@ public class MaintenanceRequestController implements Initializable {
     private Label curDate = new Label();
 
     @FXML
-    private TextField aptNo = new TextField();
+    private Label aptNo = new Label();
 
     @FXML
     private ChoiceBox issueSel = new ChoiceBox();
@@ -101,14 +101,6 @@ public class MaintenanceRequestController implements Initializable {
     private void submitRequest(ActionEvent event) throws SQLException, IOException {
         if(selectedIssue != null) {
             if(aptNo.getText() != null) {
-                String s = aptNo.getText();
-                try {
-                    aptnumber = Integer.parseInt(s);
-                    test = true;
-                } catch (NumberFormatException e) {
-                        System.out.println("Please enter an Valid Apt Number");
-                        test = false;
-                }
                 if(test) {
                 System.out.println("ready to submit request");
                 }
@@ -117,24 +109,25 @@ public class MaintenanceRequestController implements Initializable {
                                     "WHERE Apt_No = '" + aptnumber + "';";
                 Statement getExist = conn.createStatement();
                 ResultSet exists = getExist.executeQuery(existQ);
-                Parent root = null;
-                
+                boolean issueExists = false;
+
                 while (exists.next()) {
                     if ((issueSel.getValue().equals(exists.getString("Issue_Type")))
-                            && (Date.valueOf(LocalDate.now()) == (java.sql.Date)exists.getDate("Request_Date"))) {
+                            && (Date.valueOf(LocalDate.now()).equals(exists.getDate("Request_Date")))) {
                         Node node = (Node) event.getSource();
                         Stage stage = (Stage) node.getScene().getWindow();
-                        root = FXMLLoader.load(
+                        Parent root = FXMLLoader.load(
                                     getClass().getResource("IssueExists.fxml"));
                         Scene scene = new Scene(root);
                         stage.setScene(scene);
                         stage.show();
+                        issueExists = true;
                     }
                 }
-                
-                if (root == null) {
+
+                if (!issueExists) {
                     String maintQ = "INSERT INTO Maintenance_Request(Request_Date, Apt_No,"
-                                        + "Issue_Type) VALUES('" + LocalDate.now()   
+                                        + "Issue_Type) VALUES('" + LocalDate.now()
                                         + "', '" + aptnumber + "', '" + selectedIssue + "');";
                     Statement getMaint = conn.createStatement();
                     getMaint.executeUpdate(maintQ);
@@ -142,13 +135,13 @@ public class MaintenanceRequestController implements Initializable {
 
                     Node node = (Node) event.getSource();
                     Stage stage = (Stage) node.getScene().getWindow();
-                    root = FXMLLoader.load(
+                    Parent root = FXMLLoader.load(
                             getClass().getResource("MaintRequestMessage.fxml"));
                     Scene scene = new Scene(root);
                     stage.setScene(scene);
                     stage.show();
                 }
-                
+
             } else {
                 System.out.println("Please enter an Apt Number");
             }
@@ -175,5 +168,5 @@ public class MaintenanceRequestController implements Initializable {
             + "WHERE Username = '" + user + "'");
         return "";
     }
-   
+
 }

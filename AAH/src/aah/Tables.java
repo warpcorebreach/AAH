@@ -20,6 +20,7 @@ public class Tables {
     //
     private static String curUser = null;
     private static String curName = null;
+    private static String curNewResident;
     private static Connection conn = null;
 
     //maximum number of times to try and connect/disconnect
@@ -377,6 +378,14 @@ public class Tables {
 
     public static String getCurName() {
         return curName;
+    }
+
+    public static void setNewResident(String r) {
+        curNewResident = r;
+    }
+
+    public static String getNewResident() {
+        return curNewResident;
     }
 
 }
