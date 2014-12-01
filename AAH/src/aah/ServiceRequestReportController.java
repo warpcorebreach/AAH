@@ -30,8 +30,10 @@ public class ServiceRequestReportController implements Initializable {
     
     //DB connection
     private Connection conn = null;
+    /*
     //data from the SQL queries
     private ObservableList<ServiceRequestReportEntry> data = null;
+    */
     //SQL queries
     private final String SERVICE_REQUEST_REPORT_QUERY = "SELECT EXTRACT(MONTH FROM Request_Date) AS Res_Month, Issue_Type, " +
                                                         "AVG(DATEDIFF(Resolved_Date, Request_Date)+1) AS resolved_time " +
@@ -41,7 +43,7 @@ public class ServiceRequestReportController implements Initializable {
                                                         "HAVING Res_Month >= 8 AND Res_Month <= 10;";
     //string for error message
     private final String EMPTY_QUERY_MSG = "NOTICE: No service requests have been resolved for the months of August, September, and October.";
-    
+    /*
     @FXML
     private final TableView table = new TableView();    
     @FXML
@@ -51,11 +53,10 @@ public class ServiceRequestReportController implements Initializable {
     @FXML
     private TableColumn dayCol = null;
     @FXML
-    private final Button back = new Button();    
+    private final Button back = new Button();
+    */
     @FXML
     private final Label messages = new Label();
-    
-    /*
     @FXML
     private TableView table = new TableView();
     @FXML
@@ -65,21 +66,15 @@ public class ServiceRequestReportController implements Initializable {
     @FXML
     private TableColumn dayCol = new TableColumn();
     
-    private String name;
-    private java.sql.Date dob;
-    private String gen;
-    private int income;
-    private String cat;
-    private int min;
-    private int max;
-    private java.sql.Date move;
-    private String term;
-    private String user;
-    */
+    private ObservableList<ServiceRequestReportEntry> data = FXCollections.observableArrayList();;
+    private String month;
+    private String req;
+    private String day;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        /*
         if(DEBUG){
             System.out.print("getting database connection... ");
         }//end if
@@ -160,7 +155,36 @@ public class ServiceRequestReportController implements Initializable {
         else{            
             System.out.println("\nERROR: connection object is null\n\tredirecting to login...");
         }//end else 
-        
+        */
+        try {   //we should fix this query AND WHILE LOOP
+            conn = Tables.getConnection();
+            List<ServiceRequestReportEntry> apps = new ArrayList<>();
+            Statement getRev = conn.createStatement();
+            ResultSet rev = getRev.executeQuery(SERVICE_REQUEST_REPORT_QUERY);
+            
+            int i = 0;
+            while(rev.next()) {
+                month = rev.getString("Res_Month");
+                req = rev.getString("Issue_Type");
+                day = rev.getString("resolved_time");
+                apps.add(new ServiceRequestReportEntry(month, req, day));
+                System.out.println(apps.get(i));
+            }
+            getRev.close();
+
+            monthCol.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+            reqCol.setCellValueFactory(
+                new PropertyValueFactory<>("dob"));
+            dayCol.setCellValueFactory(
+                new PropertyValueFactory<>("gen"));
+            
+            data.addAll(apps);
+            table.setItems(data);
+
+        } catch (SQLException ex) {
+            System.out.println("SQL Error: " + ex.getMessage());
+        }
     }//end method initialize    
         
     @FXML
