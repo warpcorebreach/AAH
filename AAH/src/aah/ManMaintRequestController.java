@@ -21,12 +21,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -43,6 +48,8 @@ public class ManMaintRequestController implements Initializable {
     
     @FXML
     private Button resolveButton = new Button();
+    @FXML 
+    private Button back  = new Button();
     @FXML
     private TableColumn dor = new TableColumn();
     @FXML
@@ -165,4 +172,15 @@ public class ManMaintRequestController implements Initializable {
     private void select() {
         selected = (MaintRequestEntry) table.getSelectionModel().getSelectedItem();
     }
+    
+    @FXML
+    private void loadHomepage(ActionEvent event) throws IOException, SQLException {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root = FXMLLoader.load(
+                    getClass().getResource("MgrHomepage.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+   }
 }

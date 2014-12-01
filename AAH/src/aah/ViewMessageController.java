@@ -6,15 +6,22 @@
 
 package aah;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -57,6 +64,17 @@ public class ViewMessageController implements Initializable {
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
-    }    
+    }  
+    
+    @FXML
+    private void loadHomepage(ActionEvent event) throws IOException, SQLException {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root = FXMLLoader.load(
+                    getClass().getResource("ResidentHomepage.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+   }
     
 }

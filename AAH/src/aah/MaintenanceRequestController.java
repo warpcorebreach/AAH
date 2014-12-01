@@ -153,15 +153,5 @@ public class MaintenanceRequestController implements Initializable {
             + "WHERE Username = '" + user + "'");
         return "";
     }
-    
-    @FXML
-    private void loadHomepage(ActionEvent event) throws IOException, SQLException {
-        Node node = (Node) event.getSource();
-        Stage stage = (Stage) node.getScene().getWindow();
-        Parent root = FXMLLoader.load(
-                    getClass().getResource("ResidentHomepage.fxml"));
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-   }
+   
 }
