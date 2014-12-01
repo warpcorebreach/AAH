@@ -29,6 +29,18 @@ class LeaseReportEntry {
                 "Category=" + category + ", " +
                 "apt_number=" + apt_count + "}"
                );
-    }//end method toString 
+    }//end method toString
+    
+    public String getMonth(){
+        return month;
+    }//end method getMonth
+    
+    public String getCategory(){
+        return category;
+    }//end method getCategory
+    
+    public String getApt_count(){
+        return apt_count;
+    }//end method getApt_count
     
 }//end class
