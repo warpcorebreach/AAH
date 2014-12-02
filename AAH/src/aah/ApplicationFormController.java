@@ -139,6 +139,8 @@ public class ApplicationFormController implements Initializable {
         } else if (moveInChoice.isEqual(LocalDate.now())
                 || moveInChoice.isBefore(LocalDate.now())) {
             System.out.println("Move in date must be after today.");
+        } else if(moveInChoice.isAfter(LocalDate.now().plusMonths(2))) {
+            System.out.println("Move in date must be before 2 month after today.");
         } else if (selectedLease == null) {
             System.out.println("Please select a lease term.");
         } else if (addr.equals("")) {
