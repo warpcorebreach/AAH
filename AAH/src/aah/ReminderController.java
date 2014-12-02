@@ -45,6 +45,9 @@ public class ReminderController implements Initializable {
 
     @FXML
     private Label remLabel = new Label();
+    
+    @FXML
+    private Label message = new Label();
 
     @FXML
     private Button sendButton = new Button();
@@ -67,10 +70,9 @@ public class ReminderController implements Initializable {
         aptDefaults = new ArrayList<>();
 
         try {
-            if (LocalDate.now().getDayOfMonth() <= 3) {
-                remLabel.setText("Please wait until at least the 4th to send rent" +
-                        " reminders.");
-            } else {
+           /* if (LocalDate.now().getDayOfMonth() <= 3) {
+                remLabel.setText("");
+            } else { */
                 String aptQ = "SELECT A.Apt_No AS apt_no "
                                 + "FROM Apartment A JOIN Resident R "
                                 + "ON A.Apt_No = R.Apt_No "
@@ -87,7 +89,7 @@ public class ReminderController implements Initializable {
                 getApt.close();
 
                 apts.setItems(FXCollections.observableArrayList(aptDefaults));
-            }
+         //   }
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
@@ -96,15 +98,57 @@ public class ReminderController implements Initializable {
 
     @FXML
     private void sendReminder (ActionEvent event) throws IOException, SQLException {
+
+       int aptQuery = (int)apts.getValue();
+       String existsQ = "SELECT COUNT(*) as count "
+                        + "FROM Reminder " +
+                        "WHERE Apt_No = '" + aptQuery + "' AND " +
+                        "Date = '" + LocalDate.now() + "';";
+       Connection conn = Tables.getConnection();
+       Statement getExist = conn.createStatement();
+       ResultSet exists = getExist.executeQuery(existsQ);
+       exists.next();
+       boolean remExists = false;
+       if (exists.getInt("count") == 1) {
+           message.setText("Warning:");
+           remLabel.setText("You already sent this apartment a message today. Choose a different apartment.");
+           remExists = true;
+       }
+        
+       if (!remExists) {
+            if(LocalDate.now().getDayOfMonth() > 3) {
+            String remQ = "INSERT INTO Reminder VALUES"
+                             + "('" + LocalDate.now() + "', '" + apts.getValue() + "', "
+                             + "'" + remLabel.getText() + "');";
+            Statement newRem = conn.createStatement();
+            newRem.executeUpdate(remQ);
+            newRem.close();
+            message.setText("Message:");
+            remLabel.setText("Your Payment is past due. Please Pay immediately,");
+            System.out.println("Reminder sent.");
+             } else {
+                 message.setText("Warning:");
+                 remLabel.setText("Please wait until at least the 4th to send rent" +
+                         " reminders.");
+             }
+       }
+
+        if(LocalDate.now().getDayOfMonth() > 3) {
+       remLabel.setText("Your Payment is past due. Please Pay immediately,");
        String remQ = "INSERT INTO Reminder VALUES"
                         + "('" + LocalDate.now() + "', '" + apts.getValue() + "', "
                         + "'" + remLabel.getText() + "');";
-       Connection conn = Tables.getConnection();
        Statement newRem = conn.createStatement();
        newRem.executeUpdate(remQ);
        newRem.close();
-
+       message.setText("Message:");
        System.out.println("Reminder sent.");
+        } else {
+            message.setText("Warning:");
+            remLabel.setText("Please wait until at least the 4th to send rent" +
+                    " reminders.");
+        }
+
 
     }
 
