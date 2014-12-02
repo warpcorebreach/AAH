@@ -99,6 +99,7 @@ public class ReminderController implements Initializable {
     @FXML
     private void sendReminder (ActionEvent event) throws IOException, SQLException {
         if(LocalDate.now().getDayOfMonth() > 3) {
+       remLabel.setText("Your Payment is past due. Please Pay immediately,");
        String remQ = "INSERT INTO Reminder VALUES"
                         + "('" + LocalDate.now() + "', '" + apts.getValue() + "', "
                         + "'" + remLabel.getText() + "');";
@@ -107,7 +108,6 @@ public class ReminderController implements Initializable {
        newRem.executeUpdate(remQ);
        newRem.close();
        message.setText("Message:");
-       remLabel.setText("Your Payment is past due. Please Pay immediately,");
        System.out.println("Reminder sent.");
         } else {
             message.setText("Warning:");
