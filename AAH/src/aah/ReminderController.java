@@ -108,46 +108,29 @@ public class ReminderController implements Initializable {
        Statement getExist = conn.createStatement();
        ResultSet exists = getExist.executeQuery(existsQ);
        exists.next();
-       boolean remExists = false;
+       //boolean remExists = false;
        if (exists.getInt("count") == 1) {
            message.setText("Warning:");
            remLabel.setText("You already sent this apartment a message today. Choose a different apartment.");
-           remExists = true;
+           //remExists = true;
        } else if(LocalDate.now().getDayOfMonth() > 3) {
             message.setText("Message:");
-            remLabel.setText("Your Payment is past due. Please Pay immediately,");
+            String messageSend = "Your payment is past due. Please pay immediately.";
+            remLabel.setText("Your payment is past due. Please pay immediately.");
+            System.out.println(messageSend);
             String remQ = "INSERT INTO Reminder VALUES"
-                             + "('" + LocalDate.now() + "', '" + apts.getValue() + "', "
-                             + "'" + remLabel.getText() + "');";
+                             + "('" + LocalDate.now() + "', '" + apts.getValue() + "', '" + messageSend + "');";
             Statement newRem = conn.createStatement();
             newRem.executeUpdate(remQ);
             newRem.close();
             System.out.println("Reminder sent.");
-             } else {
-                 message.setText("Warning:");
-                 remLabel.setText("Please wait until at least the 4th to send rent" +
-                         " reminders.");
-             }
-       }
-
-       /* if(LocalDate.now().getDayOfMonth() > 3) {
-       remLabel.setText("Your Payment is past due. Please Pay immediately,");
-       String remQ = "INSERT INTO Reminder VALUES"
-                        + "('" + LocalDate.now() + "', '" + apts.getValue() + "', "
-                        + "'" + remLabel.getText() + "');";
-       Statement newRem = conn.createStatement();
-       newRem.executeUpdate(remQ);
-       newRem.close();
-       message.setText("Message:");
-       System.out.println("Reminder sent.");
         } else {
             message.setText("Warning:");
             remLabel.setText("Please wait until at least the 4th to send rent" +
                     " reminders.");
-        } */
-
-
-    //h}
+        }
+    }
+  
 
     @FXML
     private void loadHomepage(ActionEvent event) throws IOException, SQLException {
