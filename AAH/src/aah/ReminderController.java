@@ -67,32 +67,27 @@ public class ReminderController implements Initializable {
         aptDefaults = new ArrayList<>();
 
         try {
-            String aptQ = "SELECT A.Apt_No AS apt_no "
-                            + "FROM Apartment A JOIN Resident R "
-                            + "ON A.Apt_No = R.Apt_No "
-                            + "WHERE A.Apt_No NOT IN (SELECT Apt_No FROM Pays_Rent "
-                            + "WHERE Month = '" + curMonth + "' "
-                            + "AND Year = " + curYear + ")";
-            Connection conn = Tables.getConnection();
+            if (LocalDate.now().getDayOfMonth() <= 3) {
+                remLabel.setText("Please wait until at least the 4th to send rent" +
+                        " reminders.");
+            } else {
+                String aptQ = "SELECT A.Apt_No AS apt_no "
+                                + "FROM Apartment A JOIN Resident R "
+                                + "ON A.Apt_No = R.Apt_No "
+                                + "WHERE A.Apt_No NOT IN (SELECT Apt_No FROM Pays_Rent "
+                                + "WHERE Month = '" + curMonth + "' "
+                                + "AND Year = " + curYear + ")";
+                Connection conn = Tables.getConnection();
 
-//            String aptQ = "SELECT A.Apt_No FROM " +
-//                    "Apartment A JOIN Resident R " +
-//                    "ON A.Apt_No = R.Apt_No";
+                Statement getApt = conn.createStatement();
+                ResultSet finalApt = getApt.executeQuery(aptQ);
+                while (finalApt.next()) {
+                    aptDefaults.add(finalApt.getInt("Apt_No"));
+                }
+                getApt.close();
 
-            Statement getApt = conn.createStatement();
-            ResultSet finalApt = getApt.executeQuery(aptQ);
-            while (finalApt.next()) {
-                aptDefaults.add(finalApt.getInt("Apt_No"));
+                apts.setItems(FXCollections.observableArrayList(aptDefaults));
             }
-            getApt.close();
-
-//            for (int i : aptDefaults) {
-//                aptQ = "SELECT Apt_No FROM Apartment " +
-//                        "WHERE NOT EXISTS (SELECT * FROM Pays_Rent " +
-//                        "WHERE Apt_No = " + i + ")";
-//            }
-
-            apts.setItems(FXCollections.observableArrayList(aptDefaults));
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }

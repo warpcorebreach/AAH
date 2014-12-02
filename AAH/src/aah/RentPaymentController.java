@@ -11,10 +11,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +21,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
@@ -51,10 +46,10 @@ public class RentPaymentController implements Initializable {
 
     @FXML
     private Label rentLabel = new Label();
-    
+
     @FXML
     private ChoiceBox rentForMonth = new ChoiceBox();
-    
+
     @FXML
     private ChoiceBox rentYear = new ChoiceBox();
 
@@ -94,7 +89,7 @@ public class RentPaymentController implements Initializable {
             String aptRent = "SELECT A.Apt_No, Rent " +
                     "FROM Apartment A JOIN Resident R " +
                     "ON A.Apt_No = R.Apt_No " +
-                    "WHERE Username = '" + curUser + "';";
+                    "WHERE Username = '" + curUser + "'";
             Connection conn = Tables.getConnection();
             Statement getAptRent = conn.createStatement();
             ResultSet finalAptRent = getAptRent.executeQuery(aptRent);
@@ -113,15 +108,15 @@ public class RentPaymentController implements Initializable {
             Statement pro = conn.createStatement();
             ResultSet prorate = pro.executeQuery(toProrate);
             prorate.next();
-            if (prorate.getInt("count") == 1) {
-                String proAmt = "SELECT (EXTRACT(DAY FROM CURDATE())" +
+            if (prorate.getInt("count") >= 1) {
+                String proAmt = "SELECT (EXTRACT(DAY FROM CURDATE()) " +
                         "- EXTRACT(DAY FROM Move_Date))" +
                         "*(Rent / LAST_DAY(CURDATE())) AS prorated_rent " +
                         "FROM Prospective_Resident P JOIN Resident R " +
                         "ON P.Username = R.Username " +
                         "JOIN APARTMENT A " +
                         "ON R.Apt_No = A.Apt_No " +
-                        "WHERE P.Username = '" + curUser + "';";
+                        "WHERE P.Username = '" + curUser + "'";
                 Statement proCalc = conn.createStatement();
                 ResultSet finalPro = proCalc.executeQuery(proAmt);
                 finalPro.next();
@@ -132,7 +127,7 @@ public class RentPaymentController implements Initializable {
                     "50*(EXTRACT(DAY FROM CURDATE())-3) AS extra_rent " +
                     "FROM Apartment A JOIN Resident R " +
                     "ON A.Apt_No = R.Apt_No " +
-                    "WHERE Username = '" + curUser + "';";
+                    "WHERE Username = '" + curUser + "'";
             Statement getDelay = conn.createStatement();
             ResultSet extra = getDelay.executeQuery(delayed);
             extra.next();
@@ -144,14 +139,14 @@ public class RentPaymentController implements Initializable {
             int monthValue = LocalDate.now().getMonthValue();
             String monthQ = "SELECT EXTRACT(Month from Pay_Date) as month " +
                                 "FROM Pays_Rent " +
-                                "WHERE Apt_No = '" + apt + "';";
+                                "WHERE Apt_No = " + apt;
             Statement getMonth = conn.createStatement();
             ResultSet monthRes = getMonth.executeQuery(monthQ);
             monthRes.next();
             if (monthValue == monthRes.getInt("month")) {
                 rentDue = baseRent;
             }
-            
+
             rentLabel.setText("Rent due: $" + rentDue);
 
             cards = new ArrayList<>();
@@ -159,7 +154,7 @@ public class RentPaymentController implements Initializable {
 
             String cardPots = "SELECT Card_No " +
                     "FROM Payment_Info " +
-                    "WHERE Username = '" + curUser + "';";
+                    "WHERE Username = '" + curUser + "'";
             Statement getCard = conn.createStatement();
             ResultSet cardNos = getCard.executeQuery(cardPots);
             while (cardNos.next()) {
@@ -168,23 +163,24 @@ public class RentPaymentController implements Initializable {
             cardChoice.setItems(FXCollections.observableArrayList(cards));
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
     @FXML
     private void makePayment(ActionEvent event)throws IOException, SQLException {
-        
+
         Parent root = null;
-        
+
         String payQ = "SELECT Month, Year " +
                             "FROM Pays_Rent " +
-                            "WHERE Apt_No = '" + apt + "';";
+                            "WHERE Apt_No = " + apt;
         Connection conn = Tables.getConnection();
         Statement getPay = conn.createStatement();
         ResultSet payRes = getPay.executeQuery(payQ);
         while (payRes.next()) {
-            
-            if (((rentForMonth.getValue()).equals(payRes.getString("Month"))) 
+
+            if (((rentForMonth.getValue()).equals(payRes.getString("Month")))
                     && ((int)rentYear.getValue() == payRes.getInt("Year"))) {
                 Node node = (Node) event.getSource();
                 Stage stage = (Stage) node.getScene().getWindow();
@@ -197,10 +193,10 @@ public class RentPaymentController implements Initializable {
         }
         if (root == null ) {
             String resQ = "INSERT INTO Pays_Rent VALUES"
-                        + "('" + cardChoice.getValue() + "', '" + rentForMonth.getValue() 
+                        + "('" + cardChoice.getValue() + "', '" + rentForMonth.getValue()
                         + "', '" + rentYear.getValue()
-                        + "', '" + apt + "', " + rentDue
-                        + ", '" + LocalDate.now() + "');";
+                        + "', " + apt + ", " + rentDue
+                        + ", '" + LocalDate.now() + "')";
             Statement newRes = conn.createStatement();
             newRes.executeUpdate(resQ);
             newRes.close();
@@ -214,7 +210,7 @@ public class RentPaymentController implements Initializable {
             stage.show();
             System.out.println("Payment submitted.");
         }
-         
+
     }
 
 }
