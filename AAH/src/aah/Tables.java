@@ -209,7 +209,7 @@ public class Tables {
         // create Payment_Info table
         sttable = conn.createStatement();
         sttable.executeUpdate("CREATE TABLE Payment_Info("
-            + "Card_No INT NOT NULL, "
+            + "Card_No CHAR(16) NOT NULL, "
             + "Cvv INT NOT NULL, "
             + "Name_On_Card VARCHAR(25) NOT NULL, "
             + "Exp_Date DATE NOT NULL, "
@@ -266,7 +266,7 @@ public class Tables {
         // create Pays_Rent table
         sttable = conn.createStatement();
         sttable.executeUpdate("CREATE TABLE Pays_Rent("
-            + "Card_No VARCHAR(16) NOT NULL, "
+            + "Card_No CHAR(16) NOT NULL, "
             + "Month VARCHAR(10) NOT NULL, "
             + "Year INT NOT NULL, "
             + "Apt_No INT NOT NULL, "
