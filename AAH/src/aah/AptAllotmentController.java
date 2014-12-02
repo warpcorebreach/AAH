@@ -89,9 +89,10 @@ public class AptAllotmentController implements Initializable {
             String allQ = "SELECT Apt_No, A.Category, Rent, Sq_Ft, Available_On, Name, Pref_Lease " +
                             "FROM Apartment A JOIN Prospective_Resident P " +
                             "ON A.Category = P.Category " +
-                            "WHERE Rent >= Min_Rent AND Rent <= Max_Rent AND Move_Date >= Available_On " +
+                            "WHERE Move_Date >= Available_On " +
                             "AND Name = '" + curName + "' " +
-                            "ORDER BY Rent DESC";
+                            "AND Rent >= P.Min_Rent AND Rent <= P.Max_Rent " +
+                            "ORDER BY Rent ASC";
             conn = Tables.getConnection();
             Statement getAll = conn.createStatement();
             ResultSet allot = getAll.executeQuery(allQ);

@@ -97,87 +97,77 @@ public class AppReviewController implements Initializable {
             conn = Tables.getConnection();
             List<ApartmentEntry> apps = new ArrayList<>();
 
-            /*****
-             * Get accepted applications
-             */
-            String revQ = "SELECT Name, DOB, Gender, Income, Category, Min_Rent, " +
-                "Max_Rent, Move_Date, Pref_Lease, Username " +
-                "FROM Prospective_Resident P " +
-                "WHERE Username NOT IN (SELECT Username FROM Resident) " +
-                "AND (Income/3) >= (SELECT MIN(Rent) FROM Apartment A JOIN " +
-                "Prospective_Resident P ON A.Category = P.Category) " +
-                "AND Move_Date >= (SELECT MIN(Available_On) FROM " +
-                "Apartment A JOIN Prospective_Resident P ON " +
-                "A.Category = P.Category)";
+            // get all the prospective residents who have not been approved
+            String prosQ = "SELECT Name, DOB, Gender, Income, Category, " +
+                    "Min_Rent, Max_Rent, Move_Date, Pref_Lease, Username " +
+                    "FROM Prospective_Resident " +
+                    "WHERE Username NOT IN (SELECT Username FROM Resident)";
+            Statement getPros = conn.createStatement();
+            ResultSet prosps = getPros.executeQuery(prosQ);
 
-            Statement getRev = conn.createStatement();
-            ResultSet rev = getRev.executeQuery(revQ);
+            List<ProspResident> res = new ArrayList<>();
+            ProspResident pr;
+            while(prosps.next()) {
+                pr = new ProspResident();
+                pr.setName(prosps.getString("Name"));
+                pr.setGender(prosps.getString("Gender"));
+                pr.setCat(prosps.getString("Category"));
+                pr.setLease(prosps.getString("Pref_Lease"));
+                pr.setUser(prosps.getString("Username"));
+                pr.setMin(prosps.getInt("Min_Rent"));
+                pr.setMax(prosps.getInt("Max_Rent"));
+                pr.setDob(prosps.getDate("DOB"));
+                pr.setMove(prosps.getDate("Move_Date"));
+                pr.setIncome(prosps.getInt("Income"));
+                res.add(pr);
+            }
+            getPros.close();
 
-            while(rev.next()) {
-                name = rev.getString("Name");
-                dob = rev.getDate("DOB");
-                gen = rev.getString("Gender");
-                income = rev.getInt("Income");
-                cat = rev.getString("Category");
-                min = rev.getInt("Min_Rent");
-                max = rev.getInt("Max_Rent");
-                move = rev.getDate("Move_Date");
-                term = rev.getString("Pref_Lease");
-                user = rev.getString("Username");
+            String appQ;
+            Statement getApps;
+            ResultSet rev;
+            int count;
+            String status;
 
-                System.out.println(name + " " + user);
-                System.out.println("Application Accepted");
+            // for each valid prosp resident, see if there is an available
+            // apartment
+            for (ProspResident r : res) {
+                appQ = "SELECT COUNT(*) AS C FROM Apartment " +
+                        "WHERE Available_On <= '" + r.getMove() + "' " +
+                        "AND (Rent*3) <= " + r.getIncome() +
+                        " AND Category = '" + r.getCat() + "' " +
+                        "AND Rent >= " + r.getMin() +
+                        " AND Rent <= " + r.getMax();
+                getApps = conn.createStatement();
+                rev = getApps.executeQuery(appQ);
+
+                rev.next();
+                count = rev.getInt("C");
+                getApps.close();
+                name = r.getName();
+                dob = r.getDob();
+                gen = r.getGender();
+                income = r.getIncome();
+                cat = r.getCat();
+                min = r.getMin();
+                max = r.getMax();
+                move = r.getMove();
+                term = r.getLease();
+                user = r.getUser();
+
+                if (count > 0) {
+                    status = "Accepted";
+                } else {
+                    status = "Rejected";
+                }
+
+                System.out.println(name + " " + user + " " + move);
+                System.out.println("Application " + status);
                 System.out.println();
 
                 apps.add(new ApartmentEntry(name, dob, gen, income, cat, min,
-                        max, move, term, user, "Accepted"));
+                        max, move, term, user, status));
             }
-            getRev.close();
-            /*****
-             * End get accepted applications
-             */
-
-
-            /*****
-             * Get rejected applications
-             */
-            revQ = "SELECT Name, DOB, Gender, Income, Category, Min_Rent, " +
-                "Max_Rent, Move_Date, Pref_Lease, Username " +
-                "FROM Prospective_Resident " +
-                "WHERE Username NOT IN (SELECT Username FROM Resident) " +
-                "AND (Income/3) < (SELECT MIN(Rent) FROM Apartment A JOIN " +
-                "Prospective_Resident P ON A.Category = P.Category) " +
-                "OR Move_Date < (SELECT MIN(Available_On) FROM " +
-                "Apartment A JOIN Prospective_Resident P ON " +
-                "A.Category = P.Category)";
-
-            getRev = conn.createStatement();
-            rev = getRev.executeQuery(revQ);
-
-            while(rev.next()) {
-                name = rev.getString("Name");
-                dob = rev.getDate("DOB");
-                gen = rev.getString("Gender");
-                income = rev.getInt("Income");
-                cat = rev.getString("Category");
-                min = rev.getInt("Min_Rent");
-                max = rev.getInt("Max_Rent");
-                move = rev.getDate("Move_Date");
-                term = rev.getString("Pref_Lease");
-                user = rev.getString("Username");
-
-                System.out.println(name + " " + user);
-                System.out.println("Application Rejected");
-                System.out.println();
-
-                apps.add(new ApartmentEntry(name, dob, gen, income, cat, min,
-                        max, move, term, user, "Rejected"));
-            }
-            getRev.close();
-            /*****
-             * End get rejected applications
-             */
-
 
             nameCol.setCellValueFactory(
                 new PropertyValueFactory<>("name"));
@@ -207,7 +197,9 @@ public class AppReviewController implements Initializable {
 
     @FXML
     private void accept(ActionEvent event) throws IOException {
-        if (selected.getStatus().equals("Rejected")) {
+        if (selected == null) {
+            System.out.println("Please select an application.");
+        } else if (selected.getStatus().equals("Rejected")) {
             System.out.println("This applications has been rejected by our " +
                     "system.");
         } else {
