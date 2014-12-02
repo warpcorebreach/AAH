@@ -67,10 +67,9 @@ public class ReminderController implements Initializable {
         aptDefaults = new ArrayList<>();
 
         try {
-            if (LocalDate.now().getDayOfMonth() <= 3) {
-                remLabel.setText("Please wait until at least the 4th to send rent" +
-                        " reminders.");
-            } else {
+           /* if (LocalDate.now().getDayOfMonth() <= 3) {
+                remLabel.setText("");
+            } else { */
                 String aptQ = "SELECT A.Apt_No AS apt_no "
                                 + "FROM Apartment A JOIN Resident R "
                                 + "ON A.Apt_No = R.Apt_No "
@@ -87,7 +86,7 @@ public class ReminderController implements Initializable {
                 getApt.close();
 
                 apts.setItems(FXCollections.observableArrayList(aptDefaults));
-            }
+         //   }
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
@@ -96,6 +95,7 @@ public class ReminderController implements Initializable {
 
     @FXML
     private void sendReminder (ActionEvent event) throws IOException, SQLException {
+        if(LocalDate.now().getDayOfMonth() > 3) {
        String remQ = "INSERT INTO Reminder VALUES"
                         + "('" + LocalDate.now() + "', '" + apts.getValue() + "', "
                         + "'" + remLabel.getText() + "');";
@@ -105,6 +105,10 @@ public class ReminderController implements Initializable {
        newRem.close();
 
        System.out.println("Reminder sent.");
+        } else {
+                remLabel.setText("Please wait until at least the 4th to send rent" +
+                        " reminders.");
+        }
 
     }
 
