@@ -54,7 +54,7 @@ public class LeaseReportController implements Initializable {
     private TableColumn numberCol = new TableColumn();
     @FXML
     private Label messages = new Label();
-
+    
     private ObservableList<LeaseReportEntry> data = FXCollections.observableArrayList();
     private String month;
     private String cat;
@@ -73,6 +73,21 @@ public class LeaseReportController implements Initializable {
             ResultSet rev = getRev.executeQuery(LEASE_REPORT_QUERY);
 
             int i = 0;
+            if(!rev.next()){
+                messages.setText(EMPTY_QUERY_MSG);
+            }//end if
+            else{
+                do{
+                    month = rev.getString("Month");
+                    cat = rev.getString("Category");
+                    num = rev.getString("apt_count");
+                    apps.add(new LeaseReportEntry(month, cat, num));
+                    System.out.println(apps.get(i));
+                    i++;
+                }//end do
+                while(rev.next());
+            }//end else
+            /*
             while(rev.next()) {
                 month = rev.getString("Month");
                 cat = rev.getString("Category");
@@ -82,6 +97,7 @@ public class LeaseReportController implements Initializable {
                 System.out.println(apps.get(i));
                 i++;
             }
+            */
             getRev.close();
 
             monthCol.setCellValueFactory(
