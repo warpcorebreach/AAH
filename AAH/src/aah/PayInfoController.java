@@ -119,11 +119,11 @@ public class PayInfoController implements Initializable {
     @FXML
     private void saveCard(ActionEvent event)throws IOException, SQLException {
         String cardNo = cardNumberText.getText();
-        long cardNoInt = Integer.parseInt(cardNo);
         String cvv = cvvText.getText();
-        int cvvInt = Integer.parseInt(cvv);
         String cardName = cardNameText.getText(); 
-        
+        if(!cardNo.equals("") && !cvv.equals("") && !cardName.equals("")) {
+            long cardNoInt = Integer.parseInt(cardNo);
+            int cvvInt = Integer.parseInt(cvv);
         String addQ = "INSERT INTO Payment_Info VALUES"
                         + "('" + cardNoInt + "', '" + cvvInt + "', '" + cardName
                         + "', '" + expDate.getValue() + "', '" + curUser + "');";
@@ -141,6 +141,9 @@ public class PayInfoController implements Initializable {
         stage.show();
 
         System.out.println("Card added.");
+        } else {
+            System.out.println("Please Enter card information");
+        }
     }
     
     @FXML
