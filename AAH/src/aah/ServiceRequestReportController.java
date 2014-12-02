@@ -163,6 +163,28 @@ public class ServiceRequestReportController implements Initializable {
             ResultSet rev = getRev.executeQuery(SERVICE_REQUEST_REPORT_QUERY);
 
             int i = 0;
+            if(!rev.next()){
+                messages.setText(EMPTY_QUERY_MSG);
+            }//end if
+            else{
+                do{
+                    int monthInt = rev.getInt("Res_Month");
+                    if (monthInt == 8) {
+                        month = "August";
+                    } else if (monthInt == 9) {
+                        month = "September";
+                    } else if (monthInt == 10) {
+                        month = "October";
+                    }
+                    req = rev.getString("Issue_Type");
+                    day = rev.getString("resolved_time");
+                    apps.add(new ServiceRequestReportEntry(month, req, day));
+                    System.out.println(apps.get(i));
+                    i++;
+                }//end do
+                while(rev.next());
+            }//end else
+            /*
             while(rev.next()) {
                 int monthInt = rev.getInt("Res_Month");
                 if (monthInt == 8) {
@@ -178,6 +200,7 @@ public class ServiceRequestReportController implements Initializable {
                 System.out.println(apps.get(i));
                 i++;
             }
+            */
             getRev.close();
 
             monthCol.setCellValueFactory(
