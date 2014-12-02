@@ -5,6 +5,8 @@
  */
 package aah;
 
+import java.time.Month;
+
 /**
  * Encapsulates a data row of the Lease Report
  *
@@ -12,11 +14,11 @@ package aah;
  */
 public class LeaseReportEntry {
 
-    private final String month;
+    private final Month month;
     private final String category;
     private final String apt_count;
 
-    public LeaseReportEntry(String month, String category, String apt_count){
+    public LeaseReportEntry(Month month, String category, String apt_count){
         this.month = month;
         this.category = category;
         this.apt_count = apt_count;
@@ -31,7 +33,7 @@ public class LeaseReportEntry {
                );
     }//end method toString
 
-    public String getMonth(){
+    public Month getMonth(){
         return month;
     }//end method getMonth
 

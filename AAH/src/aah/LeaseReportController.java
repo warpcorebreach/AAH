@@ -8,6 +8,8 @@ package aah;
 import java.io.*;
 import java.net.*;
 import java.sql.*;
+import java.time.Month;
+import static java.time.Month.*;
 import java.util.*;
 
 import javafx.collections.*;
@@ -78,10 +80,20 @@ public class LeaseReportController implements Initializable {
             }//end if
             else{
                 do{
+                    Month m;
                     month = rev.getString("Month");
                     cat = rev.getString("Category");
                     num = rev.getString("apt_count");
-                    apps.add(new LeaseReportEntry(month, cat, num));
+                    if(month.equals("August")) {
+                        m = AUGUST;
+                    } else if(month.equals("September")) {
+                        m = SEPTEMBER;
+                    } else if(month.equals("October")) {
+                        m = OCTOBER;
+                    } else {
+                        m = JULY;
+                    }
+                    apps.add(new LeaseReportEntry(m, cat, num));
                     System.out.println(apps.get(i));
                     i++;
                 }//end do
@@ -99,7 +111,6 @@ public class LeaseReportController implements Initializable {
             }
             */
             getRev.close();
-
             monthCol.setCellValueFactory(
                 new PropertyValueFactory<>("month"));
             categoryCol.setCellValueFactory(
