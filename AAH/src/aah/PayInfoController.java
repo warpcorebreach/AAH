@@ -122,10 +122,10 @@ public class PayInfoController implements Initializable {
         String cvv = cvvText.getText();
         String cardName = cardNameText.getText(); 
         if(!cardNo.equals("") && !cvv.equals("") && !cardName.equals("")) {
-            long cardNoInt = Integer.parseInt(cardNo);
+//            long cardNoInt = Integer.parseInt(cardNo);
             int cvvInt = Integer.parseInt(cvv);
         String addQ = "INSERT INTO Payment_Info VALUES"
-                        + "('" + cardNoInt + "', '" + cvvInt + "', '" + cardName
+                        + "('" + cardNo + "', " + cvvInt + ", '" + cardName
                         + "', '" + expDate.getValue() + "', '" + curUser + "');";
 
         Statement newCard = conn.createStatement();

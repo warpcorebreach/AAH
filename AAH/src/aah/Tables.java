@@ -266,7 +266,7 @@ public class Tables {
         // create Pays_Rent table
         sttable = conn.createStatement();
         sttable.executeUpdate("CREATE TABLE Pays_Rent("
-            + "Card_No INT NOT NULL, "
+            + "Card_No VARCHAR(16) NOT NULL, "
             + "Month VARCHAR(10) NOT NULL, "
             + "Year INT NOT NULL, "
             + "Apt_No INT NOT NULL, "
