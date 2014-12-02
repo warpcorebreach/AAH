@@ -98,23 +98,39 @@ public class ReminderController implements Initializable {
 
     @FXML
     private void sendReminder (ActionEvent event) throws IOException, SQLException {
-        if(LocalDate.now().getDayOfMonth() > 3) {
-       String remQ = "INSERT INTO Reminder VALUES"
-                        + "('" + LocalDate.now() + "', '" + apts.getValue() + "', "
-                        + "'" + remLabel.getText() + "');";
+       int aptQuery = (int)apts.getValue();
+       String existsQ = "SELECT COUNT(*) as count "
+                        + "FROM Reminder " +
+                        "WHERE Apt_No = '" + aptQuery + "' AND " +
+                        "Date = '" + LocalDate.now() + "';";
        Connection conn = Tables.getConnection();
-       Statement newRem = conn.createStatement();
-       newRem.executeUpdate(remQ);
-       newRem.close();
-       message.setText("Message:");
-       remLabel.setText("Your Payment is past due. Please Pay immediately,");
-       System.out.println("Reminder sent.");
-        } else {
-            message.setText("Warning:");
-            remLabel.setText("Please wait until at least the 4th to send rent" +
-                    " reminders.");
-        }
-
+       Statement getExist = conn.createStatement();
+       ResultSet exists = getExist.executeQuery(existsQ);
+       exists.next();
+       boolean remExists = false;
+       if (exists.getInt("count") == 1) {
+           message.setText("Warning:");
+           remLabel.setText("You already sent this apartment a message today. Choose a different apartment.");
+           remExists = true;
+       }
+        
+       if (!remExists) {
+            if(LocalDate.now().getDayOfMonth() > 3) {
+            String remQ = "INSERT INTO Reminder VALUES"
+                             + "('" + LocalDate.now() + "', '" + apts.getValue() + "', "
+                             + "'" + remLabel.getText() + "');";
+            Statement newRem = conn.createStatement();
+            newRem.executeUpdate(remQ);
+            newRem.close();
+            message.setText("Message:");
+            remLabel.setText("Your Payment is past due. Please Pay immediately,");
+            System.out.println("Reminder sent.");
+             } else {
+                 message.setText("Warning:");
+                 remLabel.setText("Please wait until at least the 4th to send rent" +
+                         " reminders.");
+             }
+       }
     }
 
     @FXML
