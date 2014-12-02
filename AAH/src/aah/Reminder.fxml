@@ -11,7 +11,7 @@
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.ReminderController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
-      <Label layoutX="243.0" layoutY="24.0" text="Reminder">
+      <Label layoutX="243.0" layoutY="17.0" text="Reminder">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
@@ -23,6 +23,6 @@
       <Button fx:id="sendButton" layoutX="458.0" layoutY="301.0" mnemonicParsing="false" onAction="#sendReminder" prefHeight="25.0" prefWidth="85.0" text="Send" />
       <Button fx:id="backButton" layoutX="58.0" layoutY="301.0" mnemonicParsing="false" onAction="#loadHomepage" prefHeight="25.0" prefWidth="85.0" text="Back" />
       <Label fx:id="dateLabel" layoutX="444.0" layoutY="84.0" text="Date :  09/04/2014" underline="true" />
-      <ChoiceBox fx:id="apts" layoutX="168.0" layoutY="119.0" prefHeight="25.0" prefWidth="85.0" />
+      <ChoiceBox fx:id="apts" layoutX="183.0" layoutY="118.0" prefHeight="25.0" prefWidth="85.0" />
    </children>
 </AnchorPane>
