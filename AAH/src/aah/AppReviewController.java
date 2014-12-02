@@ -102,11 +102,11 @@ public class AppReviewController implements Initializable {
              */
             String revQ = "SELECT Name, DOB, Gender, Income, Category, Min_Rent, " +
                 "Max_Rent, Move_Date, Pref_Lease, Username " +
-                "FROM Prospective_Resident " +
+                "FROM Prospective_Resident P " +
                 "WHERE Username NOT IN (SELECT Username FROM Resident) " +
                 "AND (Income/3) >= (SELECT MIN(Rent) FROM Apartment A JOIN " +
                 "Prospective_Resident P ON A.Category = P.Category) " +
-                "AND Move_Date >= (SELECT MIN(Available_on) FROM " +
+                "AND Move_Date >= (SELECT MIN(Available_On) FROM " +
                 "Apartment A JOIN Prospective_Resident P ON " +
                 "A.Category = P.Category)";
 
@@ -147,7 +147,7 @@ public class AppReviewController implements Initializable {
                 "WHERE Username NOT IN (SELECT Username FROM Resident) " +
                 "AND (Income/3) < (SELECT MIN(Rent) FROM Apartment A JOIN " +
                 "Prospective_Resident P ON A.Category = P.Category) " +
-                "OR Move_Date < (SELECT MIN(Available_on) FROM " +
+                "OR Move_Date < (SELECT MIN(Available_On) FROM " +
                 "Apartment A JOIN Prospective_Resident P ON " +
                 "A.Category = P.Category)";
 
@@ -201,6 +201,7 @@ public class AppReviewController implements Initializable {
 
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
