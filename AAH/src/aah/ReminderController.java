@@ -45,6 +45,9 @@ public class ReminderController implements Initializable {
 
     @FXML
     private Label remLabel = new Label();
+    
+    @FXML
+    private Label message = new Label();
 
     @FXML
     private Button sendButton = new Button();
@@ -103,11 +106,13 @@ public class ReminderController implements Initializable {
        Statement newRem = conn.createStatement();
        newRem.executeUpdate(remQ);
        newRem.close();
-
+       message.setText("Message:");
+       remLabel.setText("Your Payment is past due. Please Pay immediately,");
        System.out.println("Reminder sent.");
         } else {
-                remLabel.setText("Please wait until at least the 4th to send rent" +
-                        " reminders.");
+            message.setText("Warning:");
+            remLabel.setText("Please wait until at least the 4th to send rent" +
+                    " reminders.");
         }
 
     }
