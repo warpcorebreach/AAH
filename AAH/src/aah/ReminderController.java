@@ -98,7 +98,7 @@ public class ReminderController implements Initializable {
 
     @FXML
     private void sendReminder (ActionEvent event) throws IOException, SQLException {
-<<<<<<< HEAD
+
        int aptQuery = (int)apts.getValue();
        String existsQ = "SELECT COUNT(*) as count "
                         + "FROM Reminder " +
@@ -132,13 +132,12 @@ public class ReminderController implements Initializable {
                          " reminders.");
              }
        }
-=======
+
         if(LocalDate.now().getDayOfMonth() > 3) {
        remLabel.setText("Your Payment is past due. Please Pay immediately,");
        String remQ = "INSERT INTO Reminder VALUES"
                         + "('" + LocalDate.now() + "', '" + apts.getValue() + "', "
                         + "'" + remLabel.getText() + "');";
-       Connection conn = Tables.getConnection();
        Statement newRem = conn.createStatement();
        newRem.executeUpdate(remQ);
        newRem.close();
@@ -150,7 +149,7 @@ public class ReminderController implements Initializable {
                     " reminders.");
         }
 
->>>>>>> f3c674fd38db5355c1a69fb6299f01e8f07c503c
+
     }
 
     @FXML
