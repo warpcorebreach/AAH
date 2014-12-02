@@ -38,7 +38,7 @@ public class RentPaymentController implements Initializable {
     private int apt, rentDue;
     private List<String> months;
     private List<Integer> years;
-    private List<Integer> cards;
+    private List<String> cards;
 
     @FXML
     private Button payButton = new Button();
@@ -163,7 +163,7 @@ public class RentPaymentController implements Initializable {
             Statement getCard = conn.createStatement();
             ResultSet cardNos = getCard.executeQuery(cardPots);
             while (cardNos.next()) {
-                cards.add(cardNos.getInt("Card_No"));
+                cards.add(cardNos.getString("Card_No"));
             }
             cardChoice.setItems(FXCollections.observableArrayList(cards));
         } catch (SQLException ex) {

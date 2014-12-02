@@ -46,7 +46,7 @@ public class PayInfoController implements Initializable {
     
     private Connection conn;
     private String curUser;
-    private List<Integer> cards;
+    private List<String> cards;
     private List<Date> dates;
     private java.sql.Date selectedDate;
     private int selectedCard;
@@ -108,7 +108,7 @@ public class PayInfoController implements Initializable {
             Statement getCard = conn.createStatement();
             ResultSet get = getCard.executeQuery(getQ);
             while (get.next()) {
-                cards.add(get.getInt("Card_No"));
+                cards.add(get.getString("Card_No"));
             }
         } catch(SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
