@@ -96,6 +96,7 @@ public class RentPaymentController implements Initializable {
                 apt = finalAptRent.getInt("Apt_No");
                 aptLabel.setText("Apartment No.: " + apt);
                 baseRent = finalAptRent.getInt("Rent");
+                System.out.println("base rent: " + baseRent);
             }
 
             String toProrate = "SELECT Count(*) AS count "
@@ -121,6 +122,7 @@ public class RentPaymentController implements Initializable {
                 ResultSet finalPro = proCalc.executeQuery(proAmt);
                 if (finalPro.next()) {
                     baseRent = finalPro.getInt("prorated_rent");
+                    System.out.println("rent prorated: " + baseRent);
                 }
             }
 
@@ -134,8 +136,10 @@ public class RentPaymentController implements Initializable {
             if (extra.next()) {
                 if (extra.getInt("extra_rent") > 0) {
                     rentDue = baseRent + extra.getInt("extra_rent");
+                    System.out.println("rent defaulted: " + rentDue);
                 } else {
                     rentDue = baseRent;
+                    System.out.println("final rent: " + rentDue);
                 }
             }
             int monthValue = LocalDate.now().getMonthValue();
