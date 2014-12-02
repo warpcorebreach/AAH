@@ -16,14 +16,14 @@
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <TableView fx:id="leaseReport" layoutX="11.0" layoutY="108.0" prefHeight="282.0" prefWidth="579.0">
+      <TableView fx:id="leaseReport" layoutX="11.0" layoutY="120.0" prefHeight="270.0" prefWidth="579.0">
         <columns>
           <TableColumn fx:id="monthCol" prefWidth="133.0" text="Month" />
-          <TableColumn fx:id="categoryCol" prefWidth="315.0" text="Category" />
-            <TableColumn fx:id="numberCol" prefWidth="130.0" text="No. of Apartments" />
+          <TableColumn fx:id="categoryCol" prefWidth="246.0" text="Category" />
+            <TableColumn fx:id="numberCol" prefWidth="199.0" text="No. of Apartments" />
         </columns>
       </TableView>
-      <Button fx:id="back" layoutX="537.0" layoutY="77.0" mnemonicParsing="false" onAction="#showManagerHome" onMouseClicked="#showManagerHome" text="Back" />
+      <Button fx:id="back" layoutX="537.0" layoutY="80.0" mnemonicParsing="false" onAction="#showManagerHome" onMouseClicked="#showManagerHome" text="Back" />
       <Label fx:id="messages" alignment="CENTER" layoutX="12.0" layoutY="72.0" prefHeight="36.0" prefWidth="520.0" textFill="RED" wrapText="true" />
    </children>
 </AnchorPane>

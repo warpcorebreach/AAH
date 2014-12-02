@@ -53,8 +53,8 @@ public class LeaseReportController implements Initializable {
     @FXML
     private TableColumn numberCol = new TableColumn();
     @FXML
-    private final Label messages = new Label();
-    
+    private Label messages = new Label();
+
     private ObservableList<LeaseReportEntry> data = FXCollections.observableArrayList();
     private String month;
     private String cat;
@@ -77,6 +77,7 @@ public class LeaseReportController implements Initializable {
                 month = rev.getString("Month");
                 cat = rev.getString("Category");
                 num = rev.getString("apt_count");
+
                 apps.add(new LeaseReportEntry(month, cat, num));
                 System.out.println(apps.get(i));
                 i++;

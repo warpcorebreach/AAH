@@ -37,23 +37,23 @@ import javafx.stage.Stage;
  * @author Julianna
  */
 public class ReminderController implements Initializable {
-    
+
     private String curUser;
     private int selectedApt;
     private List<Integer> aptDefaults;
-    
+
     @FXML
     private Label dateLabel = new Label();
-    
+
     @FXML
     private Label remLabel = new Label();
-    
+
     @FXML
     private Button sendButton = new Button();
-    
+
     @FXML
     private Button backButton = new Button();
-    
+
     @FXML
     private ChoiceBox apts = new ChoiceBox();
 
@@ -64,18 +64,19 @@ public class ReminderController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         dateLabel.setText("Date: " + LocalDate.now());
         curUser = Tables.getCurrentUser();
-        int curMonth = LocalDate.now().getMonthValue();
+        String curMonth = LocalDate.now().getMonth().toString();
         int curYear = LocalDate.now().getYear();
         aptDefaults = new ArrayList<>();
-        
+
         try {
-            String aptQ = "SELECT Apartment.Apt_No AS apt_no "
-                            + "FROM Apartment "
-                            +  "WHERE NOT EXISTS (SELECT Apt_No "
-                            +  "FROM Pays_Rent "
-                            +  "WHERE apt_no = Apt_No "
-                            +  "AND Month = '" + curMonth + "'"
-                            +  "AND Year = '" + curYear + "');";
+            String aptQ = "SELECT A.Apt_No AS apt_no "
+                            + "FROM Apartment A JOIN Resident R "
+                            + "ON A.Apt_No = R.Apt_No "
+                            + "WHERE NOT EXISTS (SELECT Apt_No "
+                            + "FROM Pays_Rent "
+                            + "WHERE Apt_No = apt_no "
+                            + "AND Month = '" + curMonth + "' "
+                            + "AND Year = " + curYear + ")";
             Connection conn = Tables.getConnection();
             Statement getApt = conn.createStatement();
             ResultSet finalApt = getApt.executeQuery(aptQ);
@@ -87,8 +88,8 @@ public class ReminderController implements Initializable {
             System.out.println("SQL Error: " + ex.getMessage());
         }
 
-    } 
-    
+    }
+
     @FXML
     private void sendReminder (ActionEvent event) throws IOException, SQLException {
        String remQ = "INSERT INTO Reminder VALUES"
@@ -98,11 +99,11 @@ public class ReminderController implements Initializable {
        Statement newRem = conn.createStatement();
        newRem.executeUpdate(remQ);
        newRem.close();
-       
+
        System.out.println("Reminder sent.");
 
     }
-    
+
     @FXML
     private void loadHomepage(ActionEvent event) throws IOException, SQLException {
         Node node = (Node) event.getSource();
@@ -113,5 +114,5 @@ public class ReminderController implements Initializable {
         stage.setScene(scene);
         stage.show();
    }
-    
+
 }
