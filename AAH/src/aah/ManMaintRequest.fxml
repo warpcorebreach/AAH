@@ -16,27 +16,32 @@
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <Button fx:id="resolveButton" layoutX="511.0" layoutY="175.0" mnemonicParsing="false" onAction="#resolve" text="Resolved" />
-      <Button fx:id="back" layoutX="511.0" layoutY="350.0" mnemonicParsing="false" onAction="#loadHomepage" text="Back" />
-      <Label layoutX="204.0" layoutY="236.0" text="Resolved Issues">
+      <Button fx:id="resolveButton" layoutX="330.0" layoutY="71.0" mnemonicParsing="false" onAction="#resolve" text="Resolve" />
+      <Button fx:id="back" layoutX="338.0" layoutY="237.0" mnemonicParsing="false" onAction="#loadHomepage" text="Back" />
+      <Label layoutX="197.0" layoutY="234.0" text="Resolved Issues">
          <font>
-            <Font name="System Bold" size="20.0" />
+            <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <TableView fx:id="table" layoutX="4.0" layoutY="88.0" onMouseClicked="#select" prefHeight="148.0" prefWidth="482.0">
+      <TableView fx:id="table" layoutX="2.0" layoutY="99.0" onMouseClicked="#select" prefHeight="132.0" prefWidth="591.0">
         <columns>
-          <TableColumn fx:id="dor" prefWidth="172.0" text="Date of Request" />
-          <TableColumn fx:id="aptCol" prefWidth="103.0" text="Apt No" />
-            <TableColumn fx:id="desCol" prefWidth="206.0" text="Describtion of Issue" />
+          <TableColumn fx:id="dor" prefWidth="184.0" text="Date of Request" />
+          <TableColumn fx:id="aptCol" prefWidth="217.0" text="Apt No" />
+            <TableColumn fx:id="desCol" prefWidth="189.0" text="Description of Issue" />
         </columns>
       </TableView>
-      <TableView fx:id="table2" layoutX="118.0" layoutY="266.0" prefHeight="125.0" prefWidth="364.0">
+      <TableView fx:id="table2" layoutX="7.0" layoutY="264.0" prefHeight="132.0" prefWidth="582.0">
          <columns>
-            <TableColumn fx:id="dor2" prefWidth="75.0" text="Date of Request" />
-            <TableColumn fx:id="aptCol2" prefWidth="75.0" text="Apt No" />
-            <TableColumn fx:id="desCol2" prefWidth="75.0" text="Describtion of Issue" />
-            <TableColumn fx:id="resolved" prefWidth="75.0" text="Date resolved" />
+            <TableColumn fx:id="dor2" prefWidth="107.0" text="Date of Request" />
+            <TableColumn fx:id="aptCol2" minWidth="1.0" prefWidth="89.0" text="Apt No" />
+            <TableColumn fx:id="desCol2" prefWidth="272.0" text="Description of Issue" />
+            <TableColumn fx:id="resolved" prefWidth="113.0" text="Date resolved" />
          </columns>
       </TableView>
+      <Label layoutX="197.0" layoutY="70.0" text="Pending Issues">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
