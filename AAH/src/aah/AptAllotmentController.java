@@ -91,6 +91,7 @@ public class AptAllotmentController implements Initializable {
                             "ON A.Category = P.Category " +
                             "WHERE Rent >= Min_Rent AND Rent <= Max_Rent AND Move_Date >= Available_On " +
                             "AND Name = '" + curName + "' " +
+                            "AND Lease_Term IS NULL " +
                             "ORDER BY Rent DESC";
             conn = Tables.getConnection();
             Statement getAll = conn.createStatement();
