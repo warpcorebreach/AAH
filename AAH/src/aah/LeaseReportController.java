@@ -117,10 +117,10 @@ public class LeaseReportController implements Initializable {
                 new PropertyValueFactory<>("category"));
             numberCol.setCellValueFactory(
                 new PropertyValueFactory<>("apt_count"));
-
+            monthCol.setSortType(TableColumn.SortType.ASCENDING);
             data.addAll(apps);
             leaseReport.setItems(data);
-
+            leaseReport.getSortOrder().add(monthCol);
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
