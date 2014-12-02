@@ -98,7 +98,7 @@ public class CreateAccountController implements Initializable {
                             System.out.println("App window closed.");
                             Statement delUser = conn.createStatement();
                             delUser.executeUpdate("DELETE FROM User WHERE "
-                                    + "Username = '" + uname + "');");
+                                    + "Username = '" + uname + "'");
                         } catch (SQLException ex) {
                             System.out.println("SQL error.");
                         }

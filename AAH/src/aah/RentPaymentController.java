@@ -114,7 +114,7 @@ public class RentPaymentController implements Initializable {
                         + "*(Rent / LAST_DAY(CURDATE())) AS prorated_rent "
                         + "FROM Prospective_Resident P JOIN Resident R "
                         + "ON P.Username = R.Username "
-                        + "JOIN APARTMENT A "
+                        + "JOIN Apartment A "
                         + "ON R.Apt_No = A.Apt_No "
                         + "WHERE P.Username = '" + curUser + "';";
                 Statement proCalc = conn.createStatement();
