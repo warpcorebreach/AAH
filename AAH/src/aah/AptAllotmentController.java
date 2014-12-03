@@ -165,6 +165,14 @@ public class AptAllotmentController implements Initializable {
         Statement upRes = conn.createStatement();
         upRes.executeUpdate(upQ);
         upRes.close();
+
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        Parent root = FXMLLoader.load(
+                getClass().getResource("AptAllotted.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML

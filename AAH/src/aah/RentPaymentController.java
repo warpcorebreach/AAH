@@ -3,7 +3,6 @@ package aah;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,8 +10,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -144,24 +141,6 @@ public class RentPaymentController implements Initializable {
 
             getAptRent.close();
 
-            // resident cannot pay rent before moving in
-//            if (LocalDate.now().getDayOfMonth() < mDay
-//                    || LocalDate.now().getMonthValue() < mMonth
-//                    || LocalDate.now().getYear() < mYear
-//                    || month < mMonth || year < mYear) {
-//                System.out.println("Please wait until you move in to pay rent!");
-//                rentDue = 0;
-//
-//                Node node = (Node) event.getSource();
-//                Stage stage = (Stage) node.getScene().getWindow();
-//                Parent root = FXMLLoader.load(
-//                        getClass().getResource("PayRentNotMovedIn.fxml"));
-//                Scene scene = new Scene(root);
-//                stage.setScene(scene);
-//                stage.show();
-//            } else {
-//                valid = true;
-//            }
             // determine if rent should be prorated
             String toProrate = "SELECT Count(*) AS count "
                     + "FROM Prospective_Resident P JOIN Resident R "
@@ -216,18 +195,7 @@ public class RentPaymentController implements Initializable {
                         System.out.println("final rent: " + rentDue);
                     }
                 }
-
-                /************
-                 * what does this do????
-                 ************/
-
-//                int monthValue = LocalDate.now().getMonthValue();
-//
-//                String actualMonth = months.get(monthValue - 1);
-//                String monthGet = (String) rentForMonth.getValue();
-//                if (actualMonth.equals(monthGet)) {
-//                    rentDue = baseRent;
-//                }
+                getDelay.close();
             }
 
             rentLabel.setText("Rent Due: $" + rentDue);
@@ -269,6 +237,7 @@ public class RentPaymentController implements Initializable {
 
                 if (((rentForMonth.getValue()).equals(payRes.getString("Month")))
                         && ((int) rentYear.getValue() == payRes.getInt("Year"))) {
+                    System.out.println("You have already paid your rent this month.");
                     Node node = (Node) event.getSource();
                     Stage stage = (Stage) node.getScene().getWindow();
                     root = FXMLLoader.load(

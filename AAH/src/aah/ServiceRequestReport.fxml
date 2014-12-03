@@ -19,8 +19,8 @@
       <TableView fx:id="table" layoutX="11.0" layoutY="108.0" prefHeight="278.0" prefWidth="579.0">
         <columns>
           <TableColumn fx:id="monthCol" prefWidth="116.0" text="Month" />
-          <TableColumn fx:id="reqCol" prefWidth="332.0" text="Type of Request" />
-            <TableColumn fx:id="dayCol" prefWidth="130.0" text="Average No of Days" />
+          <TableColumn fx:id="reqCol" prefWidth="256.0" text="Type of Request" />
+            <TableColumn fx:id="dayCol" prefWidth="206.0" text="Average No of Days" />
         </columns>
       </TableView>
       <Button fx:id="back" layoutX="539.0" layoutY="76.0" mnemonicParsing="false" onAction="#showManagerHome" onMouseClicked="#showManagerHome" text="Back" />
