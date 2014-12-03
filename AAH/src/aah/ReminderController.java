@@ -45,7 +45,7 @@ public class ReminderController implements Initializable {
 
     @FXML
     private Label remLabel = new Label();
-    
+
     @FXML
     private Label message = new Label();
 
@@ -100,7 +100,7 @@ public class ReminderController implements Initializable {
     private void sendReminder (ActionEvent event) throws IOException, SQLException {
 
        int aptQuery = (int)apts.getValue();
-       String existsQ = "SELECT COUNT(*) as count "
+       String existsQ = "SELECT COUNT(*) AS count "
                         + "FROM Reminder " +
                         "WHERE Apt_No = '" + aptQuery + "' AND " +
                         "Date = '" + LocalDate.now() + "';";
@@ -130,7 +130,7 @@ public class ReminderController implements Initializable {
                     " reminders.");
         }
     }
-  
+
 
     @FXML
     private void loadHomepage(ActionEvent event) throws IOException, SQLException {
