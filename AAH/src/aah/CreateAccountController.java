@@ -19,8 +19,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
 
@@ -89,23 +87,6 @@ public class CreateAccountController implements Initializable {
 
                 Node node = (Node) event.getSource();
                 Stage stage = (Stage) node.getScene().getWindow();
-
-                /* code to delete user if they do not finish app */
-                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                    @Override
-                    public void handle(WindowEvent event) {
-                        try {
-                            System.out.println("App window closed.");
-                            Statement delUser = conn.createStatement();
-                            delUser.executeUpdate("DELETE FROM User WHERE "
-                                    + "Username = '" + uname + "'");
-                        } catch (SQLException ex) {
-                            System.out.println("SQL error.");
-                        }
-                    }
-                });
-                /* end delete user code code */
-
                 Parent root = FXMLLoader.load(
                         getClass().getResource("ApplicationForm.fxml"));
                 Scene scene = new Scene(root);

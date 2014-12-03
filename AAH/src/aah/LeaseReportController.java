@@ -5,7 +5,6 @@
  */
 package aah;
 
-import java.io.*;
 import java.net.*;
 import java.sql.*;
 import java.time.Month;
@@ -56,7 +55,7 @@ public class LeaseReportController implements Initializable {
     private TableColumn numberCol = new TableColumn();
     @FXML
     private Label messages = new Label();
-    
+
     private ObservableList<LeaseReportEntry> data = FXCollections.observableArrayList();
     private String month;
     private String cat;

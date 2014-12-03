@@ -43,6 +43,9 @@ public class ApplicationFormController implements Initializable {
     private Button submit = new Button();
 
     @FXML
+    private Button quit = new Button();
+
+    @FXML
     private TextField name = new TextField();
 
     @FXML
@@ -212,6 +215,30 @@ public class ApplicationFormController implements Initializable {
                     selectedLease = s;
                 }
             });
+    }
+
+    @FXML
+    private void quit(ActionEvent event) throws IOException {
+        try {
+            Connection c = Tables.getConnection();
+            String uname = Tables.getCurrentUser();
+            System.out.println("App window closed.");
+            Statement delUser = c.createStatement();
+            delUser.executeUpdate("DELETE FROM User WHERE "
+                    + "Username = '" + uname + "'");
+            System.out.println("User deleted.");
+
+            Node node = (Node) event.getSource();
+            Stage stage = (Stage) node.getScene().getWindow();
+            Parent root;
+            root = FXMLLoader.load(
+                    getClass().getResource("Login.fxml"));
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (SQLException ex) {
+            System.out.println("SQL error.");
+        }
     }
 
 }

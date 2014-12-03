@@ -2,7 +2,6 @@
 package aah;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -58,11 +57,11 @@ public class AAH extends Application {
     public static void main(String[] args) throws SQLException {
 
         System.out.println("[BEGIN main()]");
-        
+
         System.out.println("+--------------------------------------+");
         System.out.println("|    Atlanta Apartment Homes Portal    |");
         System.out.println("+--------------------------------------+");
-        
+
         //boolean success = Tables.initConnection();
         if (Tables.initConnection()) {
             System.out.println("launching GUI...");
@@ -70,8 +69,8 @@ public class AAH extends Application {
             //Tables.createTables();
             launch(args);
             Tables.closeConnection();
-        }//end if 
-        
+        }//end if
+
         System.out.println("+--------------------------------------+");
         System.out.println("[END main()]");
     }

@@ -11,7 +11,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,7 +53,7 @@ public class ResidentHomepageController implements Initializable {
         conn = Tables.getConnection();
         curUser = Tables.getCurrentUser();
         try {
-            String aptQ = "SELECT COUNT(*) as countRem "
+            String aptQ = "SELECT COUNT(*) AS countRem "
                             + "FROM Reminder NATURAL JOIN Apartment NATURAL JOIN Resident "
                             + "WHERE Username = '" + curUser + "';";
             Statement getApt = conn.createStatement();
@@ -71,7 +70,7 @@ public class ResidentHomepageController implements Initializable {
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());
         }
-        
+
     }
 
     @FXML
@@ -110,7 +109,7 @@ public class ResidentHomepageController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-    
+
     @FXML
     private void payInfo(ActionEvent event) throws IOException {
         Node node = (Node) event.getSource();

@@ -42,5 +42,7 @@
       <Label layoutX="60.0" layoutY="472.0" text="Previous Address:" />
       <TextArea fx:id="prevAddr" layoutX="206.0" layoutY="472.0" prefHeight="101.0" prefWidth="302.0" />
       <Button fx:id="submit" layoutX="580.0" layoutY="507.0" mnemonicParsing="false" onAction="#submitApp" text="Submit Application" />
+      <Button fx:id="quit" layoutX="703.0" layoutY="81.0" mnemonicParsing="false" onAction="#quit" text="Quit" />
+      <Label layoutX="558.0" layoutY="122.0" text="Warning: will delete your account" />
    </children>
 </AnchorPane>

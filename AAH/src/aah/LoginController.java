@@ -98,7 +98,7 @@ public class LoginController implements Initializable {
                     getClass().getResource("MgrHomepage.fxml"));
         } else {
             homeQ = "SELECT COUNT(*) AS C FROM Resident "
-                + "WHERE Username = '" + uname + "';";
+                + "WHERE Username = '" + uname + "'";
             checkHome = conn.createStatement();
             home = checkHome.executeQuery(homeQ);
 
@@ -130,6 +130,11 @@ public class LoginController implements Initializable {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    private void exitThing() {
+        System.out.println("Exiting...");
     }
 
 }

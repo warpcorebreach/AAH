@@ -19,15 +19,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import java.sql.*;
-import static java.sql.JDBCType.NULL;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
 import javafx.stage.Stage;
 import java.sql.Date;
 
@@ -166,6 +163,7 @@ public class MaintenanceRequestController implements Initializable {
         ResultSet apt = getApt.executeQuery("SELECT Apt_No AS A "
             + "FROM USER JOIN RESIDENT ON USER.Apt_No = RESIDENT.Apt_No "
             + "WHERE Username = '" + user + "'");
+        getApt.close();
         return "";
     }
 
