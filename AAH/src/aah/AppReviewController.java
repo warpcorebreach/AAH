@@ -188,6 +188,7 @@ public class AppReviewController implements Initializable {
 
             data.addAll(apps);
             table.setItems(data);
+            table.getSortOrder().add(statusCol);
 
         } catch (SQLException ex) {
             System.out.println("SQL Error: " + ex.getMessage());

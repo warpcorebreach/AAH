@@ -8,35 +8,34 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.PayInfoController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="655.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aah.PayInfoController">
    <children>
-      <Separator layoutX="298.0" layoutY="124.0" orientation="VERTICAL" prefHeight="200.0" />
       <Label layoutX="110.0" layoutY="94.0" text="Add Card" underline="true">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="341.0" layoutY="94.0" text="Delete Card Information" underline="true">
+      <Label alignment="CENTER" layoutX="375.0" layoutY="94.0" text="Delete Card Information" underline="true">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0a0a0a" height="316.0" layoutX="295.0" layoutY="77.0" stroke="BLACK" strokeType="INSIDE" width="6.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0a0a0a" height="328.0" layoutX="331.0" layoutY="70.0" stroke="BLACK" strokeType="INSIDE" width="4.0" />
       <Label layoutX="227.0" layoutY="27.0" text="Rent Payment">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" layoutX="-2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="606.0" />
-      <Label alignment="CENTER" layoutX="176.0" layoutY="27.0" prefHeight="36.0" prefWidth="270.0" text="Payment Information">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#50a0eb" height="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="655.0" />
+      <Label alignment="CENTER" layoutX="200.0" layoutY="17.0" prefHeight="36.0" prefWidth="270.0" text="Payment Information">
          <font>
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <Label layoutX="14.0" layoutY="134.0" text="Name on the card:" />
-      <Label layoutX="320.0" layoutY="134.0" text="Select card:" />
+      <Label layoutX="14.0" layoutY="134.0" text="Name on Card:" />
+      <Label layoutX="354.0" layoutY="134.0" text="Select card:" />
       <Label layoutX="14.0" layoutY="173.0" text="Card Number:" />
-      <Label layoutX="14.0" layoutY="216.0" text="Expiration Date:" />
+      <Label layoutX="14.0" layoutY="216.0" text="Exp. Date:" />
       <Label layoutX="14.0" layoutY="258.0" text="CVV:" />
       <TextField fx:id="cardNameText" layoutX="120.0" layoutY="130.0" />
       <TextField fx:id="cardNumberText" layoutX="120.0" layoutY="169.0" />
@@ -44,6 +43,6 @@
       <ChoiceBox fx:id="expDate" layoutX="119.0" layoutY="212.0" prefHeight="25.0" prefWidth="84.0" />
       <Button fx:id="saveButton" layoutX="186.0" layoutY="334.0" mnemonicParsing="false" onAction="#saveCard" prefHeight="25.0" prefWidth="84.0" text="Save" />
       <Button fx:id="deleteButton" layoutX="508.0" layoutY="334.0" mnemonicParsing="false" onAction="#deleteCard" prefHeight="25.0" prefWidth="69.0" text="Delete" />
-      <ChoiceBox fx:id="cardBox" layoutX="393.0" layoutY="130.0" prefHeight="25.0" prefWidth="105.0" />
+      <ChoiceBox fx:id="cardBox" layoutX="438.0" layoutY="130.0" prefHeight="25.0" prefWidth="105.0" />
    </children>
 </AnchorPane>

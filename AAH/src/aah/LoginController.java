@@ -132,9 +132,4 @@ public class LoginController implements Initializable {
         stage.show();
     }
 
-    @FXML
-    private void exitThing() {
-        System.out.println("Exiting...");
-    }
-
 }
