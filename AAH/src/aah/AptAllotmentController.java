@@ -92,7 +92,8 @@ public class AptAllotmentController implements Initializable {
                             "WHERE Move_Date >= Available_On " +
                             "AND Name = '" + curName + "' " +
                             "AND Rent >= P.Min_Rent AND Rent <= P.Max_Rent " +
-                            "ORDER BY Rent ASC";
+                            "AND Lease_Term IS NULL " +
+                            "ORDER BY Rent ASC;";
             conn = Tables.getConnection();
             Statement getAll = conn.createStatement();
             ResultSet allot = getAll.executeQuery(allQ);
