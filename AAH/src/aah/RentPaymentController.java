@@ -3,6 +3,7 @@ package aah;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,6 +11,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,9 +37,15 @@ public class RentPaymentController implements Initializable {
     private List<String> months;
     private List<Integer> years;
     private List<String> cards;
+    private boolean valid;
+    private Connection conn;
+    private String curUser;
 
     @FXML
     private Button payButton = new Button();
+
+    @FXML
+    private Button calcButton = new Button();
 
     @FXML
     private Label dateLabel = new Label();
@@ -61,55 +70,115 @@ public class RentPaymentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        dateLabel.setText("Date: " + LocalDate.now());
-        months = new ArrayList<>();
-        months.add("January");
-        months.add("February");
-        months.add("March");
-        months.add("April");
-        months.add("May");
-        months.add("June");
-        months.add("July");
-        months.add("August");
-        months.add("September");
-        months.add("October");
-        months.add("November");
-        months.add("December");
-        rentForMonth.setItems(FXCollections.observableArrayList(months));
-        years = new ArrayList<>();
-        for (int x = 2010; x < 2021; x++) {
-            years.add(x);
-        }
-        rentYear.setItems(FXCollections.observableArrayList(years));
         try {
+            conn = Tables.getConnection();
+            curUser = Tables.getCurrentUser();
+            valid = true;
+            dateLabel.setText("Date: " + LocalDate.now());
+            months = new ArrayList<>();
+            months.add("January");
+            months.add("February");
+            months.add("March");
+            months.add("April");
+            months.add("May");
+            months.add("June");
+            months.add("July");
+            months.add("August");
+            months.add("September");
+            months.add("October");
+            months.add("November");
+            months.add("December");
+            rentForMonth.setItems(FXCollections.observableArrayList(months));
+            years = new ArrayList<>();
+            for (int x = 2014; x < 2017; x++) {
+                years.add(x);
+            }
+            rentYear.setItems(FXCollections.observableArrayList(years));
 
-            String curUser = Tables.getCurrentUser();
-            int baseRent = 0;
-            String aptRent = "SELECT A.Apt_No, Rent "
+            Statement aptRent = conn.createStatement();
+            ResultSet ar = aptRent.executeQuery("SELECT A.Apt_No, Rent " +
+                    "FROM Apartment A JOIN Resident R " +
+                    "ON A.Apt_No = R.Apt_No " +
+                    "WHERE R.Username = '" + curUser + "'");
+            if (ar.next()) {
+                aptLabel.setText("Apartment No.: "+ar.getInt("Apt_No"));
+                rentLabel.setText("Base Monthly Rent: $" + ar.getInt("Rent"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
+    @FXML
+    private void selectMonth(ActionEvent event) throws IOException {
+        if (rentForMonth.getValue() == null || rentYear.getValue() == null) {
+            System.out.println("Error: Please fill out all fields.");
+            return;
+        }
+        int month = rentForMonth.getSelectionModel().getSelectedIndex()+1;
+        int year = (int) rentYear.getValue();
+
+        try {
+            // get current user's data
+            int baseRent, mDay, mMonth, mYear;
+            String aptRent = "SELECT A.Apt_No, Rent, "
+                    + "EXTRACT(DAY FROM(Move_Date)) AS day, "
+                    + "EXTRACT(MONTH FROM(Move_Date)) AS month, "
+                    + "EXTRACT(YEAR FROM(Move_Date)) AS year "
                     + "FROM Apartment A JOIN Resident R "
                     + "ON A.Apt_No = R.Apt_No "
-                    + "WHERE Username = '" + curUser + "';";
-            Connection conn = Tables.getConnection();
+                    + "JOIN Prospective_Resident P "
+                    + "ON R.Username = P.Username "
+                    + "WHERE R.Username = '" + curUser + "'";
             Statement getAptRent = conn.createStatement();
             ResultSet finalAptRent = getAptRent.executeQuery(aptRent);
-            if (finalAptRent.next()) {
-                apt = finalAptRent.getInt("Apt_No");
-                aptLabel.setText("Apartment No.: " + apt);
-                baseRent = finalAptRent.getInt("Rent");
-                System.out.println("base rent: " + baseRent);
-            }
+            finalAptRent.next();
 
+            apt = finalAptRent.getInt("Apt_No");
+            aptLabel.setText("Apartment No.: " + apt);
+            baseRent = finalAptRent.getInt("Rent");
+            mDay = finalAptRent.getInt("day");
+            mMonth = finalAptRent.getInt("month");
+            mYear = finalAptRent.getInt("year");
+
+            getAptRent.close();
+
+            // resident cannot pay rent before moving in
+//            if (LocalDate.now().getDayOfMonth() < mDay
+//                    || LocalDate.now().getMonthValue() < mMonth
+//                    || LocalDate.now().getYear() < mYear
+//                    || month < mMonth || year < mYear) {
+//                System.out.println("Please wait until you move in to pay rent!");
+//                rentDue = 0;
+//
+//                Node node = (Node) event.getSource();
+//                Stage stage = (Stage) node.getScene().getWindow();
+//                Parent root = FXMLLoader.load(
+//                        getClass().getResource("PayRentNotMovedIn.fxml"));
+//                Scene scene = new Scene(root);
+//                stage.setScene(scene);
+//                stage.show();
+//            } else {
+//                valid = true;
+//            }
+            // determine if rent should be prorated
             String toProrate = "SELECT Count(*) AS count "
                     + "FROM Prospective_Resident P JOIN Resident R "
                     + "ON P.Username = R.Username "
                     + "WHERE P.Username = '" + curUser + "' "
                     + "AND EXTRACT(DAY FROM Move_Date) > 7 "
-                    + "AND EXTRACT(MONTH FROM Move_Date) = EXTRACT(MONTH FROM CURDATE());";
+                    + "AND EXTRACT(MONTH FROM Move_Date) = " + month;
             Statement pro = conn.createStatement();
             ResultSet prorate = pro.executeQuery(toProrate);
-            prorate.next();
 
-            if (prorate.getInt("count") == 1) {
+            int count = 0;
+            if (prorate.next()) {
+                count = prorate.getInt("count");
+            }
+            pro.close();
+            if (count == 1) {
+                //prorate rent
                 String proAmt = "SELECT (EXTRACT(DAY FROM CURDATE())"
                         + "- EXTRACT(DAY FROM Move_Date))"
                         + "*(Rent / LAST_DAY(CURDATE())) AS prorated_rent "
@@ -117,44 +186,54 @@ public class RentPaymentController implements Initializable {
                         + "ON P.Username = R.Username "
                         + "JOIN Apartment A "
                         + "ON R.Apt_No = A.Apt_No "
-                        + "WHERE P.Username = '" + curUser + "';";
+                        + "WHERE P.Username = '" + curUser + "'";
+
+                String proAmt1 = "SELECT Rent FROM " +
+                        "Apartment A JOIN Resident R " +
+                        "ON A.Apt_No = R.Apt_No " +
+                        "WHERE R.Username = '" + curUser + "'";
+
                 Statement proCalc = conn.createStatement();
-                ResultSet finalPro = proCalc.executeQuery(proAmt);
-                if (finalPro.next()) {
-                    baseRent = finalPro.getInt("prorated_rent");
-                    System.out.println("rent prorated: " + baseRent);
+                ResultSet finalPro = proCalc.executeQuery(proAmt1);
+                finalPro.next();
+                rentDue = (LocalDate.now().lengthOfMonth() - mDay)*(baseRent/LocalDate.now().lengthOfMonth());
+                proCalc.close();
+            } else {
+                // handle late rent
+                String delayed = "SELECT A.Apt_No, " + //now only calcs extra default amt
+                        "50*(" + LocalDate.now().getDayOfMonth() + "-3) AS extra_rent "
+                        + "FROM Apartment A JOIN Resident R "
+                        + "ON A.Apt_No = R.Apt_No "
+                        + "WHERE Username = '" + curUser + "'";
+                Statement getDelay = conn.createStatement();
+                ResultSet extra = getDelay.executeQuery(delayed);
+                if (extra.next()) {
+                    if (extra.getInt("extra_rent") > 0) {
+                        rentDue = baseRent + extra.getInt("extra_rent");
+                        System.out.println("rent defaulted: " + rentDue);
+                    } else {
+                        rentDue = baseRent;
+                        System.out.println("final rent: " + rentDue);
+                    }
                 }
+
+                /************
+                 * what does this do????
+                 ************/
+
+//                int monthValue = LocalDate.now().getMonthValue();
+//
+//                String actualMonth = months.get(monthValue - 1);
+//                String monthGet = (String) rentForMonth.getValue();
+//                if (actualMonth.equals(monthGet)) {
+//                    rentDue = baseRent;
+//                }
             }
 
-            String delayed = "SELECT A.Apt_No, " + //now only calcs extra default amt
-                    "50*(EXTRACT(DAY FROM CURDATE())-3) AS extra_rent "
-                    + "FROM Apartment A JOIN Resident R "
-                    + "ON A.Apt_No = R.Apt_No "
-                    + "WHERE Username = '" + curUser + "';";
-            Statement getDelay = conn.createStatement();
-            ResultSet extra = getDelay.executeQuery(delayed);
-            if (extra.next()) {
-                if (extra.getInt("extra_rent") > 0) {
-                    rentDue = baseRent + extra.getInt("extra_rent");
-                    System.out.println("rent defaulted: " + rentDue);
-                } else {
-                    rentDue = baseRent;
-                    System.out.println("final rent: " + rentDue);
-                }
-            }
-            int monthValue = LocalDate.now().getMonthValue();
-
-            String actualMonth = months.get(monthValue -1);
-            String monthGet = (String) rentForMonth.getValue();
-            if (actualMonth.equals(monthGet)) {
-                rentDue = baseRent;
-            }
-
-            rentLabel.setText("Rent due: $" + rentDue);
+            rentLabel.setText("Rent Due: $" + rentDue);
 
             cards = new ArrayList<>();
             // populate cards with the current user's available payment methods
-
             String cardPots = "SELECT Card_No "
                     + "FROM Payment_Info "
                     + "WHERE Username = '" + curUser + "';";
@@ -172,46 +251,54 @@ public class RentPaymentController implements Initializable {
 
     @FXML
     private void makePayment(ActionEvent event) throws IOException, SQLException {
+        if (rentForMonth.getValue() == null || rentYear.getValue() == null
+                || cardChoice.getValue() == null) {
+            System.out.println("Error: Please ensure all fields are filled.");
+            return;
+        }
+        if (valid) {
+            Parent root = null;
 
-        Parent root = null;
+            String payQ = "SELECT Month, Year "
+                    + "FROM Pays_Rent "
+                    + "WHERE Apt_No = '" + apt + "';";
+            Connection conn = Tables.getConnection();
+            Statement getPay = conn.createStatement();
+            ResultSet payRes = getPay.executeQuery(payQ);
+            while (payRes.next()) {
 
-        String payQ = "SELECT Month, Year "
-                + "FROM Pays_Rent "
-                + "WHERE Apt_No = '" + apt + "';";
-        Connection conn = Tables.getConnection();
-        Statement getPay = conn.createStatement();
-        ResultSet payRes = getPay.executeQuery(payQ);
-        while (payRes.next()) {
+                if (((rentForMonth.getValue()).equals(payRes.getString("Month")))
+                        && ((int) rentYear.getValue() == payRes.getInt("Year"))) {
+                    Node node = (Node) event.getSource();
+                    Stage stage = (Stage) node.getScene().getWindow();
+                    root = FXMLLoader.load(
+                            getClass().getResource("PayDone.fxml"));
+                    Scene scene = new Scene(root);
+                    stage.setScene(scene);
+                    stage.show();
+                }
+            }
+            if (root == null) {
+                String resQ = "INSERT INTO Pays_Rent VALUES"
+                        + "('" + cardChoice.getValue() + "', '" + rentForMonth.getValue()
+                        + "', '" + rentYear.getValue()
+                        + "', '" + apt + "', " + rentDue
+                        + ", '" + LocalDate.now() + "');";
+                Statement newRes = conn.createStatement();
+                newRes.executeUpdate(resQ);
+                newRes.close();
 
-            if (((rentForMonth.getValue()).equals(payRes.getString("Month")))
-                    && ((int) rentYear.getValue() == payRes.getInt("Year"))) {
                 Node node = (Node) event.getSource();
                 Stage stage = (Stage) node.getScene().getWindow();
                 root = FXMLLoader.load(
-                        getClass().getResource("PayDone.fxml"));
+                        getClass().getResource("RentReceived.fxml"));
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
                 stage.show();
+                System.out.println("Payment submitted.");
             }
-        }
-        if (root == null) {
-            String resQ = "INSERT INTO Pays_Rent VALUES"
-                    + "('" + cardChoice.getValue() + "', '" + rentForMonth.getValue()
-                    + "', '" + rentYear.getValue()
-                    + "', '" + apt + "', " + rentDue
-                    + ", '" + LocalDate.now() + "');";
-            Statement newRes = conn.createStatement();
-            newRes.executeUpdate(resQ);
-            newRes.close();
-
-            Node node = (Node) event.getSource();
-            Stage stage = (Stage) node.getScene().getWindow();
-            root = FXMLLoader.load(
-                    getClass().getResource("RentReceived.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-            System.out.println("Payment submitted.");
+        } else {
+            System.out.println("Invalid operation.");
         }
 
     }

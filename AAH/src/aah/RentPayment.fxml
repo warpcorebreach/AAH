@@ -31,7 +31,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="rentLabel" layoutX="234.0" layoutY="247.0" text="Rent due: $1,435">
+      <Label fx:id="rentLabel" layoutX="144.0" layoutY="247.0" text="Select a month and year to make a payment for.">
          <font>
             <Font size="18.0" />
          </font>
@@ -45,5 +45,6 @@
       <Button fx:id="payButton" layoutX="446.0" layoutY="304.0" mnemonicParsing="false" onAction="#makePayment" text="Make Payment" />
       <ChoiceBox fx:id="rentForMonth" layoutX="260.0" layoutY="188.0" prefHeight="25.0" prefWidth="110.0" />
       <ChoiceBox fx:id="rentYear" layoutX="383.0" layoutY="188.0" prefHeight="25.0" prefWidth="67.0" />
+      <Button fx:id="calcButton" layoutX="470.0" layoutY="188.0" mnemonicParsing="false" onAction="#selectMonth" text="Calculate Rent" />
    </children>
 </AnchorPane>
